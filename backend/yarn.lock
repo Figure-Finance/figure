@@ -22,6 +22,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"backend@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "backend@workspace:."
+  dependencies:
+    express: ^4.17.1
+  languageName: unknown
+  linkType: soft
+
 "body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "body-parser@npm:1.19.0"
@@ -165,15 +173,6 @@ __metadata:
   checksum: c4b470d623152c148e874b08d4afc35ea9498547c31a6ff6dae767ae11e3a59508a299732e9f45bfa2885685fbe2b75ca360862977798dfcec28ff2a4260eab2
   languageName: node
   linkType: hard
-
-"figure@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "figure@workspace:."
-  dependencies:
-    express: ^4.17.1
-    node: ^15.4.0
-  languageName: unknown
-  linkType: soft
 
 "finalhandler@npm:~1.1.2":
   version: 1.1.2
@@ -324,24 +323,6 @@ __metadata:
   version: 0.6.2
   resolution: "negotiator@npm:0.6.2"
   checksum: 4b230bd15f0862d16c54ce0243fcfcf835ad59c8e58c467b4504dd28c9868cff71ff485b02cc575dc69dca819b58a1fadc9fb28403f45721f38a8fffde007d54
-  languageName: node
-  linkType: hard
-
-"node-bin-setup@npm:^1.0.0":
-  version: 1.0.6
-  resolution: "node-bin-setup@npm:1.0.6"
-  checksum: df58fd4b9d216ea5f6d257e51ccdfb071e3bfd3c7a48fb28be9c62873e2f56d6acfb1d8be0273157b412dad5e3f7e594b28b033774599dac941532a0b75c0504
-  languageName: node
-  linkType: hard
-
-"node@npm:^15.4.0":
-  version: 15.4.0
-  resolution: "node@npm:15.4.0"
-  dependencies:
-    node-bin-setup: ^1.0.0
-  bin:
-    node: bin/node
-  checksum: 646128b9523b106eaf889c48e5342feb8bca6bf320607668debcb0c02c90b1956ec003b3185e1f59ae99a27f6b663434cae8fe5fab0ca0ddf1cdf3ac511e4dde
   languageName: node
   linkType: hard
 

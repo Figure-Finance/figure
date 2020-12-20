@@ -1,3 +1,6 @@
 {
-  "name": "backend"
+  "name": "backend",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
