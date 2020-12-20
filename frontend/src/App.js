@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import Login from './containers/Login/Login'
+import Auth from './containers/Auth/Auth'
 
 const App = () => {
   return (
     <Switch>
-      <Route exact path='/' component={Login} />
+      <Route exact path='/' component={Auth} />
       <Redirect to='/' />
     </Switch>
   )
