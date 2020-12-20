@@ -1,5 +1,6 @@
 {
   "name": "backend",
+  "license": "ISC",
   "scripts": {
     "start": "nodemon app.js"
   },
@@ -7,6 +8,11 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
     "nodemon": "^2.0.4"
   }
 }
