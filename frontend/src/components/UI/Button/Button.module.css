@@ -37,3 +37,21 @@
     inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
 }
+
+.Square {
+  border-radius: 20px;
+  box-shadow:
+    -6px -6px 9px var(--white-shadow),
+    6px 6px 9px var(--black-shadow);
+  font-size: 28px;
+  height: 60px;
+  text-shadow:
+    2px 2px 2px var(--white-shadow);
+  width: 60px;
+}
+
+.Square:active {
+  box-shadow:
+    inset -6px -6px 9px var(--white-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+}
