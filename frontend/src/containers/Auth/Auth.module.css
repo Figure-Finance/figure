@@ -15,20 +15,6 @@
   height: 97%;
 }
 
-.Inset {
-  border-radius: 30px;
-  box-shadow:
-    inset 6px 6px 9px var(--black-shadow),
-    inset -6px -6px 9px var(--white-shadow);
-}
-
-.Inset * {
+button, input {
   margin-top: 20px;
-}
-
-.Logo {
-  box-shadow:
-    -6px -6px 9px var(--white-shadow),
-    6px 6px 9px var(--black-shadow);
-  height: 400px;
 }
