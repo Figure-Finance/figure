@@ -12,12 +12,32 @@
   transform: scale(0.97);
 }
 
+.Button.Active {
+  background-color: var(--primary);
+}
+
+.Button.Active:hover {
+  cursor: default;
+}
+
+.Button.Active:active {
+  transform: none;
+}
+
 .Primary {
   color: var(--primary);
 }
 
+.Primary.Active {
+  color: var(--white);
+}
+
 .Neutral {
   color: var(--neutral);
+}
+
+.Neutral.Active {
+  color : var(--neutral);
 }
 
 .Large {
@@ -54,4 +74,11 @@
   box-shadow:
     inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
+}
+
+.Square.Active {
+  box-shadow:
+    inset -6px -6px 9px var(--primary-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+  text-shadow: none;
 }
