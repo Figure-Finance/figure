@@ -11,7 +11,9 @@ const Auth = props => {
       <Container>
         <Input placeholder='Email' />
         <Input placeholder='Password' />
-        <Button color='primary' size='large'>Sign Up</Button>
+        <Button color='primary' size='large'>
+          Sign Up
+        </Button>
       </Container>
       <div>
         <Logo className={classes.Logo} />
