@@ -1,11 +1,13 @@
 import React from 'react'
-import './App.css'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import Login from './containers/Login/Login'
 
 const App = () => {
   return (
-    <div className='App'>
-      <h1>Figure</h1>
-    </div>
+    <Switch>
+      <Route exact path='/' component={Login} />
+      <Redirect to='/' />
+    </Switch>
   )
 }
 
