@@ -1,0 +1,27 @@
+.Auth {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.Auth > div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 48%;
+  height: 97%;
+}
+
+.Inset {
+  border-radius: 30px;
+  box-shadow:
+    inset 6px 6px 9px var(--black-shadow),
+    inset -6px -6px 9px var(--white-shadow);
+}
+
+.Inset * {
+  margin-top: 20px;
+}
