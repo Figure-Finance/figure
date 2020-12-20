@@ -19,6 +19,10 @@ const Button = props => {
     classNames.push(classes.Small)
   }
 
+  if (props.active) {
+    classNames.push(classes.Active)
+  }
+
   return (
     <button className={classNames.join(' ')}>
       {props.children}
@@ -29,7 +33,8 @@ const Button = props => {
 Button.propTypes = {
   children: PropTypes.string,
   color: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
+  active: PropTypes.bool
 }
 
 export default Button
