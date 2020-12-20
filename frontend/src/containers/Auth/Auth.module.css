@@ -25,3 +25,10 @@
 .Inset * {
   margin-top: 20px;
 }
+
+.Logo {
+  box-shadow:
+    -6px -6px 9px var(--white-shadow),
+    6px 6px 9px var(--black-shadow);
+  height: 400px;
+}
