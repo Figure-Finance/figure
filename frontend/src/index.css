@@ -23,6 +23,7 @@ code {
   --danger: #FF6565;
   --white: #F2F2F2;
   --black: #313131;
+  --primary-shadow: #8DEFCB;
   --black-shadow: rgba(0, 0, 0, 0.16);
   --white-shadow: rgba(255, 255, 255, 0.69);
 }
