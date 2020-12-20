@@ -27,3 +27,15 @@ code {
   --black-shadow: rgba(0, 0, 0, 0.16);
   --white-shadow: rgba(255, 255, 255, 0.69);
 }
+
+.primary {
+  color: var(--primary);
+}
+
+.neutral {
+  color: var(--neutral);
+}
+
+.danger {
+  color: var(--danger);
+}

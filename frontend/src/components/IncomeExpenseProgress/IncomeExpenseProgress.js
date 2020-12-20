@@ -7,7 +7,9 @@ const IncomeExpenseProgress = props => {
   return (
     <div className={classes.IncomeExpenseProgress}>
       <Container height='100px' width='98%'>
+        <h1 className='primary'>$249.32</h1>
         <ProgressBar />
+        <h1 className='danger'>$249.32</h1>
       </Container>
     </div>
   )
