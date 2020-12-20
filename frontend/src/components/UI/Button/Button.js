@@ -24,7 +24,7 @@ const Button = props => {
   }
 
   return (
-    <button className={classNames.join(' ')}>
+    <button className={classNames.join(' ')} onClick={props.clicked}>
       {props.children}
     </button>
   )
@@ -34,7 +34,8 @@ Button.propTypes = {
   children: PropTypes.string,
   color: PropTypes.string,
   size: PropTypes.string,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  clicked: PropTypes.func
 }
 
 export default Button
