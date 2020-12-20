@@ -1,0 +1,19 @@
+.Input {
+  background-color: var(--white);
+  border: none;
+  border-radius: 25px;
+  box-shadow:
+    inset -6px -6px 9px var(--white-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+  color: var(--primary);
+  font-size: 28px;
+  height: 60px;
+  outline: none;
+  padding-left: 30px;
+  width: 400px;
+}
+
+.Input::placeholder {
+  color: var(--primary);
+  font-size: 28px;
+}
