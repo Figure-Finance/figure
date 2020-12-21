@@ -1,17 +1,17 @@
 import React from 'react'
 import classes from './Monthly.module.css'
-import IncomeExpenseProgress from '../../components/IncomeExpenseProgress/IncomeExpenseProgress'
-import Navbar from '../../components/Navbar/Navbar'
-import Container from '../../components/UI/Container/Container'
+import ProgressSummary from '../../components/ProgressSummary/ProgressSummary'
 import Summary from '../../components/Summary/Summary'
+import ChartSummary from '../../components/ChartSummary/ChartSummary'
+import Navbar from '../../components/Navbar/Navbar'
 
 const Monthly = props => {
   return (
     <div className={classes.Monthly}>
-      <IncomeExpenseProgress />
+      <ProgressSummary />
       <div className={classes.Main}>
         <Summary color='primary' />
-        <Container height='100%' width='33%' />
+        <ChartSummary title='Month' />
         <Summary color='danger' />
       </div>
       <Navbar active='m' />
