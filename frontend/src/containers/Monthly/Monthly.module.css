@@ -1,0 +1,15 @@
+.Monthly {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.Main {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 100%;
+  margin: 10px 0;
+}
