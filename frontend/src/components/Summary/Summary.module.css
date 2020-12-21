@@ -1,7 +1,16 @@
 .Summary {
+  height: 100%;
   text-align: center;
 }
 
-.Summary > button {
+.Buttons {
+  height: calc(100% - 38px - 60px - 43px - 15px);
+}
+
+.FullButtons {
+  height: calc(100% - 38px -43px)
+}
+
+.Buttons > button, .FullButtons > button {
   margin: 15px auto;
 }
