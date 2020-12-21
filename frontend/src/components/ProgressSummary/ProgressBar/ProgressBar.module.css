@@ -1,0 +1,12 @@
+.ProgressBar {
+  background-color: var(--white);
+  border-radius: 30px;
+  box-shadow:
+    4px 4px 7px var(--black-shadow),
+    -4px -4px 7px var(--white-shadow);
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  justify-content: flex-start;
+  width: 80%;
+}
