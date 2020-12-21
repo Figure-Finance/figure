@@ -55,7 +55,7 @@ const Button = props => {
 }
 
 Button.propTypes = {
-  children: PropTypes.string,
+  children: PropTypes.any,
   color: PropTypes.string,
   size: PropTypes.string,
   active: PropTypes.bool,
