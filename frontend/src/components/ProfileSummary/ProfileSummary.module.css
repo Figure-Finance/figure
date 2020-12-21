@@ -1,0 +1,19 @@
+.ProfileSummary {
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+.Name {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+
+.Email {
+  margin: auto;
+  width: 90%;
+}
