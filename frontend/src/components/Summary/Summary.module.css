@@ -1,0 +1,7 @@
+.Summary {
+  text-align: center;
+}
+
+.Summary > button {
+  margin: 15px auto;
+}
