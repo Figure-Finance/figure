@@ -6,9 +6,13 @@ import Button from '../UI/Button/Button'
 
 const Summary = props => {
   return (
-    <Container height='100%' width='33%'>
+    <Container
+      height={props.height || '100%'}
+      width={props.width ? props.width : '33%'}>
       <div className={classes.Summary}>
-        <h1 className={props.color}>Types</h1>
+        <h1 className={props.color}>
+          {props.title ? props.title : 'Types'}
+        </h1>
         <Button
           color={props.color}
           size='thin'
@@ -39,7 +43,10 @@ const Summary = props => {
 }
 
 Summary.propTypes = {
-  color: PropTypes.string
+  color: PropTypes.string,
+  height: PropTypes.string,
+  width: PropTypes.string,
+  title: PropTypes.string
 }
 
 export default Summary
