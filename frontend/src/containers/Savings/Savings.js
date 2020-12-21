@@ -8,10 +8,10 @@ import Navbar from '../../components/Navbar/Navbar'
 const Savings = props => {
   return (
     <div className={classes.Savings}>
-      <ProgressSummary />
+      <ProgressSummary left='neutral' />
       <div className={classes.Main}>
         <GraphSummary />
-        <Summary color='neutral' />
+        <Summary color='neutral' title='Goals' />
       </div>
       <Navbar active='s' />
     </div>
