@@ -4,8 +4,8 @@ import classes from './GraphSummary.module.css'
 import Graph from './Graph/Graph'
 import Container from '../UI/Container/Container'
 import Button from '../UI/Button/Button'
-import LeftArrow from '../Icons/LeftArrow/LeftArrow'
-import RightArrow from '../Icons/RightArrow/RightArrow'
+import LeftArrowButton from '../UI/LeftArrowButton/LeftArrowButton'
+import RightArrowButton from '../UI/RightArrowButton/RightArrowButton'
 
 const GraphSummary = props => {
   const [number, setNumber] = useState(2021)
@@ -26,7 +26,7 @@ const GraphSummary = props => {
     title = (
       <div className={classes.Buttons}>
         <Button color='primary' size='square' clicked={decrementNumber}>
-          <LeftArrow />
+          <LeftArrowButton />
         </Button>
         <Button
           color='primary'
@@ -35,7 +35,7 @@ const GraphSummary = props => {
           {number}
         </Button>
         <Button color='primary' size='square' clicked={incrementNumber}>
-          <RightArrow />
+          <RightArrowButton />
         </Button>
       </div>
     )
