@@ -11,7 +11,7 @@ const Savings = props => {
       <ProgressSummary left='neutral' />
       <div className={classes.Main}>
         <GraphSummary />
-        <Summary color='neutral' title='Goals' />
+        <Summary color='neutral' title='Goals' canAdd />
       </div>
       <Navbar active='s' />
     </div>
