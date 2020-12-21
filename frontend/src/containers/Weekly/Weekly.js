@@ -8,7 +8,7 @@ import Navbar from '../../components/Navbar/Navbar'
 const Weekly = props => {
   return (
     <div className={classes.Weekly}>
-      <ProgressSummary />
+      <ProgressSummary left='primary' right='danger' />
       <div className={classes.Main}>
         <Summary color='primary' />
         <ChartSummary title='Week' />
