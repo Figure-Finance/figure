@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import classes from './ChartSummary.module.css'
 import Container from '../UI/Container/Container'
 import Button from '../UI/Button/Button'
-import LeftArrow from '../Icons/LeftArrow/LeftArrow'
-import RightArrow from '../Icons/RightArrow/RightArrow'
+import LeftArrowButton from '../UI/LeftArrowButton/LeftArrowButton'
+import RightArrowButton from '../UI/RightArrowButton/RightArrowButton'
 import PieChart from './PieChart/PieChart'
 
 const ChartSummary = props => {
@@ -28,15 +28,11 @@ const ChartSummary = props => {
     <Container height='100%' width='33%'>
       <div className={classes.ChartSummary}>
         <div className={classes.Buttons}>
-          <Button color='primary' size='square' clicked={decrementNumber}>
-            <LeftArrow />
-          </Button>
+          <LeftArrowButton clicked={decrementNumber} color='primary' />
           <Button color='primary' size='large' width='60%'>
             {props.title} {number}
           </Button>
-          <Button color='primary' size='square' clicked={incrementNumber}>
-            <RightArrow />
-          </Button>
+          <RightArrowButton clicked={incrementNumber} color='primary' />
         </div>
         <PieChart />
       </div>
