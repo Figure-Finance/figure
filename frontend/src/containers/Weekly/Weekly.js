@@ -1,24 +1,17 @@
 import React from 'react'
 import classes from './Weekly.module.css'
-import IncomeExpenseProgress from '../../components/IncomeExpenseProgress/IncomeExpenseProgress'
-import Navbar from '../../components/Navbar/Navbar'
-import Container from '../../components/UI/Container/Container'
-import Button from '../../components/UI/Button/Button'
+import ProgressSummary from '../../components/ProgressSummary/ProgressSummary'
 import Summary from '../../components/Summary/Summary'
-import PieChart from '../../components/PieChart/PieChart'
+import ChartSummary from '../../components/ChartSummary/ChartSummary'
+import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
   return (
     <div className={classes.Weekly}>
-      <IncomeExpenseProgress />
+      <ProgressSummary />
       <div className={classes.Main}>
         <Summary color='primary' />
-        <Container height='100%' width='33%'>
-          <Button color='primary' size='large' width='90%'>
-            Week 37
-          </Button>
-          <PieChart />
-        </Container>
+        <ChartSummary title='Week' />
         <Summary color='danger' />
       </div>
       <Navbar active='w' />
