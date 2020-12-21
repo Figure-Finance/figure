@@ -9,7 +9,10 @@ const Yearly = props => {
     <div className={classes.Yearly}>
       <div className={classes.Main}>
         <GraphSummary year />
-        <Summary color='primary' />
+        <div className={classes.Summaries}>
+          <Summary color='primary' height='49%' width='100%' />
+          <Summary color='danger' height='49%' width='100%' />
+        </div>
       </div>
       <Navbar active='y' />
     </div>
