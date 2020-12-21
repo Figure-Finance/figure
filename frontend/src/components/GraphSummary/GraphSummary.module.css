@@ -1,0 +1,19 @@
+.GraphSummary {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.Buttons {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 15px 0;
+  width: 100%;
+}
+
+.Buttons > button {
+  margin: 0 5px;
+}
