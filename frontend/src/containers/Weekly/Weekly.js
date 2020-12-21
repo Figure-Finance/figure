@@ -10,9 +10,9 @@ const Weekly = props => {
     <div className={classes.Weekly}>
       <ProgressSummary left='primary' right='danger' />
       <div className={classes.Main}>
-        <Summary color='primary' />
+        <Summary color='primary' canAdd />
         <ChartSummary title='Week' />
-        <Summary color='danger' />
+        <Summary color='danger' canAdd />
       </div>
       <Navbar active='w' />
     </div>
