@@ -8,7 +8,7 @@ import Navbar from '../../components/Navbar/Navbar'
 const Monthly = props => {
   return (
     <div className={classes.Monthly}>
-      <ProgressSummary />
+      <ProgressSummary left='primary' right='danger' />
       <div className={classes.Main}>
         <Summary color='primary' />
         <ChartSummary title='Month' />
