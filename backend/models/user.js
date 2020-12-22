@@ -1,35 +1,24 @@
-const mongodb = require('mongodb')
-const getDb = require('../util/database').getDb
+const mongoose = require('mongoose')
 
-const ObjectId = mongodb.ObjectId
+const Schema = mongoose.Schema
 
-class User {
-  constructor (email, firstName, lastName, password) {
-    this._id = null
-    this.email = email
-    this.firstName = firstName
-    this.lastName = lastName
-    this.password = password
-    this.finances = []
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
   }
+})
 
-  static findById (userId) {
-    const db = getDb()
-    return db.collection('users').findOne({ _id: ObjectId(userId) })
-      .then(user => {
-        console.log(user)
-        return user
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  // static getUserFinances () {
-  //   const db = getDb()
-  //   console.log(`DB: ${db}`)
-  //   return db.collection('users').find().toArray()
-  // }
-}
-
-module.exports = User
+module.exports = mongoose.model('User', userSchema)

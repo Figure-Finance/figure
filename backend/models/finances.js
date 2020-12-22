@@ -1,17 +1,32 @@
-const mongodb = require('mongodb')
-const getDb = require('../util/database').getDb
+const mongoose = require('mongoose')
 
-const ObjectId = mongodb.ObjectId
+const Schema = mongoose.Schema
 
-class Finances {
-  constructor (type, amount, location, description, isIncome, date) {
-    this.type = type
-    this.amount = amount
-    this.location = location
-    this.description = description
-    this.isIncome = isIncome
-    this.date = date
+const financeSchema = new Schema({
+  category: {
+    type: String,
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  },
+  location: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  isIncome: {
+    type: Boolean,
+    required: true
+  },
+  date: {
+    type: Date,
+    require: true
   }
-}
+})
 
-module.exports = Finances
+module.exports = mongoose.model('Finance', financeSchema)

@@ -2,7 +2,7 @@ const path = require('path')
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const mongoConnect = require('./util/database').mongoConnect
+const mongoose = require('mongoose')
 const User = require('./models/user')
 
 const app = express()
@@ -12,19 +12,24 @@ const dashWeeklyRoutes = require('./routes/dashboard-weekly')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use((req, res, next) => {
-  User.findById('5fdfc2c73dc690b6ad0e56a2')
-    .then(user => {
-      console.log(`User from database: ${user}`)
-      req.user = new User(user.email, user.firstName, user.lastName, user.password)
-      req.user.finances.push(user.finances)
-      next()
-    })
-    .catch(err => console.log(err))
-})
-
 app.use('/api', dashWeeklyRoutes)
 
-mongoConnect(() => {
-  app.listen(80)
-})
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(result => {
+    console.log('CONNECTED')
+    User.findOne().then(user => {
+      if (!user) {
+        const user = new User({
+          email: 'sid@test.com',
+          firstName: 'Sid',
+          lastName: 'Arci',
+          password: 'test'
+        })
+      }
+      user.save()
+    })
+    app.listen(80)
+  })
+  .catch(err => {
+    console.log(err)
+  })

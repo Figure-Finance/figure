@@ -1,14 +1,13 @@
 const User = require('../models/user')
 const Finances = require('../models/finances')
 
-exports.getFinances = (req, res, next) => {
+exports.getUser = (req, res, next) => {
   console.log('RUNNING ROUTE')
-  req.user
-    .getUserFinances()
-    .then(finances => {
+  User.find()
+    .then(users => {
       console.log('IN THEN BLOCK')
-      console.log(finances)
-      res.json(finances)
+      console.log(users)
+      res.json(users)
     })
     .catch(err => {
       console.log('IN CATCH BLOCK')
