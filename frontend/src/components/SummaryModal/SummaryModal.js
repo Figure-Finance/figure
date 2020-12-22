@@ -1,14 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classes from './Modal.module.css'
+import classes from './SummaryModal.module.css'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import AddButton from '../UI/AddButton/AddButton'
 
-const Modal = props => {
+const SummaryModal = props => {
   return (
-    <div className={classes.Modal}>
-      <h1 className={props.color}>Modal</h1>
+    <div className={classes.SummaryModal}>
+      <h1 className={props.color}>
+        Add Income
+      </h1>
       <div className={classes.Inputs}>
         <Input placeholder='Type' color={props.color} />
         <Input placeholder='Amount' color={props.color} />
@@ -30,9 +32,9 @@ const Modal = props => {
   )
 }
 
-Modal.propTypes = {
+SummaryModal.propTypes = {
   clicked: PropTypes.func,
   color: PropTypes.string
 }
 
-export default Modal
+export default SummaryModal
