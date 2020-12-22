@@ -5,14 +5,24 @@
   box-shadow:
     inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
-  color: var(--primary);
   font-size: 20px;
   height: 60px;
   outline: none;
-  padding-left: 30px;
+  text-align: center;
 }
 
 .Input::placeholder {
-  color: var(--primary);
   font-size: 20px;
+}
+
+.Primary, .Primary::placeholder {
+  color: var(--primary);
+}
+
+.Neutral, .Neutral::placeholder {
+  color: var(--neutral);
+}
+
+.Danger, .Danger::placeholder {
+  color: var(--danger);
 }
