@@ -15,7 +15,11 @@ const AddButton = props => {
   }
 
   return (
-    <Button color={props.color} size='square' clicked={props.clicked}>
+    <Button
+      width={props.width}
+      color={props.color}
+      size={props.size || 'square'}
+      clicked={props.clicked}>
       <Add fill={fill} />
     </Button>
   )
@@ -23,7 +27,9 @@ const AddButton = props => {
 
 AddButton.propTypes = {
   color: PropTypes.string,
-  clicked: PropTypes.func
+  clicked: PropTypes.func,
+  size: PropTypes.string,
+  width: PropTypes.string
 }
 
 export default AddButton
