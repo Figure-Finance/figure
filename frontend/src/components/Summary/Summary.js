@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classes from './Summary.module.css'
-import Modal from '../Modal/Modal'
+import SummaryModal from '../SummaryModal/SummaryModal'
 import Container from '../UI/Container/Container'
 import AddButton from '../UI/AddButton/AddButton'
 import Button from '../UI/Button/Button'
@@ -60,7 +60,7 @@ const Summary = props => {
 
   if (showModal) {
     content = (
-      <Modal color={props.color} clicked={closeModal}></Modal>
+      <SummaryModal color={props.color} clicked={closeModal} />
     )
   }
 
