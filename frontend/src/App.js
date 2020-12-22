@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import Auth from './containers/Auth/Auth'
-import Question from './containers/Question/Question'
+import Questions from './containers/Questions/Questions'
 import Weekly from './containers/Weekly/Weekly'
 import Monthly from './containers/Monthly/Monthly'
 import Yearly from './containers/Yearly/Yearly'
@@ -11,8 +11,8 @@ import Profile from './containers/Profile/Profile'
 const App = () => {
   return (
     <Switch>
-      <Route exact path='/signup' component={Auth} />
-      <Route exact path='/signup/1' component={Question} />
+      <Route exact path='/auth' component={Auth} />
+      <Route exact path='/auth/questions' component={Questions} />
       <Route exact path='/profile' component={Profile} />
       <Route exact path='/savings' component={Savings} />
       <Route exact path='/yearly' component={Yearly} />
