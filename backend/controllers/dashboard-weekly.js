@@ -4,7 +4,7 @@ const Finances = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   console.log('RUNNING ROUTE')
   User.findOne()
-    .populate('finances')
+    .populate('user.finances')
     .execPopulate()
     .then(finances => {
       console.log('IN THEN BLOCK')
@@ -17,6 +17,9 @@ exports.getUserFinances = (req, res, next) => {
     })
 }
 
+// TODO: Get fields from FE - add some dummy data to BE
+
 // exports.postUserFinances = (req, res, next) => {
+//   console.log(req)
 //   console.log('POSTING')
 // }

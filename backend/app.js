@@ -9,6 +9,12 @@ const app = express()
 
 const dashWeeklyRoutes = require('./routes/dashboard-weekly')
 
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -25,11 +31,15 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
           lastName: 'Arci',
           password: 'test',
           finances: [{
-            financeId: mongoose.ObjectId('5fe15698c8ed34064c649811'),
+            financeId: '5fe15698c8ed34064c649811',
             date: '12-26-2020'
           }]
         })
+        console.log(`User from if block app.js: ${user}`)
         user.save()
+      } else {
+        console.log('IN ELSE BLOCK APP.JS')
+        console.log(`User from else block app.js: ${user}`)
       }
     })
     app.listen(80)

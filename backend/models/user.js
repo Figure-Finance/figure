@@ -20,9 +20,7 @@ const userSchema = new Schema({
     required: true
   },
   finances: [{
-    financeId: { type: Schema.Types.ObjectId, ref: 'Finance', required: true },
-    date: { type: String, required: true },
-    required: false
+    financeId: { type: Schema.Types.ObjectId, ref: 'Finance' }
   }]
 })
 
