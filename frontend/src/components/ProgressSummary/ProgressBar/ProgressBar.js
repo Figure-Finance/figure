@@ -7,20 +7,22 @@ const ProgressBar = props => {
   return (
     <div className={classes.ProgressBar}>
       <Progress
-        color={props.left}
-        percent='69'
+        color={props.leftColor}
+        percent={props.leftPercent}
         position='left' />
       <Progress
-        color={props.right}
-        percent='31'
+        color={props.rightColor}
+        percent={props.rightPercent}
         position='right' />
     </div>
   )
 }
 
 ProgressBar.propTypes = {
-  left: PropTypes.string,
-  right: PropTypes.string
+  leftPercent: PropTypes.number,
+  rightPercent: PropTypes.number,
+  leftColor: PropTypes.string,
+  rightColor: PropTypes.string
 }
 
 export default ProgressBar
