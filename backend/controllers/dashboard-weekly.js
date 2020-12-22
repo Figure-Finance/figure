@@ -4,8 +4,8 @@ const Finances = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   console.log('RUNNING ROUTE')
   User.findOne()
-    .populate('user.finances')
-    .execPopulate()
+    // .populate('user.finances')
+    // .execPopulate()
     .then(finances => {
       console.log('IN THEN BLOCK')
       console.log(finances)
