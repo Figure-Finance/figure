@@ -18,7 +18,12 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  finances: [{
+    financeId: { type: Schema.Types.ObjectId, ref: 'Finance', required: true },
+    date: { type: String, required: true },
+    required: false
+  }]
 })
 
 module.exports = mongoose.model('User', userSchema)

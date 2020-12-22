@@ -24,8 +24,12 @@ const financeSchema = new Schema({
     required: true
   },
   date: {
-    type: Date,
+    type: String,
     require: true
+  },
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true
   }
 })
 

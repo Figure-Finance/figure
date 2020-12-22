@@ -23,10 +23,14 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
           email: 'sid@test.com',
           firstName: 'Sid',
           lastName: 'Arci',
-          password: 'test'
+          password: 'test',
+          finances: [{
+            financeId: mongoose.ObjectId('5fe15698c8ed34064c649811'),
+            date: '12-26-2020'
+          }]
         })
+        user.save()
       }
-      user.save()
     })
     app.listen(80)
   })
