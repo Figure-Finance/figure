@@ -22,21 +22,17 @@ const GraphSummary = props => {
 
   let title = null
 
-  if (props.year) {
+  if (props.showYearly) {
     title = (
       <div className={classes.Buttons}>
-        <Button color='primary' size='square' clicked={decrementNumber}>
-          <LeftArrowButton />
-        </Button>
+        <LeftArrowButton clicked={decrementNumber} />
         <Button
           color='primary'
           size='large'
           width='300px'>
           {number}
         </Button>
-        <Button color='primary' size='square' clicked={incrementNumber}>
-          <RightArrowButton />
-        </Button>
+        <RightArrowButton clicked={incrementNumber} />
       </div>
     )
   }
@@ -50,7 +46,7 @@ const GraphSummary = props => {
 }
 
 GraphSummary.propTypes = {
-  year: PropTypes.boolean
+  showYearly: PropTypes.bool
 }
 
 export default GraphSummary
