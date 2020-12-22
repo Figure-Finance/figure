@@ -60,7 +60,9 @@ const Summary = props => {
 
   if (showModal) {
     content = (
-      <SummaryModal color={props.color} clicked={closeModal} />
+      <SummaryModal
+        color={props.color}
+        clicked={closeModal} />
     )
   }
 
