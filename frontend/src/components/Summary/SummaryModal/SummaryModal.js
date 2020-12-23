@@ -27,7 +27,7 @@ const SummaryModal = props => {
   const sendTransaction = () => {
     api.post('dash-weekly', {
       category: type,
-      amount,
+      amount: +amount,
       location,
       description,
       date,
