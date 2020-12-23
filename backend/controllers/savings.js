@@ -5,10 +5,9 @@ exports.getBankSavings = (req, res, next) => {
   Savings.findOne()
     .then(savings => {
       console.log(savings)
-      res.json(savings)
+      return res.status(200).json(savings)
     })
     .catch(err => console.log(err))
-  next()
 }
 
 exports.postBankSavings = (req, res, next) => {
@@ -18,13 +17,13 @@ exports.postBankSavings = (req, res, next) => {
   const bankProgress = req.body.bankProgress
   Savings.find()
     .then(savings => {
-      bankSavings = new Savings({
+      const bankSavings = new Savings({
         bankGoal: bankGoal,
         itemGoals: itemGoals, // { item: 'New Bike', amount: 450 }
         bankProgress: bankProgress
       })
       bankSavings.save(err => console.log(err))
-      res.json(bankSavings)
+      return res.status(201).json(bankSavings)
     })
     .catch(err => console.log(err))
 }
