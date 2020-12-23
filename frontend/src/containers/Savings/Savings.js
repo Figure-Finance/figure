@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import api from '../../api'
 import classes from './Savings.module.css'
 import GraphSummary from '../../components/GraphSummary/GraphSummary'
@@ -7,31 +7,51 @@ import Summary from '../../components/Summary/Summary'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Savings = props => {
+  const [loading, setLoading] = useState(false)
   const [goals, setGoals] = useState([])
   const [goalProgress, setGoalProgress] = useState(0)
   const [totalGoal, setTotalGoal] = useState(0)
 
-  useEffect(() => {
+  const onFetchSavings = useCallback(() => {
+    setLoading(true)
     api.get('savings').then(res => {
-      console.log(res.data)
+      setLoading(false)
       setGoals(res.data.itemGoals)
       setGoalProgress(res.data.totalSavingsProgress)
       setTotalGoal(res.data.totalSavingsGoal)
     }).catch(err => {
+      setLoading(false)
       console.log(err)
     })
   }, [])
 
-  return (
-    <div className={classes.Savings}>
+  useEffect(() => {
+    onFetchSavings()
+  }, [onFetchSavings])
+
+  let progressSummary = <h1>Loading...</h1>
+  let summary = <h1>Loading...</h1>
+
+  if (!loading) {
+    progressSummary = (
       <ProgressSummary
         left='neutral'
         leftAmount={goalProgress}
         rightAmount={totalGoal}
         single />
+    )
+
+    summary = (
+      <Summary color='neutral' title='Goals' content={goals} canAdd />
+    )
+  }
+
+  return (
+    <div className={classes.Savings}>
+      {progressSummary}
       <div className={classes.Main}>
         <GraphSummary isSavings />
-        <Summary color='neutral' title='Goals' content={goals} canAdd />
+        {summary}
       </div>
       <Navbar active='s' />
     </div>
