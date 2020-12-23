@@ -32,7 +32,7 @@ const Summary = props => {
       width='90%'
       secondary={`$${item.amount.toFixed(2)}`}
       dual>
-      {item.type}
+      {item.name}
     </Button>
   ))
 
