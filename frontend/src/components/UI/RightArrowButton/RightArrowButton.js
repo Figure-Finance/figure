@@ -6,7 +6,7 @@ import RightArrow from '../../Icons/RightArrow/RightArrow'
 const RightArrowButton = props => {
   return (
     <Button color={props.color} size='square' clicked={props.clicked}>
-      <RightArrow fill='#05F29B' />
+      <RightArrow fill={props.color} />
     </Button>
   )
 }
