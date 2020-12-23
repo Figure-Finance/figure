@@ -3,16 +3,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const savingsSchema = new Schema({
-  bankGoal: {
+  totalSavingsGoal: {
     type: Number,
     required: true
   },
   itemGoals: [{
-    item: { type: String, required: true },
+    name: { type: String, required: true },
     amount: { type: Number, required: true },
     progress: { type: Number, required: false }
   }],
-  bankProgress: {
+  totalSavingsProgress: {
     type: Number,
     required: false
   }

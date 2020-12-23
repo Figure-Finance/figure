@@ -3,9 +3,10 @@ const Finance = require('../models/finances')
 
 exports.getUserFinances = (req, res, next) => {
   console.log('RUNNING ROUTE')
-  User.find()
+  User.findOne()
     .then(user => {
       console.log(`User: ${user} User password: ${user.password}`)
+      return res.status(200).json(user)
       // .populate('finances.financeId')
       // .execPopulate()
       // .then(finances => {
@@ -22,7 +23,7 @@ exports.getUserFinances = (req, res, next) => {
     //   console.log('IN EXEC BLOCK')
     //   console.log(`Finances: ${finances}`)
     // })
-  next()
+  // next()
 }
 
 // TODO: Get fields from FE - add some dummy data to BE

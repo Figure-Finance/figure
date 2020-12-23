@@ -11,16 +11,16 @@ exports.getBankSavings = (req, res, next) => {
 }
 
 exports.postBankSavings = (req, res, next) => {
-  const bankGoal = req.body.bankGoal
+  const totalSavingsGoal = req.body.totalSavingsGoal
   const itemGoals = req.body.itemGoals
   // TODO: bankProgress will auto update and is just received through here for testing
-  const bankProgress = req.body.bankProgress
+  const totalSavingsProgress = req.body.totalSavingsProgress
   Savings.find()
     .then(savings => {
       const bankSavings = new Savings({
-        bankGoal: bankGoal,
-        itemGoals: itemGoals, // { item: 'New Bike', amount: 450 }
-        bankProgress: bankProgress
+        totalSavingsGoal: totalSavingsGoal,
+        itemGoals: itemGoals, // { name: 'New Bike', amount: 450 }
+        totalSavingsProgress: totalSavingsProgress
       })
       bankSavings.save(err => console.log(err))
       return res.status(201).json(bankSavings)
