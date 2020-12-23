@@ -60,7 +60,7 @@ const Monthly = props => {
         rightAmount={totalExpenses} />
       <div className={classes.Main}>
         <Summary content={income} color='primary' />
-        <ChartSummary title='Month' />
+        <ChartSummary title='Month' data={expenses} />
         <Summary content={expenses} color='danger' />
       </div>
       <Navbar active='m' />

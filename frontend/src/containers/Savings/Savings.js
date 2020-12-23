@@ -27,10 +27,11 @@ const Savings = props => {
     <div className={classes.Savings}>
       <ProgressSummary
         left='neutral'
-        leftAmount={630.38}
-        rightAmount={totalGoals} />
+        leftAmount={1000.00}
+        rightAmount={totalGoals}
+        single />
       <div className={classes.Main}>
-        <GraphSummary />
+        <GraphSummary isSavings />
         <Summary color='neutral' title='Goals' content={goals} canAdd />
       </div>
       <Navbar active='s' />

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Line } from 'react-chartjs-2'
+import PropTypes from 'prop-types'
 
 const Graph = props => {
-  return (
+  let graph = (
     <Line
       data={{
         labels: [
@@ -58,6 +59,55 @@ const Graph = props => {
       width={600}
       options={{ maintainAspctRatio: false }} />
   )
+
+  if (props.isSavings) {
+    graph = (
+      <Line
+        data={{
+          labels: [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+          ],
+          datasets: [
+            {
+              label: 'Savings',
+              data: [12, 19, 3, 5, 2, 3, 1, 22, 88, 99, 2, 6],
+              backgroundColor: [
+                'rgba(101, 200, 255, 0.2)'
+              ],
+              borderColor: [
+                '#65C8FF'
+              ],
+              borderWidth: 2,
+              pointStyle: 'rectRounded',
+              pointBackgroundColor: '#65C8FF',
+              pointBorderColor: '#65C8FF',
+              pointRadius: '4',
+              pointHoverRadius: '10'
+            }
+          ]
+        }}
+        height={370}
+        width={600}
+        options={{ maintainAspctRatio: false }} />
+    )
+  }
+
+  return graph
+}
+
+Graph.propTypes = {
+  isSavings: PropTypes.bool
 }
 
 export default Graph

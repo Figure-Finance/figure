@@ -16,7 +16,7 @@ const SummaryModal = props => {
   let isIncome
   let heading
 
-  if (props.color === 'primary') {
+  if (props.isIncome) {
     isIncome = true
     heading = 'Add Income'
   } else {
@@ -27,7 +27,7 @@ const SummaryModal = props => {
   const sendTransaction = () => {
     api.post('dash-weekly', {
       category: type,
-      amount,
+      amount: +amount,
       location,
       description,
       date,
@@ -91,7 +91,8 @@ const SummaryModal = props => {
 
 SummaryModal.propTypes = {
   clicked: PropTypes.func,
-  color: PropTypes.string
+  color: PropTypes.string,
+  isIncome: PropTypes.bool
 }
 
 export default SummaryModal

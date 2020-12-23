@@ -9,7 +9,7 @@ const ChartModal = props => {
       <Button
         key={index}
         size='large'
-        color='primary'
+        color='default'
         clicked={props.clicked}
         width='100%'>
         {item}

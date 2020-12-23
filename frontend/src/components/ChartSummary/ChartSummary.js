@@ -71,20 +71,22 @@ const ChartSummary = props => {
     }
   }
 
+  const types = props.data.map(item => item.type)
+  const amounts = props.data.map(item => item.amount)
+
   let content = (
     <div className={classes.ChartSummary}>
       <div className={classes.Buttons}>
-        <LeftArrowButton clicked={decrementNumber} color='primary' />
+        <LeftArrowButton clicked={decrementNumber} color='default' />
         <Button
-          color='primary'
           size='large'
           width='60%'
           clicked={openModal}>
           {buttonContent}
         </Button>
-        <RightArrowButton clicked={incrementNumber} color='primary' />
+        <RightArrowButton clicked={incrementNumber} color='default' />
       </div>
-      <PieChart />
+      <PieChart types={types} amounts={amounts} />
     </div>
   )
 
@@ -106,7 +108,8 @@ const ChartSummary = props => {
 }
 
 ChartSummary.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default ChartSummary

@@ -71,8 +71,9 @@ const Weekly = props => {
         <Summary
           content={income}
           color='primary'
-          canAdd />
-        <ChartSummary title='Week' />
+          canAdd
+          isIncome />
+        <ChartSummary title='Week' data={expenses} />
         <Summary
           content={expenses}
           color='danger'

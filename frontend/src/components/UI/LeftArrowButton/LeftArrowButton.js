@@ -6,7 +6,7 @@ import LeftArrow from '../../Icons/LeftArrow/LeftArrow'
 const LeftArrowButton = props => {
   return (
     <Button color={props.color} size='square' clicked={props.clicked}>
-      <LeftArrow fill='#05F29B' />
+      <LeftArrow fill={props.color} />
     </Button>
   )
 }

@@ -68,6 +68,10 @@
   color: var(--danger);
 }
 
+.Default {
+  color: var(--default);
+}
+
 .Large {
   border-radius: 25px;
   box-shadow:

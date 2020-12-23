@@ -51,7 +51,8 @@ const Summary = props => {
     content = (
       <SummaryModal
         color={props.color}
-        clicked={closeModal} />
+        clicked={closeModal}
+        isIncome={props.isIncome}/>
     )
   }
 
@@ -68,6 +69,7 @@ const Summary = props => {
 
 Summary.propTypes = {
   color: PropTypes.string,
+  isIncome: PropTypes.bool,
   height: PropTypes.string,
   width: PropTypes.string,
   title: PropTypes.string,
