@@ -40,3 +40,17 @@ exports.getItemGoalDetails = (req, res, next) => {
     })
     .catch(err => console.log(err))
 }
+
+exports.deleteItemGoal = (req, res, next) => {
+  const itemGoalId = req.params.id
+  Savings.findOne({ 'itemGoals._id': itemGoalId })
+    .then(savingsItem => {
+      newSavingsItemGoals = savingsItem.itemGoals.filter(item => {
+        return item._id.toString() !== itemGoalId.toString()
+      })
+      savingsItem.itemGoals = newSavingsItemGoals
+      savingsItem.save()
+      return res.status(200).json({ msg: 'Successfully deleted goal!' })
+    })
+    .catch(err => console.log(err))
+}

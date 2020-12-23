@@ -12,4 +12,6 @@ router.post('/', savingsController.postBankSavings)
 
 router.get('/goal/:id', savingsController.getItemGoalDetails)
 
+router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
+
 module.exports = router
