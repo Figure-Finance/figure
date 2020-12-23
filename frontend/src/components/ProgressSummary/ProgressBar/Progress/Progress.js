@@ -28,7 +28,7 @@ const Progress = props => {
 
 Progress.propTypes = {
   color: PropTypes.string,
-  percent: PropTypes.string,
+  percent: PropTypes.number,
   position: PropTypes.string
 }
 

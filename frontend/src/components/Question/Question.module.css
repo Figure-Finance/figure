@@ -1,0 +1,15 @@
+.Question {
+
+}
+
+.Buttons {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.Buttons > button {
+  margin: 20px 0;
+}

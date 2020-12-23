@@ -11,6 +11,13 @@ import PieChart from './PieChart/PieChart'
 const ChartSummary = props => {
   const [number, setNumber] = useState(1)
   const [showModal, setShowModal] = useState(false)
+
+  const weeks = []
+
+  for (let i = 1; i <= 53; i++) {
+    weeks.push(`Week ${i}`)
+  }
+
   const months = [
     'January',
     'February',
@@ -54,7 +61,9 @@ const ChartSummary = props => {
 
   const changeSelection = event => {
     if (props.title === 'Week') {
-      setNumber(number + 1)
+      const index = weeks.findIndex(el => el === event.target.innerHTML)
+      setNumber(index + 1)
+      setShowModal(false)
     } else if (props.title === 'Month') {
       const index = months.findIndex(el => el === event.target.innerHTML)
       setNumber(index + 1)
@@ -79,9 +88,13 @@ const ChartSummary = props => {
     </div>
   )
 
-  if (showModal) {
+  if (showModal && props.title === 'Month') {
     content = (
       <ChartModal selection={months} clicked={changeSelection} />
+    )
+  } else if (showModal && props.title === 'Week') {
+    content = (
+      <ChartModal selection={weeks} clicked={changeSelection} />
     )
   }
 
