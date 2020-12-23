@@ -9,7 +9,7 @@ const savingsSchema = new Schema({
   },
   itemGoals: [{
     item: { type: String, required: true },
-    cost: { type: Number, required: true },
+    amount: { type: Number, required: true },
     progress: { type: Number, required: false }
   }],
   bankProgress: {

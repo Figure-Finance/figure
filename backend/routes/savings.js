@@ -8,6 +8,6 @@ const router = express.Router()
 
 router.get('/savings', savingsController.getBankSavings)
 
-router.get('/post-savings', savingsController.postBankSavings)
+router.post('/savings', savingsController.postBankSavings)
 
 module.exports = router
