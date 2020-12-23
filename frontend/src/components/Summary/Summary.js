@@ -26,7 +26,7 @@ const Summary = props => {
 
   const buttons = props.content.map(item => (
     <Button
-      key={item.type}
+      key={item.name}
       color={props.color}
       size='thin'
       width='90%'

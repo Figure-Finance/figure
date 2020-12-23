@@ -8,34 +8,34 @@ import Navbar from '../../components/Navbar/Navbar'
 const Monthly = props => {
   const income = [
     {
-      type: 'Web Design',
+      name: 'Web Design',
       amount: 484.92
     },
     {
-      type: 'Video Team',
+      name: 'Video Team',
       amount: 200.00
     },
     {
-      type: 'Curriculum',
+      name: 'Curriculum',
       amount: 200.00
     }
   ]
 
   const expenses = [
     {
-      type: 'Groceries',
+      name: 'Groceries',
       amount: 235.84
     },
     {
-      type: 'Gas',
+      name: 'Gas',
       amount: 140.00
     },
     {
-      type: 'Eating Out',
+      name: 'Eating Out',
       amount: 128.49
     },
     {
-      type: 'Misc',
+      name: 'Misc',
       amount: 100.00
     }
   ]
