@@ -15,8 +15,8 @@ const Savings = props => {
     api.get('savings').then(res => {
       console.log(res.data)
       setGoals(res.data.itemGoals)
-      setGoalProgress(res.data.bankProgress)
-      setTotalGoal(res.data.bankGoal)
+      setGoalProgress(res.data.totalSavingsProgress)
+      setTotalGoal(res.data.totalSavingsGoal)
     }).catch(err => {
       console.log(err)
     })
