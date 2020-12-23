@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classes from './Summary.module.css'
 import SummaryModal from './SummaryModal/SummaryModal'
 import Container from '../UI/Container/Container'
+import SummaryHeading from './SummaryHeading/SummaryHeading'
 import AddButton from '../UI/AddButton/AddButton'
 import Button from '../UI/Button/Button'
 
@@ -37,9 +38,9 @@ const Summary = props => {
 
   let content = (
     <>
-      <h1 className={props.color}>
-        {props.title ? props.title : 'Types'}
-      </h1>
+      <SummaryHeading color={props.color}>
+        {props.title}
+      </SummaryHeading>
       <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
         {buttons}
       </div>
@@ -51,8 +52,8 @@ const Summary = props => {
     content = (
       <SummaryModal
         color={props.color}
-        clicked={closeModal}
-        isIncome={props.isIncome}/>
+        closeModal={closeModal}
+        isIncome={props.isIncome} />
     )
   }
 
