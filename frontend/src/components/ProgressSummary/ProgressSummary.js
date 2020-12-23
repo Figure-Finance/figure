@@ -5,12 +5,17 @@ import Container from '../UI/Container/Container'
 import ProgressBar from './ProgressBar/ProgressBar'
 
 const ProgressSummary = props => {
-  const leftPercent = (
+  let leftPercent = (
     (100 / (props.leftAmount + props.rightAmount)) * props.leftAmount
   )
-  const rightPercent = (
+  let rightPercent = (
     (100 / (props.leftAmount + props.rightAmount)) * props.rightAmount
   )
+
+  if (props.single) {
+    leftPercent = props.leftAmount / props.rightAmount * 100
+    rightPercent = 0
+  }
 
   return (
     <div className={classes.ProgressSummary}>
@@ -35,7 +40,8 @@ ProgressSummary.propTypes = {
   left: PropTypes.string,
   right: PropTypes.string,
   leftAmount: PropTypes.number,
-  rightAmount: PropTypes.number
+  rightAmount: PropTypes.number,
+  single: PropTypes.bool
 }
 
 export default ProgressSummary
