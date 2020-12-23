@@ -12,6 +12,8 @@ const Button = props => {
     classNames.push(classes.Neutral)
   } else if (props.color === 'danger') {
     classNames.push(classes.Danger)
+  } else {
+    classNames.push(classes.Default)
   }
 
   if (props.size === 'large') {
