@@ -5,25 +5,17 @@ exports.getUserFinances = (req, res, next) => {
   console.log('RUNNING ROUTE')
   User.findOne()
     .then(user => {
-      console.log(`User: ${user} User password: ${user.password}`)
-      return res.status(200).json(user)
-      // .populate('finances.financeId')
-      // .execPopulate()
-      // .then(finances => {
-      //   console.log(`Finances from then block: ${finances}`)
-      //   // res.json({ msg: 'Getting user finances' })
-      //   return res.status(200).json({ msg: 'Getting user finances' })
-      // })
-      // .catch(err => {
-      //   console.log('IN CATCH BLOCK')
-      //   console.log(err)
-      // })
+      console.log(`User: ${user} User password: ${user.finances}`)
+      Finance.find({ userId: user._id })
+        .then(finances => {
+          console.log(`Finances from then block: ${finances}`)
+          return res.status(200).json({ msg: 'Getting user finances', finances: finances })
+        })
+        .catch(err => {
+          console.log('IN CATCH BLOCK')
+          console.log(err)
+        })
     })
-    // .exec(finances => {
-    //   console.log('IN EXEC BLOCK')
-    //   console.log(`Finances: ${finances}`)
-    // })
-  // next()
 }
 
 // TODO: Get fields from FE - add some dummy data to BE
