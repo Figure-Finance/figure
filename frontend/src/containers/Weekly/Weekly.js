@@ -17,34 +17,34 @@ const Weekly = props => {
 
   const income = [
     {
-      type: 'Web Design',
+      name: 'Web Design',
       amount: 84.92
     },
     {
-      type: 'Video Team',
+      name: 'Video Team',
       amount: 50.00
     },
     {
-      type: 'Curriculum',
+      name: 'Curriculum',
       amount: 50.00
     }
   ]
 
   const expenses = [
     {
-      type: 'Groceries',
+      name: 'Groceries',
       amount: 35.84
     },
     {
-      type: 'Gas',
+      name: 'Gas',
       amount: 40.00
     },
     {
-      type: 'Eating Out',
+      name: 'Eating Out',
       amount: 18.49
     },
     {
-      type: 'Misc',
+      name: 'Misc',
       amount: 20.00
     }
   ]

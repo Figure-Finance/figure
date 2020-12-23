@@ -8,13 +8,15 @@ import Navbar from '../../components/Navbar/Navbar'
 
 const Savings = props => {
   const [goals, setGoals] = useState([])
+  const [goalProgress, setGoalProgress] = useState(0)
   const [totalGoal, setTotalGoal] = useState(0)
 
   useEffect(() => {
     api.get('savings').then(res => {
       console.log(res.data)
       setGoals(res.data.itemGoals)
-      setTotalGoal(res.data.bankGoal)
+      setGoalProgress(res.data.totalSavingsProgress)
+      setTotalGoal(res.data.totalSavingsGoal)
     }).catch(err => {
       console.log(err)
     })
@@ -24,7 +26,7 @@ const Savings = props => {
     <div className={classes.Savings}>
       <ProgressSummary
         left='neutral'
-        leftAmount={1000.00}
+        leftAmount={goalProgress}
         rightAmount={totalGoal}
         single />
       <div className={classes.Main}>
