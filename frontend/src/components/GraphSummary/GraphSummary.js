@@ -27,7 +27,7 @@ const GraphSummary = props => {
       <div className={classes.Buttons}>
         <LeftArrowButton clicked={decrementNumber} />
         <Button
-          color='primary'
+          color='default'
           size='large'
           width='300px'>
           {number}
@@ -40,13 +40,14 @@ const GraphSummary = props => {
   return (
     <Container height='100%' width='66%'>
       {title}
-      <Graph />
+      <Graph isSavings={props.isSavings} />
     </Container>
   )
 }
 
 GraphSummary.propTypes = {
-  showYearly: PropTypes.bool
+  showYearly: PropTypes.bool,
+  isSavings: PropTypes.bool
 }
 
 export default GraphSummary
