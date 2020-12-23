@@ -4,27 +4,32 @@ const Finance = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   console.log('RUNNING ROUTE')
   User.findOne()
-    .populate('finances.financeId')
+    .populate('finance._id')
+    // .execPopulate()
     .exec(finances => {
-      console.log('IN THEN BLOCK')
+      console.log('IN EXEC BLOCK')
       console.log(finances)
-      res.json(finances)
     })
-    // .catch(err => {
-    //   console.log('IN CATCH BLOCK')
-    //   console.log(err)
-    // })
+  return res.status(200).json({ msg: 'Getting user finances' })
+  // .then(finances => {
+  //   console.log(`Finances from then block: ${finances}`)
+  // // res.json({ msg: 'Getting user finances' })
+  // })
+  // .catch(err => {
+  //   console.log('IN CATCH BLOCK')
+  //   console.log(err)
+  // })
   next()
 }
 
 // TODO: Get fields from FE - add some dummy data to BE
 
 exports.postUserFinances = (req, res, next) => {
-  const financeData = req.data
+  const financeData = req.body
   console.log(`Finance Data from POST user finances: ${financeData}`)
   const user = User.findOne()
     .then(user => {
-      finances = new Finance({
+      const finances = new Finance({
         category: 'Groceries',
         amount: 45.49,
         location: 'Sprouts',
@@ -35,7 +40,8 @@ exports.postUserFinances = (req, res, next) => {
       })
       console.log('POSTING')
       finances.save()
-      res.json({ user: user, finances: finances })
+      // Needs category and amount as response only
+      return res.status(201).json({ user: user, finances: finances })
     })
     .catch(err => console.log(err))
 }
