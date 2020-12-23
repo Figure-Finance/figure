@@ -8,7 +8,7 @@ import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
   useEffect(() => {
-    api.get('/dash-weekly').then(res => {
+    api.get('dash-weekly').then(res => {
       console.log(res.data)
     }).catch(err => {
       console.log(err)

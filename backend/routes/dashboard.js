@@ -8,6 +8,6 @@ const router = express.Router()
 
 router.get('/dash-weekly', dashWeeklyController.getUserFinances)
 
-router.post('/post-finances', dashWeeklyController.postUserFinances)
+router.post('/dash-weekly', dashWeeklyController.postUserFinances)
 
 module.exports = router
