@@ -6,7 +6,7 @@ exports.getUserFinances = (req, res, next) => {
     .then(user => {
       Finance.find({ userId: user._id })
         .then(finances => {
-          return res.status(200).json({ msg: 'Getting user finances', finances: finances })
+          return res.status(200).json(finances)
         })
         .catch(err => {
           console.log(err)

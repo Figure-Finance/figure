@@ -29,25 +29,23 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
   .then(result => {
     console.log('CONNECTED')
     const finances = Finance.findOne()
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          email: 'sid@test.com',
-          firstName: 'Sid',
-          lastName: 'Arci',
-          password: 'test',
-          finances: [{
-            financeId: finances._id,
-            date: '12-26-2020'
-          }]
-        })
-        console.log(`User from if block app.js: ${user}`)
-        user.save(err => console.log(err))
-      } else {
-        console.log('IN ELSE BLOCK APP.JS')
-        console.log(`User from else block app.js: ${user}`)
-      }
-    })
+    User.findOne()
+      .then(user => {
+        if (!user) {
+          const user = new User({
+            email: 'sid@test.com',
+            firstName: 'Sid',
+            lastName: 'Arci',
+            password: 'test',
+            finances: [{
+              financeId: finances._id,
+              date: '12-26-2020'
+            }]
+          })
+          user.save(err => console.log(err))
+        }
+      })
+      .catch(err => console.log(err))
     app.listen(80)
   })
   .catch(err => {
