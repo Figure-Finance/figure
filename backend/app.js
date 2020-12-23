@@ -10,6 +10,7 @@ const app = express()
 
 const dashWeeklyRoutes = require('./routes/dashboard')
 const savingsRoutes = require('./routes/savings')
+const userRoutes = require('./routes/user')
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -22,6 +23,7 @@ app.use(bodyParser.json())
 
 app.use('/api', dashWeeklyRoutes)
 app.use('/api', savingsRoutes)
+app.use('/api', userRoutes)
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
