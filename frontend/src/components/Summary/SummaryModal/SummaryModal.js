@@ -34,8 +34,10 @@ const SummaryModal = props => {
       isIncome
     }).then(res => {
       console.log(res.data)
+      props.closeModal()
     }).catch(err => {
       console.log(err)
+      props.closeModal()
     })
   }
 
@@ -75,7 +77,7 @@ const SummaryModal = props => {
         <Button
           size='large'
           color={props.color}
-          clicked={props.clicked}
+          clicked={props.closeModal}
           width='100%'>
           X
         </Button>
@@ -90,7 +92,7 @@ const SummaryModal = props => {
 }
 
 SummaryModal.propTypes = {
-  clicked: PropTypes.func,
+  closeModal: PropTypes.func,
   color: PropTypes.string,
   isIncome: PropTypes.bool
 }
