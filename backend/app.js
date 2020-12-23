@@ -21,8 +21,8 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.json())
 
-app.use('/api', dashWeeklyRoutes)
-app.use('/api', savingsRoutes)
+app.use('/api/weekly', dashWeeklyRoutes)
+app.use('/api/savings', savingsRoutes)
 app.use('/api', userRoutes)
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

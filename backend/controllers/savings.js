@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const User = require('../models/user')
 const Savings = require('../models/savings')
 
@@ -24,6 +25,18 @@ exports.postBankSavings = (req, res, next) => {
       })
       bankSavings.save(err => console.log(err))
       return res.status(201).json(bankSavings)
+    })
+    .catch(err => console.log(err))
+}
+
+exports.getItemGoalDetails = (req, res, next) => {
+  const itemGoalId = req.params.id
+  Savings.findOne({ 'itemGoals._id': itemGoalId })
+    .then(savingsItem => {
+      const itemGoal = savingsItem.itemGoals.filter(item => {
+        return item._id.toString() === itemGoalId.toString()
+      })
+      return res.status(200).json(itemGoal)
     })
     .catch(err => console.log(err))
 }

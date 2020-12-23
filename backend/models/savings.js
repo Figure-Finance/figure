@@ -10,6 +10,7 @@ const savingsSchema = new Schema({
   itemGoals: [{
     name: { type: String, required: true },
     amount: { type: Number, required: true },
+    description: { type: String, required: true },
     progress: { type: Number, required: false }
   }],
   totalSavingsProgress: {
