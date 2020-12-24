@@ -10,6 +10,8 @@ router.get('/', savingsController.getSavings)
 
 router.post('/', savingsController.postTotalSavings)
 
+router.patch('/edit', savingsController.editTotalSavings)
+
 router.post('/goal/add', savingsController.postItemGoals)
 
 router.get('/goal/:id', savingsController.getItemGoalDetails)

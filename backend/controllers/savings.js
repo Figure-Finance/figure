@@ -44,6 +44,12 @@ exports.postTotalSavings = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
+exports.editTotalSavings = (req, res, next) => {
+  const newTotalSavingsGoal = req.body.totalSavingsGoal
+  // TODO: find by user
+  Savings.findOne()
+}
+
 // ITEMS GOALS ROUTES
 
 exports.postItemGoals = (req, res, next) => {
