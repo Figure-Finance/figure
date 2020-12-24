@@ -96,21 +96,23 @@ exports.getByTimeFrame = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       if (timeFrame === 'month') {
-        interval = {
-          start: getMonth(startOfToday()),
-          end: lastDayOfMonth(startOfToday())
-        }
         savings = savingsItem.progressUpdates.filter(i => {
-          // console.log(``From month time frame, i.date: ${i.date})
-          return isWithinInterval(new Date(i.date), interval)
+          // console.log(`From month time frame, i.date: ${i.date}`)
+          console.log()
+          const isWithin = isWithinInterval(new Date(i.date), {
+            start: getMonth(startOfToday()),
+            end: lastDayOfMonth(startOfToday())
+          })
+          console.log(`Is within? ${isWithin}`)
+          return isWithin
         })
+        console.log(`savings after filtering: ${savings}`)
       } else if (timeFrame === 'year') {
-        interval = {
-          start: getYear(startOfToday()),
-          end: lastDayOfYear(startOfToday())
-        }
         savings = savingsItem.progressUpdates.filter(i => {
-          return isWithinInterval(new Date(i.date), interval)
+          return isWithinInterval(new Date(i.date), {
+            start: getYear(startOfToday()),
+            end: lastDayOfYear(startOfToday())
+          })
         })
       } else if (timeFrame === 'week') {
         interval = {

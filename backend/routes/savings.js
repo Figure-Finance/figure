@@ -11,9 +11,9 @@ router.get('/', savingsController.getSavings)
 
 router.post('/', savingsController.postTotalSavings)
 
-router.patch('/edit', savingsController.editTotalSavings)
+router.patch('/total', savingsController.editTotalSavings)
 
-router.patch('/progress/update', savingsController.updateTotalSavingsProgress)
+router.patch('/progress', savingsController.updateTotalSavingsProgress)
 
 router.get('/:timeFrame', savingsController.getByTimeFrame)
 
@@ -21,9 +21,9 @@ router.post('/goal/add', itemGoalController.postItemGoals)
 
 router.get('/goal/:id', itemGoalController.getItemGoalDetails)
 
-router.delete('/goal/delete/:id', itemGoalController.deleteItemGoal)
+router.delete('/goal/:id', itemGoalController.deleteItemGoal)
 
-router.patch('/goal/edit/:id', itemGoalController.editItemGoal)
+router.patch('/goal/:id', itemGoalController.editItemGoal)
 
 router.patch('/goal/allocate/:id', itemGoalController.allocateGoalFunds)
 
