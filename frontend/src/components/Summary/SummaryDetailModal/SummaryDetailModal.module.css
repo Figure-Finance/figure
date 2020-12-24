@@ -1,0 +1,10 @@
+.SummaryDetailModal {
+  height: 100%;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.SummaryDetailModal > button,
+.SummaryDetailModal > input {
+  margin: 10px auto;
+}
