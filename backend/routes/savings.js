@@ -3,6 +3,7 @@ const path = require('path')
 const express = require('express')
 
 const savingsController = require('../controllers/savings')
+const itemGoalController = require('../controllers/itemGoals')
 
 const router = express.Router()
 
@@ -12,14 +13,18 @@ router.post('/', savingsController.postTotalSavings)
 
 router.patch('/edit', savingsController.editTotalSavings)
 
-router.post('/goal/add', savingsController.postItemGoals)
+router.patch('/update', savingsController.updateTotalSavingsProgress)
 
-router.get('/goal/:id', savingsController.getItemGoalDetails)
+// router.get('/savings/:timeFrame', savingsController.getByTimeFrame)
 
-router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
+router.post('/goal/add', itemGoalController.postItemGoals)
 
-router.patch('/goal/edit/:id', savingsController.editItemGoal)
+router.get('/goal/:id', itemGoalController.getItemGoalDetails)
 
-router.patch('/goal/allocate/:id', savingsController.allocateGoalFunds)
+router.delete('/goal/delete/:id', itemGoalController.deleteItemGoal)
+
+router.patch('/goal/edit/:id', itemGoalController.editItemGoal)
+
+router.patch('/goal/allocate/:id', itemGoalController.allocateGoalFunds)
 
 module.exports = router
