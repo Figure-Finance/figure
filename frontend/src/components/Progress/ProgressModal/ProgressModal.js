@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './LeftModal.module.css'
+import classes from './ProgressModal.module.css'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 
-const LeftModal = props => {
+const ProgressModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElement, setFormElement] = useState({
     id: '0',
@@ -13,7 +13,7 @@ const LeftModal = props => {
       type: 'number',
       placeholder: 'Amount'
     },
-    value: '',
+    value: props.amount,
     validation: {
       required: true
     },
@@ -22,7 +22,7 @@ const LeftModal = props => {
   })
 
   const submitHandler = () => {
-    props.onSubmit(formElement.value)
+    props.onSubmit(+formElement.value)
   }
 
   const inputChangedHandler = (event) => {
@@ -38,7 +38,7 @@ const LeftModal = props => {
   }
 
   return (
-    <div className={classes.LeftModal}>
+    <div className={classes.ProgressModal}>
       <Button
         onClick={props.closeModal}
         size='square'
@@ -46,7 +46,7 @@ const LeftModal = props => {
         X
       </Button>
       <div className={classes.Main}>
-        <h1 className='neutral'>Deposit</h1>
+        <h1 className={props.color}>{props.title}</h1>
         <Input
           key={formElement.id}
           type={formElement.type}
@@ -69,10 +69,12 @@ const LeftModal = props => {
   )
 }
 
-LeftModal.propTypes = {
+ProgressModal.propTypes = {
   closeModal: PropTypes.func,
   color: PropTypes.string,
-  onSubmit: PropTypes.func
+  title: PropTypes.string,
+  onSubmit: PropTypes.func,
+  amount: PropTypes.string
 }
 
-export default LeftModal
+export default ProgressModal

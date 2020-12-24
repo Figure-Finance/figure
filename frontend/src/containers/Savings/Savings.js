@@ -25,39 +25,48 @@ const Savings = props => {
     })
   }, [])
 
-  const onDeposit = useCallback((body, cb) => {
-    api.patch('savings/progress/update', body).then(res => {
+  const onDeposit = useCallback((value, cb) => {
+    api.patch('savings/progress', {
+      progressAmount: value
+    }).then(res => {
       cb(res)
+      setGoalProgress(res.data)
     }).catch(err => {
       console.log(err)
     })
-  })
+  }, [])
+
+  const onUpdateTotalGoal = useCallback((value, cb) => {
+    api.patch('savings/total', {
+      totalSavingsGoal: value
+    }).then(res => {
+      cb(res)
+      setTotalGoal(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
   const onAddGoal = useCallback(cb => {
-    // setLoading(true)
     api.post('savings/goal/add').then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
     })
-  })
+  }, [])
 
   const onUpdateGoal = useCallback((id, body, cb) => {
-    // setLoading(true)
     api.patch(`savings/goal/edit/${id}`, body).then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
-      // setLoading(false)
     })
   }, [])
 
   const onDeleteGoal = useCallback((id, cb) => {
-    // setLoading(true)
     api.delete(`savings/goal/delete/${id}`).then(res => {
       cb(res)
     }).catch(err => {
-      // setLoading(false)
       console.log(err)
     })
   }, [])
@@ -69,6 +78,7 @@ const Savings = props => {
   return (
     <div className={classes.Savings}>
       <Progress
+        updateGoal={onUpdateTotalGoal}
         updateProgress={onDeposit}
         leftColor='neutral'
         leftAmount={goalProgress}

@@ -1,4 +1,4 @@
-.LeftModal {
+.ProgressModal {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.LeftModal button {
+.ProgressModal button {
   margin: 0 15px;
 }
 
