@@ -1,0 +1,19 @@
+.BreakdownDetailModal {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.Inputs, .Buttons {
+  width: 100%;
+}
+
+.BreakdownDetailModal > button,
+.Buttons > button,
+.Inputs > input {
+  margin: 10px auto;
+}
