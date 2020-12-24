@@ -1,33 +1,53 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classes from './Summary.module.css'
-import SummaryModal from './SummaryModal/SummaryModal'
+import SummaryAddModal from './SummaryAddModal/SummaryAddModal'
 import Container from '../UI/Container/Container'
 import SummaryHeading from './SummaryHeading/SummaryHeading'
+import SummaryDetailModal from './SummaryDetailModal/SummaryDetailModal'
 import AddButton from '../UI/AddButton/AddButton'
 import Button from '../UI/Button/Button'
 
 const Summary = props => {
-  const [showModal, setShowModal] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [currentItem, setCurrentItem] = useState(null)
 
   let addButton = null
+  let content = null
 
-  const openModal = () => {
-    setShowModal(true)
+  const openAddModal = () => {
+    setShowAddModal(true)
   }
 
-  const closeModal = () => {
-    setShowModal(false)
+  const closeAddModal = () => {
+    setShowAddModal(false)
+  }
+
+  const closeDetailModal = () => {
+    setShowDetailModal(false)
+  }
+
+  const updateItem = () => {
+    console.log('updated!')
+    setShowDetailModal(false)
+  }
+
+  const openDetailModal = id => {
+    setShowDetailModal(true)
+    const selectedItem = props.content.filter(item => item._id === id)
+    setCurrentItem(selectedItem[0])
   }
 
   if (props.canAdd) {
-    addButton = <AddButton color={props.color} clicked={openModal} />
+    addButton = <AddButton color={props.color} clicked={openAddModal} />
   }
 
   const buttons = props.content.map(item => (
     <Button
-      key={item.name}
+      key={item._id}
       color={props.color}
+      clicked={() => openDetailModal(item._id)}
       size='thin'
       width='90%'
       secondary={`$${item.amount.toFixed(2)}`}
@@ -36,24 +56,33 @@ const Summary = props => {
     </Button>
   ))
 
-  let content = (
-    <>
-      <SummaryHeading color={props.color}>
-        {props.title}
-      </SummaryHeading>
-      <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
-        {buttons}
-      </div>
-      {addButton}
-    </>
-  )
-
-  if (showModal) {
+  if (!showDetailModal) {
     content = (
-      <SummaryModal
+      <>
+        <SummaryHeading color={props.color}>
+          {props.title}
+        </SummaryHeading>
+        <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
+          {buttons}
+        </div>
+        {addButton}
+      </>
+    )
+  } else if (showAddModal) {
+    content = (
+      <SummaryAddModal
         color={props.color}
-        closeModal={closeModal}
+        closeModal={closeAddModal}
         isIncome={props.isIncome} />
+    )
+  } else if (showDetailModal) {
+    content = (
+      <SummaryDetailModal
+        onCancel={closeDetailModal}
+        onSuccess={updateItem}
+        name={currentItem.name}
+        amount={currentItem.amount.toString()}
+        description={currentItem.description} />
     )
   }
 
