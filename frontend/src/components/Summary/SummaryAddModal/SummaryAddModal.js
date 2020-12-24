@@ -1,83 +1,156 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import api from '../../../api'
 import classes from './SummaryAddModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 import AddButton from '../../UI/AddButton/AddButton'
 
 const SummaryAddModal = props => {
-  const [type, setType] = useState('')
-  const [amount, setAmount] = useState('')
-  const [location, setLocation] = useState('')
-  const [description, setDescription] = useState('')
-  const [date, setDate] = useState('')
+  const [formIsValid, setFormIsValid] = useState(false)
+  const [formElements, setFormElements] = useState({
+    // type: {
+    //   type: 'input',
+    //   config: {
+    //     type: 'text',
+    //     placeholder: 'Type'
+    //   },
+    //   value: props.type,
+    //   validation: {
+    //     required: true
+    //   },
+    //   valid: false,
+    //   touched: false
+    // },
+    name: {
+      type: 'input',
+      config: {
+        type: 'text',
+        placeholder: 'Name'
+      },
+      value: props.name,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    amount: {
+      type: 'input',
+      config: {
+        type: 'number',
+        placeholder: 'Amount'
+      },
+      value: props.amount,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    // location: {
+    //   type: 'input',
+    //   config: {
+    //     type: 'text',
+    //     placeholder: 'Location'
+    //   },
+    //   value: props.location,
+    //   validation: {
+    //     required: true
+    //   },
+    //   valid: false,
+    //   touched: false
+    // },
+    description: {
+      type: 'textarea',
+      config: {
+        placeholder: 'Description'
+      },
+      value: props.description,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    }
+    // date: {
+    //   type: 'input',
+    //   config: {
+    //     type: 'date',
+    //     placeholder: 'Date'
+    //   },
+    //   value: props.date,
+    //   validation: {
+    //     required: true
+    //   },
+    //   valid: false,
+    //   touched: false
+    // }
+  })
 
-  let isIncome
-  let heading
-
-  if (props.isIncome) {
-    isIncome = true
-    heading = 'Add Income'
-  } else {
-    isIncome = false
-    heading = 'Add Expense'
-  }
-
-  const sendTransaction = () => {
-    api.post('dash-weekly', {
-      category: type,
-      amount: +amount,
-      location,
-      description,
-      date,
-      isIncome
-    }).then(res => {
+  const addItemHandler = () => {
+    props.onSubmit({
+      name: formElements.name.value,
+      amount: formElements.amount.value,
+      description: formElements.description.value
+    }, res => {
       console.log(res.data)
       props.closeModal()
-    }).catch(err => {
-      console.log(err)
-      props.closeModal()
+    })
+  }
+
+  const inputChangedHandler = (event, inputIdentifier) => {
+    const updatedAuthForm = {
+      ...formElements
+    }
+    const updatedFormElement = {
+      ...updatedAuthForm[inputIdentifier]
+    }
+    updatedFormElement.value = event.target.value
+    updatedFormElement.valid = true
+    // updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation)
+    updatedFormElement.touched = true
+    updatedAuthForm[inputIdentifier] = updatedFormElement
+
+    let formIsValid = true
+    for (const inputIdentifier in updatedAuthForm) {
+      formIsValid = updatedAuthForm[inputIdentifier].valid && formIsValid
+    }
+    setFormElements(updatedAuthForm)
+    setFormIsValid(formIsValid)
+  }
+
+  const formElementsArray = []
+  for (const key in formElements) {
+    formElementsArray.push({
+      id: key,
+      config: formElements[key]
     })
   }
 
   return (
     <div className={classes.SummaryAddModal}>
       <h1 className={props.color}>
-        {heading}
+        {`Add ${props.title}`}
       </h1>
       <div className={classes.Inputs}>
-        <Input
-          placeholder='Type'
-          color={props.color}
-          value={type}
-          onChange={value => setType(value)} />
-        <Input
-          placeholder='Amount'
-          color={props.color}
-          value={amount}
-          onChange={value => setAmount(value)} />
-        <Input
-          placeholder='Company/Location'
-          color={props.color}
-          value={location}
-          onChange={value => setLocation(value)} />
-        <Input
-          placeholder='Description'
-          color={props.color}
-          value={description}
-          onChange={value => setDescription(value)} />
-        <Input
-          placeholder='Date'
-          color={props.color}
-          value={date}
-          onChange={value => setDate(value)} />
+        {formElementsArray.map(formElement => (
+          <Input
+            key={formElement.id}
+            color={props.color}
+            type={formElement.config.type}
+            config={formElement.config.config}
+            value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            changed={event => inputChangedHandler(event, formElement.id)} />
+        ))}
       </div>
       <div className={classes.Buttons}>
         <Button
           size='large'
           color={props.color}
-          clicked={props.closeModal}
+          onClick={props.closeModal}
           width='100%'>
           X
         </Button>
@@ -85,14 +158,23 @@ const SummaryAddModal = props => {
           color={props.color}
           size='large'
           width='100%'
-          clicked={sendTransaction} />
+          onClick={addItemHandler}
+          disabled={!formIsValid} />
       </div>
     </div>
   )
 }
 
 SummaryAddModal.propTypes = {
+  title: PropTypes.string,
+  type: PropTypes.string,
+  name: PropTypes.string,
+  amount: PropTypes.number,
+  location: PropTypes.string,
+  description: PropTypes.string,
+  date: PropTypes.string,
   closeModal: PropTypes.func,
+  onSubmit: PropTypes.func,
   color: PropTypes.string,
   isIncome: PropTypes.bool
 }
