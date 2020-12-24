@@ -18,6 +18,8 @@ const Button = props => {
 
   if (props.size === 'large') {
     classNames.push(classes.Large)
+  } else if (props.size === 'medium') {
+    classNames.push(classes.Medium)
   } else if (props.size === 'square') {
     classNames.push(classes.Square)
   } else if (props.size === 'thin') {
@@ -49,7 +51,7 @@ const Button = props => {
   return (
     <button
       className={classNames.join(' ')}
-      onClick={props.clicked}
+      onClick={props.onClick}
       style={{ width: props.width }}
       disabled={props.disabled}>
       {content}
@@ -62,7 +64,7 @@ Button.propTypes = {
   color: PropTypes.string,
   size: PropTypes.string,
   active: PropTypes.bool,
-  clicked: PropTypes.func,
+  onClick: PropTypes.func,
   dual: PropTypes.bool,
   secondary: PropTypes.string,
   width: PropTypes.string,
