@@ -1,0 +1,23 @@
+.ProgressModal {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ProgressModal button {
+  margin: 0 15px;
+}
+
+.Main {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.Main h1 {
+  margin-right: 15px;
+}
