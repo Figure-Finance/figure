@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from './Monthly.module.css'
-import ProgressSummary from '../../components/ProgressSummary/ProgressSummary'
+import Progress from '../../components/Progress/Progress'
 import Summary from '../../components/Summary/Summary'
 import ChartSummary from '../../components/ChartSummary/ChartSummary'
 import Navbar from '../../components/Navbar/Navbar'
@@ -53,7 +53,7 @@ const Monthly = props => {
 
   return (
     <div className={classes.Monthly}>
-      <ProgressSummary
+      <Progress
         left='primary'
         leftAmount={totalIncome}
         right='danger'

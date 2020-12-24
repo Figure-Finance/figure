@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import api from '../../api'
 import classes from './Savings.module.css'
 import GraphSummary from '../../components/GraphSummary/GraphSummary'
-import ProgressSummary from '../../components/ProgressSummary/ProgressSummary'
+import Progress from '../../components/Progress/Progress'
 import Summary from '../../components/Summary/Summary'
 import Navbar from '../../components/Navbar/Navbar'
 
@@ -25,22 +25,39 @@ const Savings = props => {
     })
   }, [])
 
+  const onDeposit = useCallback((body, cb) => {
+    api.patch('savings/progress/update', body).then(res => {
+      cb(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  })
+
+  const onAddGoal = useCallback(cb => {
+    // setLoading(true)
+    api.post('savings/goal/add').then(res => {
+      cb(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  })
+
   const onUpdateGoal = useCallback((id, body, cb) => {
-    setLoading(true)
+    // setLoading(true)
     api.patch(`savings/goal/edit/${id}`, body).then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
-      setLoading(false)
+      // setLoading(false)
     })
   }, [])
 
   const onDeleteGoal = useCallback((id, cb) => {
-    setLoading(true)
+    // setLoading(true)
     api.delete(`savings/goal/delete/${id}`).then(res => {
       cb(res)
     }).catch(err => {
-      setLoading(false)
+      // setLoading(false)
       console.log(err)
     })
   }, [])
@@ -49,35 +66,26 @@ const Savings = props => {
     onFetchSavings()
   }, [onFetchSavings])
 
-  let progressSummary = <h1>Loading...</h1>
-  let summary = <h1>Loading...</h1>
-
-  if (!loading) {
-    progressSummary = (
-      <ProgressSummary
-        left='neutral'
-        leftAmount={goalProgress}
-        rightAmount={totalGoal}
-        single />
-    )
-
-    summary = (
-      <Summary
-        updateGoal={onUpdateGoal}
-        deleteGoal={onDeleteGoal}
-        color='neutral'
-        title='Goals'
-        content={goals}
-        canAdd />
-    )
-  }
-
   return (
     <div className={classes.Savings}>
-      {progressSummary}
+      <Progress
+        updateProgress={onDeposit}
+        leftColor='neutral'
+        leftAmount={goalProgress}
+        rightAmount={totalGoal}
+        single
+        loading={loading} />
       <div className={classes.Main}>
         <GraphSummary isSavings />
-        {summary}
+        <Summary
+          addItem={onAddGoal}
+          updateItem={onUpdateGoal}
+          deleteItem={onDeleteGoal}
+          color='neutral'
+          title='Goal'
+          content={goals}
+          canAdd
+          loading={loading} />
       </div>
       <Navbar active='s' />
     </div>

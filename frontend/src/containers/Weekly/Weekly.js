@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import api from '../../api'
 import classes from './Weekly.module.css'
-import ProgressSummary from '../../components/ProgressSummary/ProgressSummary'
+import Progress from '../../components/Progress/Progress'
 import Summary from '../../components/Summary/Summary'
 import ChartSummary from '../../components/ChartSummary/ChartSummary'
 import Navbar from '../../components/Navbar/Navbar'
@@ -62,7 +62,7 @@ const Weekly = props => {
 
   return (
     <div className={classes.Weekly}>
-      <ProgressSummary
+      <Progress
         left='primary'
         leftAmount={totalIncome}
         right='danger'
