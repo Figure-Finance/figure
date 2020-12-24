@@ -28,15 +28,22 @@ const Summary = props => {
     setShowDetailModal(false)
   }
 
-  const updateGoalHandler = (id, updatedGoal) => {
-    props.updateGoal(id, updatedGoal, res => {
+  const addItemHandler = () => {
+    props.addItem(res => {
+      console.log(res.data)
+      setShowAddModal(false)
+    })
+  }
+
+  const updateItemHandler = (id, updatedItem) => {
+    props.updateItem(id, updatedItem, res => {
       console.log(res.data)
       setShowDetailModal(false)
     })
   }
 
-  const deleteGoalHandler = id => {
-    props.deleteGoal(id, res => {
+  const deleteItemHandler = id => {
+    props.deleteItem(id, res => {
       console.log(res.data)
       setShowDetailModal(false)
     })
@@ -49,14 +56,18 @@ const Summary = props => {
   }
 
   if (props.canAdd) {
-    addButton = <AddButton color={props.color} clicked={openAddModal} />
+    addButton = (
+      <AddButton
+        color={props.color}
+        onClick={openAddModal} />
+    )
   }
 
   const buttons = props.content.map(item => (
     <Button
       key={item._id}
       color={props.color}
-      clicked={() => openDetailModal(item._id)}
+      onClick={() => openDetailModal(item._id)}
       size='thin'
       width='90%'
       secondary={`$${item.amount.toFixed(2)}`}
@@ -65,34 +76,36 @@ const Summary = props => {
     </Button>
   ))
 
-  if (!showDetailModal) {
-    content = (
-      <>
-        <SummaryHeading color={props.color}>
-          {props.title}
-        </SummaryHeading>
-        <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
-          {buttons}
-        </div>
-        {addButton}
-      </>
-    )
-  } else if (showAddModal) {
+  if (showAddModal) {
     content = (
       <SummaryAddModal
+        title={props.title}
         color={props.color}
         closeModal={closeAddModal}
+        onSubmit={addItemHandler}
         isIncome={props.isIncome} />
     )
   } else if (showDetailModal) {
     content = (
       <SummaryDetailModal
         onCancel={closeDetailModal}
-        onSuccess={updatedGoal => updateGoalHandler(currentItem._id, updatedGoal)}
-        onDelete={() => deleteGoalHandler(currentItem._id)}
+        onSubmit={updatedItem => updateItemHandler(currentItem._id, updatedItem)}
+        onDelete={() => deleteItemHandler(currentItem._id)}
         name={currentItem.name}
         amount={currentItem.amount.toString()}
         description={currentItem.description} />
+    )
+  } else {
+    content = (
+      <>
+        <SummaryHeading color={props.color}>
+          {`${props.title}s`}
+        </SummaryHeading>
+        <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
+          {buttons}
+        </div>
+        {addButton}
+      </>
     )
   }
 
@@ -115,8 +128,9 @@ Summary.propTypes = {
   title: PropTypes.string,
   canAdd: PropTypes.bool,
   content: PropTypes.arrayOf(PropTypes.object),
-  updateGoal: PropTypes.func,
-  deleteGoal: PropTypes.func
+  addItem: PropTypes.func,
+  updateItem: PropTypes.func,
+  deleteItem: PropTypes.func
 }
 
 export default Summary
