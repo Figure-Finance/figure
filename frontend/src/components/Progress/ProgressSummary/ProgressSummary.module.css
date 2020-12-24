@@ -1,0 +1,12 @@
+.ProgressSummary {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ProgressSummary button {
+  margin: 0 15px;
+}
