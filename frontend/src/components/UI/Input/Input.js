@@ -3,7 +3,61 @@ import PropTypes from 'prop-types'
 import classes from './Input.module.css'
 
 const Input = props => {
+  let inputElement = null
   const classNames = [classes.Input]
+
+  if (props.invalid && props.shouldValidate && props.touched) {
+    classNames.push(classes.Invalid)
+  }
+
+  switch (props.type) {
+    case ('input'):
+      inputElement = (
+        <input
+          placeholder={props.placeholder}
+          className={classNames.join(' ')}
+          {...props.config}
+          style={{ width: props.width || '100%' }}
+          value={props.value}
+          onChange={props.changed} />
+      )
+      break
+    case ('textarea'):
+      inputElement = (
+        <textarea
+          placeholder={props.placeholder}
+          className={classNames.join(' ')}
+          {...props.config}
+          style={{ width: props.width || '100%' }}
+          value={props.value}
+          onChange={props.changed} />
+      )
+      break
+    case ('select'):
+      inputElement = (
+        <select
+          className={classNames.join(' ')}
+          value={props.value}
+          style={{ width: props.width || '100%' }}
+          onChange={props.changed}>
+          {props.config.options.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.displayValue}
+            </option>
+          ))}
+        </select>
+      )
+      break
+    default:
+      inputElement = (
+        <input
+          className={classNames.join(' ')}
+          {...props.config}
+          style={{ width: props.width || '100%' }}
+          value={props.value}
+          onChange={props.changed} />
+      )
+  }
 
   if (props.color === 'primary') {
     classNames.push(classes.Primary)
@@ -13,15 +67,16 @@ const Input = props => {
     classNames.push(classes.Danger)
   }
 
-  return (
-    <input
-      type='text'
-      value={props.value}
-      placeholder={props.placeholder}
-      className={classNames.join(' ')}
-      style={{ width: props.width || '100%' }}
-      onChange={e => props.onChange(e.target.value)} />
-  )
+  // let validationError = null
+  // if (props.invalid && props.touched) {
+  //   validationError = (
+  //     <p className={classes.ValidationError}>
+  //       Please enter a valid {props.valueType}
+  //     </p>
+  //   )
+  // }
+
+  return inputElement
 }
 
 Input.propTypes = {
@@ -29,8 +84,13 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   width: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func
-
+  changed: PropTypes.func,
+  touched: PropTypes.bool,
+  invalid: PropTypes.bool.isRequired,
+  valueType: PropTypes.string,
+  shouldValidate: PropTypes.object,
+  type: PropTypes.string,
+  config: PropTypes.object
 }
 
 export default Input
