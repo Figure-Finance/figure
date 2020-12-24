@@ -16,6 +16,7 @@
 .Button:disabled {
   color: var(--disabled);
   cursor: not-allowed;
+  fill: var(--disabled);
 }
 
 .Button.Dual {
@@ -87,7 +88,7 @@
   height: 60px;
   text-shadow:
     2px 2px 2px var(--white-shadow);
-  width: 400px;
+  width: 100%;
 }
 
 .Large:active {
@@ -123,7 +124,7 @@
   height: 40px;
   text-shadow:
   2px 2px 2px var(--white-shadow);
-  width: 400px;
+  width: 100%;
 }
 
 .Thin:active {
