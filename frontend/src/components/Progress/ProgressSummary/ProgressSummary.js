@@ -29,7 +29,8 @@ const ProgressSummary = props => {
         leftColor={props.leftColor}
         rightColor={props.rightColor}
         leftPercent={leftPercent}
-        rightPercent={rightPercent} />
+        rightPercent={rightPercent}
+        single={props.single} />
       <Button
         onClick={props.rightButtonClickHandler}
         color={props.rightColor ? props.rightColor : props.leftColor}
