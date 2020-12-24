@@ -15,8 +15,7 @@ const SummaryDetailModal = props => {
       },
       value: props.name,
       validation: {
-        required: true,
-        isEmail: true
+        required: true
       },
       valid: false,
       touched: false
@@ -29,8 +28,7 @@ const SummaryDetailModal = props => {
       },
       value: props.amount,
       validation: {
-        required: true,
-        minLength: 8
+        required: true
       },
       valid: false,
       touched: false
@@ -42,13 +40,20 @@ const SummaryDetailModal = props => {
       },
       value: props.description,
       validation: {
-        required: true,
-        minLength: 8
+        required: true
       },
       valid: false,
       touched: false
     }
   })
+
+  const addItemHandler = () => {
+    props.onSubmit({
+      name: formElements.name.value,
+      amount: formElements.amount.value,
+      description: formElements.description.value
+    })
+  }
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
@@ -81,7 +86,7 @@ const SummaryDetailModal = props => {
 
   return (
     <div className={classes.SummaryDetailModal}>
-      <Button size='thin' color='neutral' clicked={props.onCancel}>
+      <Button size='thin' color='neutral' onClick={props.onCancel}>
         X
       </Button>
       {formElementsArray.map(formElement => (
@@ -98,18 +103,14 @@ const SummaryDetailModal = props => {
       <Button
         size='thin'
         color='neutral'
-        clicked={() => props.onSuccess({
-          name: formElements.name.value,
-          amount: formElements.amount.value,
-          description: formElements.description.value
-        })}
+        onClick={addItemHandler}
         disabled={!formIsValid}>
         Update
       </Button>
       <Button
         size='thin'
         color='neutral'
-        clicked={props.onDelete}>
+        onClick={props.onDelete}>
         Delete
       </Button>
     </div>
@@ -121,7 +122,7 @@ SummaryDetailModal.propTypes = {
   amount: PropTypes.string,
   description: PropTypes.string,
   onCancel: PropTypes.func,
-  onSuccess: PropTypes.func,
+  onSubmit: PropTypes.func,
   onDelete: PropTypes.func
 }
 
