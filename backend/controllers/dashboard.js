@@ -7,7 +7,6 @@ const Finance = require('../models/finances')
 
 exports.getUserFinances = (req, res, next) => {
   // TODO: uncomment this when date is passed through front end
-  // TODO: only return category and amount? Create details route? Or did we decide not to do this?
   // const startDate = new Date(req.params.date)
   const startDate = startOfToday()
   User.findOne()
@@ -54,6 +53,43 @@ exports.postUserFinances = (req, res, next) => {
       finances.save()
       // Needs category and amount as response only
       return res.status(201).json({ user: user, finances: finances })
+    })
+    .catch(err => console.log(err))
+}
+
+exports.getFinanceDetailsById = (req, res, next) => {
+  const financeId = req.params.id
+  Finance.findOne({ _id: financeId })
+    .then(financeEntry => {
+      console.log(financeEntry)
+      return res.status(200).json(financeEntry)
+    })
+    .catch(err => console.log(err))
+}
+
+exports.deleteFinanceEntryById = (req, res, next) => {
+  const financeId = req.params.id
+  Finance.findByIdAndDelete(financeId, err => {
+    console.log(err)
+  })
+  return res.status(200).json({ msg: 'Finance entry deleted successfully!' })
+}
+
+exports.editFinanceEntryById = (req, res, next) => {
+  const financeId = req.params.id
+  const newCategory = req.body.category
+  const newAmount = req.body.amount
+  const newDescription = req.body.description
+  const newLocation = req.body.location
+  const newDate = req.body.date
+  Finance.findOne({ _id: financeId })
+    .then(financeEntry => {
+      financeEntry.category = newCategory
+      financeEntry.amount = newAmount
+      financeEntry.description = newDescription
+      financeEntry.location = newLocation
+      financeEntry.date = newDate
+      return res.status(200).json(financeEntry)
     })
     .catch(err => console.log(err))
 }
