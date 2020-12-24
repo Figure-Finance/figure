@@ -16,6 +16,10 @@
     inset 0 4px 4px var(--white-shadow);
 }
 
+.Single {
+  border-radius: 30px !important;
+}
+
 .Primary {
   background-color: var(--primary);
 }
