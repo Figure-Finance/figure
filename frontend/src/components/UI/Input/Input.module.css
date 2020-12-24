@@ -5,6 +5,7 @@
   box-shadow:
     inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
+  font-family: inherit;
   font-size: 20px;
   height: 60px;
   outline: none;
