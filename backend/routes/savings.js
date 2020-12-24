@@ -13,7 +13,7 @@ router.post('/', savingsController.postTotalSavings)
 
 router.patch('/edit', savingsController.editTotalSavings)
 
-router.patch('/update', savingsController.updateTotalSavingsProgress)
+router.patch('/progress/update', savingsController.updateTotalSavingsProgress)
 
 // router.get('/savings/:timeFrame', savingsController.getByTimeFrame)
 

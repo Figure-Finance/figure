@@ -71,12 +71,12 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
-// exports.getByTimeFrame = (req, res, next) => {
-// const timeFrameAsDays = req.params.timeFrame
+exports.getByTimeFrame = (req, res, next) => {
+  const timeFrameAsDays = req.params.timeFrame
 
 // By week: display each day
 // By month: display each week
 // By 3 month: display each week
 // By year: display each month
 // By all time: display quarterly
-// }
+}
