@@ -48,6 +48,12 @@ exports.editTotalSavings = (req, res, next) => {
   const newTotalSavingsGoal = req.body.totalSavingsGoal
   // TODO: find by user
   Savings.findOne()
+    .then(savingsItem => {
+      savingsItem.totalSavingsGoal = newTotalSavingsGoal
+      savingsItem.save(err => console.log(err))
+      return res.status(200).json(savingsItem)
+    })
+    .catch(err => console.log(err))
 }
 
 // ITEMS GOALS ROUTES
@@ -114,11 +120,11 @@ exports.allocateGoalFunds = (req, res, next) => {
   const allocateAmount = req.body.allocateAmount
   Savings.findOne()
     .then(totalSavings => {
-      totalSavings.totalSavingsProgress -= allocateAmount
-      totalSavings.save(err => console.log(err))
-      if (totalSavings.progress < allocateAmount) {
+      if (totalSavings.totalSavingsProgress < allocateAmount) {
         throw new Error("You don't have enough saved yet to allocate that much to this goal!")
       }
+      totalSavings.totalSavingsProgress -= allocateAmount
+      totalSavings.save(err => console.log(err))
       ItemGoal.findOne({ _id: itemGoalId })
         .then(itemGoal => {
           console.log(itemGoal)
