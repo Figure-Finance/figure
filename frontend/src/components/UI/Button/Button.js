@@ -50,7 +50,8 @@ const Button = props => {
     <button
       className={classNames.join(' ')}
       onClick={props.clicked}
-      style={{ width: props.width }}>
+      style={{ width: props.width }}
+      disabled={props.disabled}>
       {content}
     </button>
   )
@@ -64,7 +65,8 @@ Button.propTypes = {
   clicked: PropTypes.func,
   dual: PropTypes.bool,
   secondary: PropTypes.string,
-  width: PropTypes.string
+  width: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 export default Button
