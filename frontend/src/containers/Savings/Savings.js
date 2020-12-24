@@ -20,6 +20,26 @@ const Savings = props => {
       setGoalProgress(res.data.totalSavingsProgress)
       setTotalGoal(res.data.totalSavingsGoal)
     }).catch(err => {
+      console.log(err)
+      setLoading(false)
+    })
+  }, [])
+
+  const onUpdateGoal = useCallback((id, body, cb) => {
+    setLoading(true)
+    api.patch(`savings/goal/edit/${id}`, body).then(res => {
+      cb(res)
+    }).catch(err => {
+      console.log(err)
+      setLoading(false)
+    })
+  }, [])
+
+  const onDeleteGoal = useCallback((id, cb) => {
+    setLoading(true)
+    api.delete(`savings/goal/delete/${id}`).then(res => {
+      cb(res)
+    }).catch(err => {
       setLoading(false)
       console.log(err)
     })
@@ -42,7 +62,13 @@ const Savings = props => {
     )
 
     summary = (
-      <Summary color='neutral' title='Goals' content={goals} canAdd />
+      <Summary
+        updateGoal={onUpdateGoal}
+        deleteGoal={onDeleteGoal}
+        color='neutral'
+        title='Goals'
+        content={goals}
+        canAdd />
     )
   }
 
