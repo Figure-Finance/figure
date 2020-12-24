@@ -14,3 +14,13 @@
   justify-content: center;
   text-align: center;
 }
+
+.PastAnswers {
+  bottom: 30px;
+  left: 30px;
+  position: absolute;
+}
+
+.PastAnswers > button {
+  margin-top: 10px;
+}
