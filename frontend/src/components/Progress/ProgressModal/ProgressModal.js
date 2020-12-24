@@ -13,7 +13,7 @@ const ProgressModal = props => {
       type: 'number',
       placeholder: 'Amount'
     },
-    value: props.amount,
+    value: props.amount || '',
     validation: {
       required: true
     },
