@@ -98,7 +98,11 @@ const SummaryDetailModal = props => {
       <Button
         size='thin'
         color='neutral'
-        clicked={props.onSuccess}
+        clicked={() => props.onSuccess({
+          name: formElements.name.value,
+          amount: formElements.amount.value,
+          description: formElements.description.value
+        })}
         disabled={!formIsValid}>
         Update
       </Button>
