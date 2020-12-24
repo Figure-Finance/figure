@@ -5,40 +5,41 @@ const ItemGoal = require('../models/itemGoal')
 
 // TOTAL SAVINGS ROUTES
 
-//
 exports.getSavings = (req, res, next) => {
   // TODO: findOne by current user's id
   let savings
   let itemGoals
   Savings.findOne()
     .then(savingsDoc => {
-      savings = savingsDoc
-      console.log(savings)
-      // TODO: findOne by current user's id
-      ItemGoal.findOne()
-        .then(itemGoalDoc => {
-          itemGoals = itemGoalDoc
-          console.log(itemGoals)
-        })
-        .catch(err => console.log(err))
-      return res.status(200).json({ totalSavings: savings, itemGoals: itemGoals })
+      return savings = savingsDoc
+      next()
+    })
+    .catch(err => console.log(err))
+  ItemGoal.find()
+    .then(itemGoalArray => {
+      itemGoals = itemGoalArray
+      return res.status(200).json({ ...savings._doc, itemGoals })
     })
     .catch(err => console.log(err))
 }
 
 exports.postTotalSavings = (req, res, next) => {
   const totalSavingsGoal = req.body.totalSavingsGoal
-  const itemGoals = req.body.itemGoals
   // TODO: bankProgress will auto update and is just received through here for testing
   const totalSavingsProgress = req.body.totalSavingsProgress
-  Savings.find()
-    .then(savings => {
-      const bankSavings = new Savings({
-        totalSavingsGoal: totalSavingsGoal, // { name: 'New Bike', amount: 450 }
-        totalSavingsProgress: totalSavingsProgress
-      })
-      bankSavings.save(err => console.log(err))
-      return res.status(201).json(bankSavings)
+  const user = User.findOne()
+    .then(user => {
+      Savings.find()
+        .then(savings => {
+          const bankSavings = new Savings({
+            totalSavingsGoal: totalSavingsGoal, // { name: 'New Bike', amount: 450 }
+            totalSavingsProgress: totalSavingsProgress,
+            userId: user._id
+          })
+          bankSavings.save(err => console.log(err))
+          return res.status(201).json(bankSavings)
+        })
+        .catch(err => console.log(err))
     })
     .catch(err => console.log(err))
 }
@@ -97,6 +98,28 @@ exports.editItemGoal = (req, res, next) => {
       itemGoal.description = newDescription
       itemGoal.save()
       return res.status(200).json(itemGoal)
+    })
+    .catch(err => console.log(err))
+}
+
+exports.allocateGoalFunds = (req, res, next) => {
+  // TODO: when we have users, find this savings doc by current user
+  const itemGoalId = req.params.id
+  const allocateAmount = req.body.allocateAmount
+  Savings.findOne()
+    .then(totalSavings => {
+      // console.log(totalSavings.totalSavingsProgress)
+      totalSavings.totalSavingsProgress -= allocateAmount
+      totalSavings.save(err => console.log(err))
+      ItemGoal.findOne({ _id: itemGoalId })
+        .then(itemGoal => {
+          console.log(itemGoal)
+          itemGoal.progress += allocateAmount
+          itemGoal.save(err => console.log(err))
+          console.log(itemGoal)
+        })
+        .catch(err => console.log(err))
+      return res.status(200).json(totalSavings)
     })
     .catch(err => console.log(err))
 }

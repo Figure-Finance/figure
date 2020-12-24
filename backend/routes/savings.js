@@ -18,4 +18,6 @@ router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
 
 router.patch('/goal/edit/:id', savingsController.editItemGoal)
 
+router.patch('/goal/allocate/:id', savingsController.allocateGoalFunds)
+
 module.exports = router
