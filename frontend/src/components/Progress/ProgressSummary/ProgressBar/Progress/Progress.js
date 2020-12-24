@@ -11,6 +11,10 @@ const Progress = props => {
     classNames.push(classes.Right)
   }
 
+  if (props.single) {
+    classNames.push(classes.Single)
+  }
+
   if (props.color === 'primary') {
     classNames.push(classes.Primary)
   } else if (props.color === 'neutral') {
@@ -29,7 +33,8 @@ const Progress = props => {
 Progress.propTypes = {
   color: PropTypes.string,
   percent: PropTypes.number,
-  position: PropTypes.string
+  position: PropTypes.string,
+  single: PropTypes.bool
 }
 
 export default Progress
