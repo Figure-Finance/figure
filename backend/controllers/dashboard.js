@@ -89,6 +89,7 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.description = newDescription
       financeEntry.location = newLocation
       financeEntry.date = newDate
+      financeEntry.save(err => console.log(err))
       return res.status(200).json(financeEntry)
     })
     .catch(err => console.log(err))
