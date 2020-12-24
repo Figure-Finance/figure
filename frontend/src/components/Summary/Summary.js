@@ -28,9 +28,18 @@ const Summary = props => {
     setShowDetailModal(false)
   }
 
-  const updateItem = () => {
-    console.log('updated!')
-    setShowDetailModal(false)
+  const updateGoalHandler = (id, updatedGoal) => {
+    props.updateGoal(id, updatedGoal, res => {
+      console.log(res.data)
+      setShowDetailModal(false)
+    })
+  }
+
+  const deleteGoalHandler = id => {
+    props.deleteGoal(id, res => {
+      console.log(res.data)
+      setShowDetailModal(false)
+    })
   }
 
   const openDetailModal = id => {
@@ -79,7 +88,8 @@ const Summary = props => {
     content = (
       <SummaryDetailModal
         onCancel={closeDetailModal}
-        onSuccess={updateItem}
+        onSuccess={updatedGoal => updateGoalHandler(currentItem._id, updatedGoal)}
+        onDelete={() => deleteGoalHandler(currentItem._id)}
         name={currentItem.name}
         amount={currentItem.amount.toString()}
         description={currentItem.description} />
@@ -104,7 +114,9 @@ Summary.propTypes = {
   width: PropTypes.string,
   title: PropTypes.string,
   canAdd: PropTypes.bool,
-  content: PropTypes.arrayOf(PropTypes.object)
+  content: PropTypes.arrayOf(PropTypes.object),
+  updateGoal: PropTypes.func,
+  deleteGoal: PropTypes.func
 }
 
 export default Summary
