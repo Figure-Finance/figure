@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Container from '../UI/Container/Container'
 import ProgressSummary from './ProgressSummary/ProgressSummary'
-import LeftModal from './LeftModal/LeftModal'
-import RightModal from './RightModal/RightModal'
+import ProgressModal from './ProgressModal/ProgressModal'
 import Loader from '../Loader/Loader'
 
 const Progress = props => {
@@ -14,16 +13,20 @@ const Progress = props => {
     setShowLeftModal(false)
   }
 
-  const leftModalSubmitHandler = body => {
-    console.log('here')
-    props.updateProgress(body, res => {
-      console.log(res.data)
+  const leftModalSubmitHandler = value => {
+    props.updateProgress(value, res => {
       leftModalCloseHandler()
     })
   }
 
   const rightModalCloseHandler = () => {
     setShowRightModal(false)
+  }
+
+  const rightModalSubmitHandler = value => {
+    props.updateGoal(value, res => {
+      rightModalCloseHandler()
+    })
   }
 
   let content = (
@@ -39,16 +42,20 @@ const Progress = props => {
 
   if (showLeftModal) {
     content = (
-      <LeftModal
+      <ProgressModal
+        title='Deposit'
         closeModal={leftModalCloseHandler}
         onSubmit={leftModalSubmitHandler}
         color={props.leftColor} />
     )
   } else if (showRightModal) {
     content = (
-      <RightModal
+      <ProgressModal
+        title='Update Goal'
+        amount={props.rightAmount.toString()}
         closeModal={rightModalCloseHandler}
-        color={props.rightColor} />
+        onSubmit={rightModalSubmitHandler}
+        color={props.rightColor || props.leftColor} />
     )
   }
 
@@ -65,6 +72,7 @@ const Progress = props => {
 
 Progress.propTypes = {
   updateProgress: PropTypes.func,
+  updateGoal: PropTypes.func,
   leftColor: PropTypes.string,
   rightColor: PropTypes.string,
   leftAmount: PropTypes.number,
