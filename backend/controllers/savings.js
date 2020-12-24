@@ -4,19 +4,17 @@ const ItemGoal = require('../models/itemGoal')
 
 const startOfToday = require('date-fns/startOfToday')
 
-const getWeek = require('date-fns/getWeek')
+const startOfWeek = require('date-fns/startOfWeek')
 const lastDayOfWeek = require('date-fns/lastDayOfWeek')
-const eachDayOfInterval = require('date-fns/eachDayOfInterval')
 
-const getYear = require('date-fns/getYear')
+const startOfYear = require('date-fns/startOfYear')
 const lastDayOfYear = require('date-fns/lastDayOfYear')
-const getQuarter = require('date-fns/getQuarter')
+
+const startOfQuarter = require('date-fns/startOfQuarter')
 const lastDayOfQuarter = require('date-fns/lastDayOfQuarter')
-const eachQuarterOfInterval = require('date-fns/eachQuarterOfInterval')
 
 const eachWeekOfInterval = require('date-fns/eachWeekOfInterval')
-const eachMonthOfInterval = require('date-fns/eachMonthOfInterval')
-const getMonth = require('date-fns/getMonth')
+const startOfMonth = require('date-fns/startOfMonth')
 const lastDayOfMonth = require('date-fns/lastDayOfMonth')
 
 const isWithinInterval = require('date-fns/isWithinInterval')
@@ -70,7 +68,7 @@ exports.editTotalSavings = (req, res, next) => {
     .then(savingsItem => {
       savingsItem.totalSavingsGoal = newTotalSavingsGoal
       savingsItem.save(err => console.log(err))
-      return res.status(200).json(savingsItem)
+      return res.status(200).json(savingsItem.totalSavingsGoal)
     })
     .catch(err => console.log(err))
 }
@@ -97,46 +95,39 @@ exports.getByTimeFrame = (req, res, next) => {
     .then(savingsItem => {
       if (timeFrame === 'month') {
         savings = savingsItem.progressUpdates.filter(i => {
-          // console.log(`From month time frame, i.date: ${i.date}`)
-          console.log()
-          const isWithin = isWithinInterval(new Date(i.date), {
-            start: getMonth(startOfToday()),
+          return isWithinInterval(new Date(i.date), {
+            start: startOfMonth(startOfToday()),
             end: lastDayOfMonth(startOfToday())
-          })
-          console.log(`Is within? ${isWithin}`)
-          return isWithin
         })
+      })
         console.log(`savings after filtering: ${savings}`)
       } else if (timeFrame === 'year') {
         savings = savingsItem.progressUpdates.filter(i => {
           return isWithinInterval(new Date(i.date), {
-            start: getYear(startOfToday()),
+            start: startOfYear(startOfToday()),
             end: lastDayOfYear(startOfToday())
           })
         })
       } else if (timeFrame === 'week') {
-        interval = {
-          start: getWeek(startOfToday()),
-          end: lastDayOfWeek(startOfToday())
-        }
         savings = savingsItem.progressUpdates.filter(i => {
-          return isWithinInterval(new Date(i.date), interval)
+          return isWithinInterval(new Date(i.date), {
+            start: startOfWeek(startOfToday()),
+            end: lastDayOfWeek(startOfToday())
+          })
         })
       } else if (timeFrame === 'all') {
-        interval = {
-          start: new Date(2019, 01, 01),
-          end: startOfToday()
-        }
         savings = savingsItem.progressUpdates.filter(i => {
-          return isWithinInterval(new Date(i.date), interval)
+          return isWithinInterval(new Date(i.date), {
+            start: new Date(2019, 01, 01),
+            end: startOfToday()
+          })
         })
       } else if (timeFrame === 'quarter') {
-        interval = {
-          start: getQuarter(startOfToday()),
-          end: lastDayOfQuarter(startOfToday())
-        }
         savings = savingsItem.progressUpdates.filter(i => {
-          return isWithinInterval(new Date(i.date), interval)
+          return isWithinInterval(new Date(i.date), {
+            start: startOfQuarter(startOfToday()),
+            end: lastDayOfQuarter(startOfToday())
+          })
         })
       }
       return res.status(200).json(savings)
