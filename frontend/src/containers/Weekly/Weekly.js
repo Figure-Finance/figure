@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import api from '../../api'
 import classes from './Weekly.module.css'
 import Progress from '../../components/Progress/Progress'
-import Summary from '../../components/Summary/Summary'
+import Breakdown from '../../components/Breakdown/Breakdown'
 import ChartSummary from '../../components/ChartSummary/ChartSummary'
 import Navbar from '../../components/Navbar/Navbar'
 
@@ -68,13 +68,13 @@ const Weekly = props => {
         right='danger'
         rightAmount={totalExpenses} />
       <div className={classes.Main}>
-        <Summary
+        <Breakdown
           content={income}
           color='primary'
           canAdd
           isIncome />
         <ChartSummary title='Week' data={expenses} />
-        <Summary
+        <Breakdown
           content={expenses}
           color='danger'
           canAdd />

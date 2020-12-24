@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './Yearly.module.css'
 import GraphSummary from '../../components/GraphSummary/GraphSummary'
-import Summary from '../../components/Summary/Summary'
+import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Yearly = props => {
@@ -44,12 +44,12 @@ const Yearly = props => {
       <div className={classes.Main}>
         <GraphSummary showYearly />
         <div className={classes.Summaries}>
-          <Summary
+          <Breakdown
             content={income}
             color='primary'
             height='49%'
             width='100%' />
-          <Summary
+          <Breakdown
             content={expenses}
             color='danger'
             height='49%'

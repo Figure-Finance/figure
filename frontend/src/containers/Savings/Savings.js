@@ -3,7 +3,7 @@ import api from '../../api'
 import classes from './Savings.module.css'
 import GraphSummary from '../../components/GraphSummary/GraphSummary'
 import Progress from '../../components/Progress/Progress'
-import Summary from '../../components/Summary/Summary'
+import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Savings = props => {
@@ -47,8 +47,8 @@ const Savings = props => {
     })
   }, [])
 
-  const onAddGoal = useCallback(cb => {
-    api.post('savings/goal/add').then(res => {
+  const onAddGoal = useCallback((goal, cb) => {
+    api.post('savings/goal', goal).then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
@@ -56,7 +56,7 @@ const Savings = props => {
   }, [])
 
   const onUpdateGoal = useCallback((id, body, cb) => {
-    api.patch(`savings/goal/edit/${id}`, body).then(res => {
+    api.patch(`savings/goal/${id}`, body).then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
@@ -64,7 +64,7 @@ const Savings = props => {
   }, [])
 
   const onDeleteGoal = useCallback((id, cb) => {
-    api.delete(`savings/goal/delete/${id}`).then(res => {
+    api.delete(`savings/goal/${id}`).then(res => {
       cb(res)
     }).catch(err => {
       console.log(err)
@@ -87,15 +87,15 @@ const Savings = props => {
         loading={loading} />
       <div className={classes.Main}>
         <GraphSummary isSavings />
-        <Summary
+        <Breakdown
           addItem={onAddGoal}
           updateItem={onUpdateGoal}
           deleteItem={onDeleteGoal}
           color='neutral'
           title='Goal'
           content={goals}
-          canAdd
-          loading={loading} />
+          loading={loading}
+          canAdd />
       </div>
       <Navbar active='s' />
     </div>
