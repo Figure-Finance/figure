@@ -8,13 +8,18 @@
   font-family: inherit;
   font-size: 20px;
   height: 60px;
-  resize: none;
   outline: none;
   text-align: center;
 }
 
 .Input::placeholder {
   font-size: 20px;
+}
+
+.TextArea {
+  padding: 15px 0;
+  height: 100px;
+  resize: none;
 }
 
 .Primary, .Primary::placeholder {
