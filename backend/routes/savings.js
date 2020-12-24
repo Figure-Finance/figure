@@ -6,12 +6,16 @@ const savingsController = require('../controllers/savings')
 
 const router = express.Router()
 
-router.get('/', savingsController.getBankSavings)
+router.get('/', savingsController.getSavings)
 
-router.post('/', savingsController.postBankSavings)
+router.post('/', savingsController.postTotalSavings)
+
+router.post('/goal/add', savingsController.postItemGoals)
 
 router.get('/goal/:id', savingsController.getItemGoalDetails)
-
-router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
+//
+// router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
+//
+// router.patch('/goal/edit/:id', savingsController.editItemGoal)
 
 module.exports = router

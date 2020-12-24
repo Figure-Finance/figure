@@ -7,15 +7,18 @@ const savingsSchema = new Schema({
     type: Number,
     required: true
   },
-  itemGoals: [{
-    name: { type: String, required: true },
-    amount: { type: Number, required: true },
-    description: { type: String, required: true },
-    progress: { type: Number, required: false }
-  }],
   totalSavingsProgress: {
     type: Number,
     required: false
+  },
+  progressUpdates: [{
+    date: { type: Date, required: true },
+    progressAmount: { type: Number, required: true }
+  }],
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 })
 
