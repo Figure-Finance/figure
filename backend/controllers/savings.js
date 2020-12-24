@@ -101,7 +101,7 @@ exports.getByTimeFrame = (req, res, next) => {
           end: lastDayOfMonth(startOfToday())
         }
         savings = savingsItem.progressUpdates.filter(i => {
-          console.log(`From month time frame, i.date: ${}`)
+          // console.log(``From month time frame, i.date: ${i.date})
           return isWithinInterval(new Date(i.date), interval)
         })
       } else if (timeFrame === 'year') {
