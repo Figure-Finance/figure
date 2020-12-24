@@ -108,15 +108,23 @@ exports.allocateGoalFunds = (req, res, next) => {
   const allocateAmount = req.body.allocateAmount
   Savings.findOne()
     .then(totalSavings => {
-      // console.log(totalSavings.totalSavingsProgress)
       totalSavings.totalSavingsProgress -= allocateAmount
       totalSavings.save(err => console.log(err))
+      if (totalSavings.progress < allocateAmount) {
+        throw new Error("You don't have enough saved yet to allocate that much to this goal!")
+      }
       ItemGoal.findOne({ _id: itemGoalId })
         .then(itemGoal => {
           console.log(itemGoal)
-          itemGoal.progress += allocateAmount
-          itemGoal.save(err => console.log(err))
-          console.log(itemGoal)
+          if (itemGoal.progress >= itemGoal.amount) {
+            throw new Error('This goal has been reached.')
+          } else if (itemGoal.progress + allocateAmount > itemGoal.amount) {
+            throw new Error('This allocation will put you over goal.')
+          } else {
+            itemGoal.progress += allocateAmount
+            itemGoal.save(err => console.log(err))
+            console.log(itemGoal)
+          }
         })
         .catch(err => console.log(err))
       return res.status(200).json(totalSavings)
