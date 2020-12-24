@@ -13,9 +13,9 @@ router.post('/', savingsController.postTotalSavings)
 router.post('/goal/add', savingsController.postItemGoals)
 
 router.get('/goal/:id', savingsController.getItemGoalDetails)
-//
-// router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
-//
-// router.patch('/goal/edit/:id', savingsController.editItemGoal)
+
+router.delete('/goal/delete/:id', savingsController.deleteItemGoal)
+
+router.patch('/goal/edit/:id', savingsController.editItemGoal)
 
 module.exports = router

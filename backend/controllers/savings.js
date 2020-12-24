@@ -77,41 +77,26 @@ exports.getItemGoalDetails = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
-// exports.deleteItemGoal = (req, res, next) => {
-//   const itemGoalId = req.params.id
-//   Savings.findOne({ 'itemGoals._id': itemGoalId })
-//     .then(savingsItem => {
-//       const newSavingsItemGoals = savingsItem.itemGoals.filter(item => {
-//         return item._id.toString() !== itemGoalId.toString()
-//       })
-//       savingsItem.itemGoals = newSavingsItemGoals
-//       savingsItem.save()
-//       return res.status(200).json({ msg: 'Successfully deleted goal!' })
-//     })
-//     .catch(err => console.log(err))
-// }
+exports.deleteItemGoal = (req, res, next) => {
+  const itemGoalId = req.params.id
+  ItemGoal.findByIdAndDelete(itemGoalId, err => {
+    console.log(err)
+  })
+  return res.status(200).json({ msg: 'Goal deleted successfully!' })
+}
 
-// exports.editItemGoal = (req, res, next) => {
-//   const itemGoalId = req.params.id
-//   const newName = req.body.name
-//   const newAmount = req.body.amount
-//   const newDescription = req.body.description
-//   console.log(`request body: ${req.body.name}`)
-//   Savings.findOne({ 'itemGoals._id': itemGoalId })
-//     .then(savingsItem => {
-//       const itemGoal = savingsItem.itemGoals.filter(item => {
-//         return item._id.toString() === itemGoalId.toString()
-//       })
-//       console.log(`Item Goal after filter: ${itemGoal}`)
-//
-//       itemGoal.name = newName
-//       itemGoal.amount = newAmount
-//       itemGoal.description = newDescription
-//
-//       savingsItem.save()
-//       console.log(`Item goal after changing: ${itemGoal}`)
-//
-//       return res.status(200).json({ savingsItem })
-//     })
-//     .catch(err => console.log(err))
-// }
+exports.editItemGoal = (req, res, next) => {
+  const itemGoalId = req.params.id
+  const newName = req.body.name
+  const newAmount = req.body.amount
+  const newDescription = req.body.description
+  ItemGoal.findOne({ _id: itemGoalId })
+    .then(itemGoal => {
+      itemGoal.name = newName
+      itemGoal.amount = newAmount
+      itemGoal.description = newDescription
+      itemGoal.save()
+      return res.status(200).json(itemGoal)
+    })
+    .catch(err => console.log(err))
+}
