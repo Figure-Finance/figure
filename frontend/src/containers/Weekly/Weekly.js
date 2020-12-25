@@ -3,12 +3,12 @@ import api from '../../api'
 import classes from './Weekly.module.css'
 import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
-import ChartSummary from '../../components/ChartSummary/ChartSummary'
+import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
   useEffect(() => {
-    api.get('dash-weekly').then(res => {
+    api.get('weekly').then(res => {
       console.log(res.data)
     }).catch(err => {
       console.log(err)
@@ -63,18 +63,20 @@ const Weekly = props => {
   return (
     <div className={classes.Weekly}>
       <Progress
-        left='primary'
+        leftColor='primary'
         leftAmount={totalIncome}
-        right='danger'
+        rightColor='danger'
         rightAmount={totalExpenses} />
       <div className={classes.Main}>
         <Breakdown
+          title='Income'
           content={income}
           color='primary'
           canAdd
           isIncome />
-        <ChartSummary title='Week' data={expenses} />
+        <Chart title='Week' data={expenses} />
         <Breakdown
+          title='Expenses'
           content={expenses}
           color='danger'
           canAdd />
