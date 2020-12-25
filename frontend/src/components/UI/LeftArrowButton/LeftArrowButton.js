@@ -5,7 +5,7 @@ import LeftArrow from '../../Icons/LeftArrow/LeftArrow'
 
 const LeftArrowButton = props => {
   return (
-    <Button color={props.color} size='square' clicked={props.clicked}>
+    <Button color={props.color} size='square' onClick={props.onClick}>
       <LeftArrow fill={props.color} />
     </Button>
   )
@@ -13,7 +13,7 @@ const LeftArrowButton = props => {
 
 LeftArrowButton.propTypes = {
   color: PropTypes.string,
-  clicked: PropTypes.func
+  onClick: PropTypes.func
 }
 
 export default LeftArrowButton
