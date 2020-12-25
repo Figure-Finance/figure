@@ -92,7 +92,7 @@ const Savings = props => {
           updateItem={onUpdateGoal}
           deleteItem={onDeleteGoal}
           color='neutral'
-          title='Goal'
+          title='Goals'
           content={goals}
           loading={loading}
           canAdd />
