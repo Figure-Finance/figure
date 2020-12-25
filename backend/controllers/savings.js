@@ -111,7 +111,7 @@ exports.getByTimeFrame = (req, res, next) => {
         savings = updatesList.filter(i => {
           return isWithinInterval(new Date(i.date), {
             // TODO: make start date based on user creation date
-            start: new Date(2019, 01, 01)
+            start: new Date(2019, 01, 01),
             end: startOfToday()
           })
         })
