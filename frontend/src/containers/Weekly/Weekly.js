@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import api from '../../api'
 import classes from './Weekly.module.css'
 import Progress from '../../components/Progress/Progress'
@@ -7,13 +7,39 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
-  useEffect(() => {
+  const onFetchWeekly = useCallback(() => {
     api.get('weekly').then(res => {
       console.log(res.data)
     }).catch(err => {
       console.log(err)
     })
   }, [])
+
+  // const onAddIncome = useCallback(() => {
+  //   api.get('weekly').then(res => {
+  //     console.log(res.data)
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // }, [])
+
+  // const onUpdateIncome = useCallback(body => {
+  //   api.patch('weekly', body).then(res => {
+  //     console.log(res.data)
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // }, [])
+
+  // const onDeleteIncome = useCallback(body => {
+  //   api.delete('weekly', body).then(res => {
+  //     console.log(res.data)
+  //   }).catch(err => {
+  //     console.log(err)
+  //   })
+  // }, [])
+
+  useEffect(onFetchWeekly, [onFetchWeekly])
 
   const income = [
     {
