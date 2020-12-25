@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './ChartSummary.module.css'
 import Container from '../UI/Container/Container'
-import Button from '../UI/Button/Button'
-import LeftArrowButton from '../UI/LeftArrowButton/LeftArrowButton'
-import RightArrowButton from '../UI/RightArrowButton/RightArrowButton'
+import ChartSummary from './ChartSummary/ChartSummary'
 import ChartModal from './ChartModal/ChartModal'
-import PieChart from './PieChart/PieChart'
 
-const ChartSummary = props => {
+const Chart = props => {
   const [number, setNumber] = useState(1)
   const [showModal, setShowModal] = useState(false)
 
@@ -47,15 +43,7 @@ const ChartSummary = props => {
     }
   }
 
-  let buttonContent = (
-    `${props.title} ${number}`
-  )
-
-  if (props.title === 'Month') {
-    buttonContent = months[number - 1]
-  }
-
-  const openModal = () => {
+  const openModalHandler = () => {
     setShowModal(true)
   }
 
@@ -71,32 +59,34 @@ const ChartSummary = props => {
     }
   }
 
-  const types = props.data.map(item => item.type)
+  const names = props.data.map(item => item.name)
   const amounts = props.data.map(item => item.amount)
 
+  let buttonContent = (
+    `${props.title} ${number}`
+  )
+
+  if (props.title === 'Month') {
+    buttonContent = months[number - 1]
+  }
+
   let content = (
-    <div className={classes.ChartSummary}>
-      <div className={classes.Buttons}>
-        <LeftArrowButton clicked={decrementNumber} color='default' />
-        <Button
-          size='large'
-          width='60%'
-          clicked={openModal}>
-          {buttonContent}
-        </Button>
-        <RightArrowButton clicked={incrementNumber} color='default' />
-      </div>
-      <PieChart types={types} amounts={amounts} />
-    </div>
+    <ChartSummary
+      buttonContent={buttonContent}
+      names={names}
+      amounts={amounts}
+      openModal={openModalHandler}
+      leftArrowClick={decrementNumber}
+      rightArrowClick={incrementNumber} />
   )
 
   if (showModal && props.title === 'Month') {
     content = (
-      <ChartModal selection={months} clicked={changeSelection} />
+      <ChartModal selection={months} onClick={changeSelection} />
     )
   } else if (showModal && props.title === 'Week') {
     content = (
-      <ChartModal selection={weeks} clicked={changeSelection} />
+      <ChartModal selection={weeks} onClick={changeSelection} />
     )
   }
 
@@ -107,9 +97,9 @@ const ChartSummary = props => {
   )
 }
 
-ChartSummary.propTypes = {
+Chart.propTypes = {
   title: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
-export default ChartSummary
+export default Chart

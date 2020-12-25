@@ -1,35 +1,35 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './Summary.module.css'
-import SummaryAddModal from './SummaryAddModal/SummaryAddModal'
 import Container from '../UI/Container/Container'
-import SummaryHeading from './SummaryHeading/SummaryHeading'
-import SummaryDetailModal from './SummaryDetailModal/SummaryDetailModal'
-import AddButton from '../UI/AddButton/AddButton'
-import Button from '../UI/Button/Button'
+import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
+import BreakdownAddModal from './BreakdownAddModal/BreakdownAddModal'
+import BreakdownDetailModal from './BreakdownDetailModal/BreakdownDetailModal'
 
-const Summary = props => {
+const Breakdown = props => {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [currentItem, setCurrentItem] = useState(null)
 
-  let addButton = null
-  let content = null
-
-  const openAddModal = () => {
+  const openAddModalHandler = () => {
     setShowAddModal(true)
   }
 
-  const closeAddModal = () => {
+  const closeAddModalHandler = () => {
     setShowAddModal(false)
   }
 
-  const closeDetailModal = () => {
+  const openDetailModalHandler = id => {
+    setShowDetailModal(true)
+    const selectedItem = props.content.filter(item => item._id === id)
+    setCurrentItem(selectedItem[0])
+  }
+
+  const closeDetailModalHandler = () => {
     setShowDetailModal(false)
   }
 
-  const addItemHandler = () => {
-    props.addItem(res => {
+  const addItemHandler = goal => {
+    props.addItem(goal, res => {
       console.log(res.data)
       setShowAddModal(false)
     })
@@ -49,63 +49,34 @@ const Summary = props => {
     })
   }
 
-  const openDetailModal = id => {
-    setShowDetailModal(true)
-    const selectedItem = props.content.filter(item => item._id === id)
-    setCurrentItem(selectedItem[0])
-  }
-
-  if (props.canAdd) {
-    addButton = (
-      <AddButton
-        color={props.color}
-        onClick={openAddModal} />
-    )
-  }
-
-  const buttons = props.content.map(item => (
-    <Button
-      key={item._id}
+  let content = (
+    <BreakdownSummary
+      title={props.title}
       color={props.color}
-      onClick={() => openDetailModal(item._id)}
-      size='thin'
-      width='90%'
-      secondary={`$${item.amount.toFixed(2)}`}
-      dual>
-      {item.name}
-    </Button>
-  ))
+      content={props.content}
+      openDetailModal={id => openDetailModalHandler(id)}
+      openAddModal={openAddModalHandler}
+      canAdd={props.canAdd} />
+  )
 
   if (showAddModal) {
     content = (
-      <SummaryAddModal
+      <BreakdownAddModal
         title={props.title}
         color={props.color}
-        closeModal={closeAddModal}
+        closeModal={closeAddModalHandler}
         onSubmit={addItemHandler}
         isIncome={props.isIncome} />
     )
   } else if (showDetailModal) {
     content = (
-      <SummaryDetailModal
-        onCancel={closeDetailModal}
+      <BreakdownDetailModal
+        onCancel={closeDetailModalHandler}
         onSubmit={updatedItem => updateItemHandler(currentItem._id, updatedItem)}
         onDelete={() => deleteItemHandler(currentItem._id)}
         name={currentItem.name}
         amount={currentItem.amount.toString()}
         description={currentItem.description} />
-    )
-  } else {
-    content = (
-      <>
-        <SummaryHeading color={props.color}>
-          {`${props.title}s`}
-        </SummaryHeading>
-        <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
-          {buttons}
-        </div>
-        {addButton}
-      </>
     )
   }
 
@@ -113,14 +84,12 @@ const Summary = props => {
     <Container
       height={props.height || '100%'}
       width={props.width ? props.width : '33%'}>
-      <div className={classes.Summary}>
-        {content}
-      </div>
+      {content}
     </Container>
   )
 }
 
-Summary.propTypes = {
+Breakdown.propTypes = {
   color: PropTypes.string,
   isIncome: PropTypes.bool,
   height: PropTypes.string,
@@ -133,4 +102,4 @@ Summary.propTypes = {
   deleteItem: PropTypes.func
 }
 
-export default Summary
+export default Breakdown

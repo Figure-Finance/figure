@@ -1,8 +1,8 @@
 import React from 'react'
 import classes from './Monthly.module.css'
 import Progress from '../../components/Progress/Progress'
-import Summary from '../../components/Summary/Summary'
-import ChartSummary from '../../components/ChartSummary/ChartSummary'
+import Breakdown from '../../components/Breakdown/Breakdown'
+import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Monthly = props => {
@@ -54,14 +54,20 @@ const Monthly = props => {
   return (
     <div className={classes.Monthly}>
       <Progress
-        left='primary'
+        leftColor='primary'
         leftAmount={totalIncome}
-        right='danger'
+        rightColor='danger'
         rightAmount={totalExpenses} />
       <div className={classes.Main}>
-        <Summary content={income} color='primary' />
-        <ChartSummary title='Month' data={expenses} />
-        <Summary content={expenses} color='danger' />
+        <Breakdown
+          title='Income'
+          content={income}
+          color='primary' />
+        <Chart title='Month' data={expenses} />
+        <Breakdown
+          title='Expenses'
+          content={expenses}
+          color='danger' />
       </div>
       <Navbar active='m' />
     </div>

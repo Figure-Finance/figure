@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './SummaryAddModal.module.css'
+import classes from './BreakdownAddModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
-import AddButton from '../../UI/AddButton/AddButton'
 
-const SummaryAddModal = props => {
+const BreakdownAddModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     // type: {
@@ -27,7 +26,7 @@ const SummaryAddModal = props => {
         type: 'text',
         placeholder: 'Name'
       },
-      value: props.name,
+      value: props.name || '',
       validation: {
         required: true
       },
@@ -40,7 +39,7 @@ const SummaryAddModal = props => {
         type: 'number',
         placeholder: 'Amount'
       },
-      value: props.amount,
+      value: props.amount || '',
       validation: {
         required: true
       },
@@ -65,7 +64,7 @@ const SummaryAddModal = props => {
       config: {
         placeholder: 'Description'
       },
-      value: props.description,
+      value: props.description || '',
       validation: {
         required: true
       },
@@ -128,7 +127,7 @@ const SummaryAddModal = props => {
   }
 
   return (
-    <div className={classes.SummaryAddModal}>
+    <div className={classes.BreakdownAddModal}>
       <h1 className={props.color}>
         {`Add ${props.title}`}
       </h1>
@@ -150,22 +149,22 @@ const SummaryAddModal = props => {
         <Button
           size='large'
           color={props.color}
-          onClick={props.closeModal}
-          width='100%'>
-          X
+          onClick={props.closeModal}>
+          Cancel
         </Button>
-        <AddButton
+        <Button
           color={props.color}
           size='large'
-          width='100%'
           onClick={addItemHandler}
-          disabled={!formIsValid} />
+          disabled={!formIsValid}>
+          Add
+        </Button>
       </div>
     </div>
   )
 }
 
-SummaryAddModal.propTypes = {
+BreakdownAddModal.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   name: PropTypes.string,
@@ -179,4 +178,4 @@ SummaryAddModal.propTypes = {
   isIncome: PropTypes.bool
 }
 
-export default SummaryAddModal
+export default BreakdownAddModal

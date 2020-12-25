@@ -1,4 +1,4 @@
-.Summary {
+.BreakdownSummary {
   height: 100%;
   text-align: center;
 }
@@ -11,6 +11,11 @@
   height: calc(100% - 38px -43px)
 }
 
-.Buttons > button, .FullButtons > button {
+.BreakdownSummary > button {
+  margin: 0 auto;
+}
+
+.Buttons > button,
+.FullButtons > button {
   margin: 15px auto;
 }

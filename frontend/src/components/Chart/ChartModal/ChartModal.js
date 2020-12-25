@@ -10,8 +10,7 @@ const ChartModal = props => {
         key={index}
         size='large'
         color='default'
-        clicked={props.clicked}
-        width='100%'>
+        onClick={props.onClick}>
         {item}
       </Button>
     ))
@@ -27,7 +26,7 @@ const ChartModal = props => {
 }
 
 ChartModal.propTypes = {
-  clicked: PropTypes.func,
+  onClick: PropTypes.func,
   selection: PropTypes.array
 }
 

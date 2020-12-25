@@ -10,6 +10,10 @@ const Input = props => {
     classNames.push(classes.Invalid)
   }
 
+  if (props.type === 'textarea') {
+    classNames.push(classes.TextArea)
+  }
+
   switch (props.type) {
     case ('input'):
       inputElement = (

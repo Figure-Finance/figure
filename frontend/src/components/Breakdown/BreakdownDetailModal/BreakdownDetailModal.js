@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './SummaryDetailModal.module.css'
+import classes from './BreakdownDetailModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const SummaryDetailModal = props => {
+const BreakdownDetailModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     name: {
@@ -85,39 +85,43 @@ const SummaryDetailModal = props => {
   }
 
   return (
-    <div className={classes.SummaryDetailModal}>
+    <div className={classes.BreakdownDetailModal}>
       <Button size='thin' color='neutral' onClick={props.onCancel}>
         X
       </Button>
-      {formElementsArray.map(formElement => (
-        <Input
-          key={formElement.id}
-          type={formElement.config.type}
-          config={formElement.config.config}
-          value={formElement.config.value}
-          invalid={!formElement.config.valid}
-          shouldValidate={formElement.config.validation}
-          touched={formElement.config.touched}
-          changed={event => inputChangedHandler(event, formElement.id)} />
-      ))}
-      <Button
-        size='thin'
-        color='neutral'
-        onClick={addItemHandler}
-        disabled={!formIsValid}>
-        Update
-      </Button>
-      <Button
-        size='thin'
-        color='neutral'
-        onClick={props.onDelete}>
-        Delete
-      </Button>
+      <div className={classes.Inputs}>
+        {formElementsArray.map(formElement => (
+          <Input
+            key={formElement.id}
+            type={formElement.config.type}
+            config={formElement.config.config}
+            value={formElement.config.value}
+            invalid={!formElement.config.valid}
+            shouldValidate={formElement.config.validation}
+            touched={formElement.config.touched}
+            changed={event => inputChangedHandler(event, formElement.id)} />
+        ))}
+      </div>
+      <div className={classes.Buttons}>
+        <Button
+          size='thin'
+          color='neutral'
+          onClick={addItemHandler}
+          disabled={!formIsValid}>
+          Update
+        </Button>
+        <Button
+          size='thin'
+          color='neutral'
+          onClick={props.onDelete}>
+          Delete
+        </Button>
+      </div>
     </div>
   )
 }
 
-SummaryDetailModal.propTypes = {
+BreakdownDetailModal.propTypes = {
   name: PropTypes.string,
   amount: PropTypes.string,
   description: PropTypes.string,
@@ -126,4 +130,4 @@ SummaryDetailModal.propTypes = {
   onDelete: PropTypes.func
 }
 
-export default SummaryDetailModal
+export default BreakdownDetailModal

@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const SummaryHeading = props => (
+const BreakdownSummaryHeading = props => (
   <h1 className={props.color}>
-    {props.children ? props.children : 'Types'}
+    {props.children}
   </h1>
 )
 
-SummaryHeading.propTypes = {
+BreakdownSummaryHeading.propTypes = {
   color: PropTypes.string,
   children: PropTypes.string
 }
 
-export default SummaryHeading
+export default BreakdownSummaryHeading

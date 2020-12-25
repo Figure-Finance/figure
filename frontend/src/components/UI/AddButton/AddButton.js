@@ -19,7 +19,8 @@ const AddButton = props => {
       width={props.width}
       color={props.color}
       size={props.size || 'square'}
-      onClick={props.onClick}>
+      onClick={props.onClick}
+      disabled={props.disabled}>
       <Add fill={fill} />
     </Button>
   )
@@ -29,7 +30,8 @@ AddButton.propTypes = {
   color: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.string,
-  width: PropTypes.string
+  width: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 export default AddButton
