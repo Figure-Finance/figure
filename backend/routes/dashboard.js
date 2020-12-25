@@ -10,7 +10,7 @@ router.get('/', dashWeeklyController.getUserFinances)
 
 router.post('/', dashWeeklyController.postUserFinances)
 
-router.get('/:id', dashWeeklyController.getFinanceDetailsById)
+router.get('/:date/:id', dashWeeklyController.getFinanceDetailsById)
 
 router.delete('/delete/:id', dashWeeklyController.deleteFinanceEntryById)
 
