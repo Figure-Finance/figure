@@ -71,9 +71,7 @@ const Savings = props => {
     })
   }, [])
 
-  useEffect(() => {
-    onFetchSavings()
-  }, [onFetchSavings])
+  useEffect(onFetchSavings, [onFetchSavings])
 
   return (
     <div className={classes.Savings}>
