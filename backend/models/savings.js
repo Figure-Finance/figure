@@ -13,7 +13,7 @@ const savingsSchema = new Schema({
   },
   progressUpdates: [{
     date: { type: Date, required: true },
-    progressAmount: { type: Number, required: true }
+    curTotal: { type: Number, required: true }
   }],
   userId: {
     type: Schema.Types.ObjectId,

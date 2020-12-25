@@ -74,19 +74,16 @@ exports.editTotalSavings = (req, res, next) => {
 }
 
 exports.updateTotalSavingsProgress = (req, res, next) => {
-  const newProgressAmount = req.body.progressAmount
   // TODO: get this by user
   Savings.findOne()
     .then(savingsItem => {
-      // TODO: check if we have an entry with today's date when updating
-      // If we do, increment the total for that entry by the newProgressAmount
-      // If we don't, push a new entry for today's date with the totalSavingsProgress incremented by the newProgressAmount
-
-      // if (savingsItem.progressUpdates.values.includes(startOfToday())) {
-        // Access the correct object in the array and increment the total
-      // }
-      // savingsItem.progressUpdates.push({ startOfToday(): newProgressAmount })
-      savingsItem.totalSavingsProgress += newProgressAmount
+      const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
+      if (last && savingsItem.progressUpdates && last.date === startOfToday()) {
+	       last.curTotal += req.body.progressAmount
+      } else {
+	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: req.body.progressAmount})
+      }
+      savingsItem.totalSavingsProgress += req.body.progressAmount
       savingsItem.save(err => console.log(err))
       return res.status(200).json(savingsItem.totalSavingsProgress)
     })
