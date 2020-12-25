@@ -98,8 +98,7 @@ const Weekly = props => {
           title='Income'
           content={income}
           color='primary'
-          canAdd
-          isIncome />
+          canAdd />
         <Chart title='Week' data={expenses} />
         <Breakdown
           title='Expenses'
