@@ -36,7 +36,7 @@ const BreakdownSummary = props => {
 
   const buttons = props.content.map(item => (
     <Button
-      key={item._id}
+      key={item.name}
       onClick={() => props.openDetailModal(item._id)}
       color={props.color}
       size='thin'
@@ -50,7 +50,7 @@ const BreakdownSummary = props => {
   return (
     <div className={classes.BreakdownSummary}>
       <BreakdownSummaryHeading color={props.color}>
-        {`${props.title}s`}
+        {props.title}
       </BreakdownSummaryHeading>
       <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
         {buttons}
