@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const BreakdownSummaryHeading = props => (
   <h1 className={props.color}>
-    {props.children ? props.children : 'Types'}
+    {props.children}
   </h1>
 )
 
