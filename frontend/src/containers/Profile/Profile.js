@@ -7,37 +7,16 @@ import Logo from '../../components/Logo/Logo'
 
 const Profile = props => {
   const income = [
-    {
-      type: 'Web Design',
-      amount: 84.92
-    },
-    {
-      type: 'Video Team',
-      amount: 50.00
-    },
-    {
-      type: 'Curriculum',
-      amount: 50.00
-    }
+    'Web Design',
+    'Video Team',
+    'Curriculum'
   ]
 
   const expenses = [
-    {
-      type: 'Groceries',
-      amount: 35.84
-    },
-    {
-      type: 'Gas',
-      amount: 40.00
-    },
-    {
-      type: 'Eating Out',
-      amount: 18.49
-    },
-    {
-      type: 'Misc',
-      amount: 20.00
-    }
+    'Groceries',
+    'Gas',
+    'Eating Out',
+    'Misc'
   ]
 
   return (
