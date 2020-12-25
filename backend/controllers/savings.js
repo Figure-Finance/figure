@@ -85,7 +85,7 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
       // if (savingsItem.progressUpdates.values.includes(startOfToday())) {
         // Access the correct object in the array and increment the total
       // }
-      savingsItem.progressUpdates.push({ startOfToday(): newProgressAmount })
+      // savingsItem.progressUpdates.push({ startOfToday(): newProgressAmount })
       savingsItem.totalSavingsProgress += newProgressAmount
       savingsItem.save(err => console.log(err))
       return res.status(200).json(savingsItem.totalSavingsProgress)
