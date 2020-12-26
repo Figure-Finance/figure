@@ -22,9 +22,13 @@ const Weekly = props => {
     })
   }, [])
 
-  const onAddIncome = useCallback(() => {
-    api.get('weekly').then(res => {
+  const onAddIncome = useCallback((body, cb) => {
+    api.post('weekly', {
+      ...body,
+      isIncome: true
+    }).then(res => {
       console.log(res.data)
+      cb(res)
     }).catch(err => {
       console.log(err)
     })
@@ -38,9 +42,21 @@ const Weekly = props => {
     })
   }, [])
 
-  const onDeleteIncome = useCallback(body => {
-    api.delete('weekly', body).then(res => {
+  const onDeleteIncome = useCallback(() => {
+    api.delete('weekly').then(res => {
       console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
+
+  const onAddExpense = useCallback((body, cb) => {
+    api.post('weekly', {
+      ...body,
+      isIncome: false
+    }).then(res => {
+      console.log(res.data)
+      cb(res)
     }).catch(err => {
       console.log(err)
     })
@@ -123,7 +139,7 @@ const Weekly = props => {
         <Breakdown
           title='Expenses'
           content={expenses}
-          addItem={onAddIncome}
+          addItem={onAddExpense}
           updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
           color='danger'
