@@ -101,7 +101,8 @@ const Savings = props => {
           title='Goals'
           content={goals}
           loading={loading}
-          canAdd />
+          canAdd
+          isSavings />
       </div>
       <Navbar active='s' />
     </div>
