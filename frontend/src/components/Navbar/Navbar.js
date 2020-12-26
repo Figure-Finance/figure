@@ -8,26 +8,36 @@ const Navbar = props => (
   <div className={classes.Navbar}>
     <Container>
       <NavItem
+        color='primary'
+        size='square'
         link='/'
         active={props.active === 'w'}>
         W
       </NavItem>
       <NavItem
+        color='primary'
+        size='square'
         link='/monthly'
         active={props.active === 'm'}>
         M
       </NavItem>
       <NavItem
+        color='primary'
+        size='square'
         link='/yearly'
         active={props.active === 'y'}>
         Y
       </NavItem>
       <NavItem
+        color='primary'
+        size='square'
         link='/savings'
         active={props.active === 's'}>
         S
       </NavItem>
       <NavItem
+        color='primary'
+        size='square'
         link='/profile'
         active={props.active === 'p'}>
         P
