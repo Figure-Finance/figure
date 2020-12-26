@@ -7,13 +7,13 @@ import Button from '../../UI/Button/Button'
 const BreakdownAddModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
-    name: {
+    type: {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Name'
+        placeholder: 'Type'
       },
-      value: props.name || '',
+      value: props.type || '',
       validation: {
         required: true
       },
@@ -33,6 +33,19 @@ const BreakdownAddModal = props => {
       valid: false,
       touched: false
     },
+    location: {
+      type: 'input',
+      config: {
+        type: 'text',
+        placeholder: 'Location'
+      },
+      value: props.location || '',
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
     description: {
       type: 'textarea',
       config: {
@@ -44,81 +57,21 @@ const BreakdownAddModal = props => {
       },
       valid: false,
       touched: false
+    },
+    date: {
+      type: 'input',
+      config: {
+        type: 'date',
+        placeholder: 'Date'
+      },
+      value: props.date || '',
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
     }
   })
-
-  // const setModalStateForIncome = useCallback(() => {
-  //   if (props.title === 'Income' || props.title === 'Expenses') {
-  //     setFormElements({
-  //       type: {
-  //         type: 'input',
-  //         config: {
-  //           type: 'text',
-  //           placeholder: 'Type'
-  //         },
-  //         value: props.type || '',
-  //         validation: {
-  //           required: true
-  //         },
-  //         valid: false,
-  //         touched: false
-  //       },
-  //       amount: {
-  //         type: 'input',
-  //         config: {
-  //           type: 'number',
-  //           placeholder: 'Amount'
-  //         },
-  //         value: props.amount || '',
-  //         validation: {
-  //           required: true
-  //         },
-  //         valid: false,
-  //         touched: false
-  //       },
-  //       location: {
-  //         type: 'input',
-  //         config: {
-  //           type: 'text',
-  //           placeholder: 'Location'
-  //         },
-  //         value: props.location || '',
-  //         validation: {
-  //           required: true
-  //         },
-  //         valid: false,
-  //         touched: false
-  //       },
-  //       description: {
-  //         type: 'textarea',
-  //         config: {
-  //           placeholder: 'Description'
-  //         },
-  //         value: props.description || '',
-  //         validation: {
-  //           required: true
-  //         },
-  //         valid: false,
-  //         touched: false
-  //       },
-  //       date: {
-  //         type: 'input',
-  //         config: {
-  //           type: 'date',
-  //           placeholder: 'Date'
-  //         },
-  //         value: props.date || '',
-  //         validation: {
-  //           required: true
-  //         },
-  //         valid: false,
-  //         touched: false
-  //       }
-  //     })
-  //   }
-  // }, [])
-  //
-  // setModalStateForIncome()
 
   const addItemHandler = () => {
     props.onSubmit({
