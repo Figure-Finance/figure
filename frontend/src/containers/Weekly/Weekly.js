@@ -22,29 +22,29 @@ const Weekly = props => {
     })
   }, [])
 
-  // const onAddIncome = useCallback(() => {
-  //   api.get('weekly').then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onAddIncome = useCallback(() => {
+    api.get('weekly').then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
-  // const onUpdateIncome = useCallback(body => {
-  //   api.patch('weekly', body).then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onUpdateIncome = useCallback(body => {
+    api.patch('weekly', body).then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
-  // const onDeleteIncome = useCallback(body => {
-  //   api.delete('weekly', body).then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onDeleteIncome = useCallback(body => {
+    api.delete('weekly', body).then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
@@ -111,6 +111,9 @@ const Weekly = props => {
         <Breakdown
           title='Income'
           content={income}
+          addItem={onAddIncome}
+          updateItem={onUpdateIncome}
+          deleteItem={onDeleteIncome}
           color='primary'
           canAdd />
         <Chart
@@ -120,6 +123,9 @@ const Weekly = props => {
         <Breakdown
           title='Expenses'
           content={expenses}
+          addItem={onAddIncome}
+          updateItem={onUpdateIncome}
+          deleteItem={onDeleteIncome}
           color='danger'
           canAdd />
       </div>
