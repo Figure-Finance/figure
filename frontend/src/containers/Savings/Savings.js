@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import api from '../../api'
 import classes from './Savings.module.css'
-import GraphSummary from '../../components/GraphSummary/GraphSummary'
+import Graph from '../../components/Graph/Graph'
 import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
@@ -84,7 +84,7 @@ const Savings = props => {
         single
         loading={loading} />
       <div className={classes.Main}>
-        <GraphSummary isSavings />
+        <Graph isSavings />
         <Breakdown
           addItem={onAddGoal}
           updateItem={onUpdateGoal}
