@@ -6,7 +6,11 @@ const Container = props => {
   return (
     <div
       className={classes.Container}
-      style={{ width: props.width, height: props.height }}>
+      style={{
+        width: props.width,
+        height: props.height,
+        borderRadius: props.borderRadius || '30px'
+      }}>
       {props.children}
     </div>
   )
@@ -15,7 +19,8 @@ const Container = props => {
 Container.propTypes = {
   children: PropTypes.any,
   height: PropTypes.string,
-  width: PropTypes.string
+  width: PropTypes.string,
+  borderRadius: PropTypes.string
 }
 
 export default Container
