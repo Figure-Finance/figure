@@ -1,5 +1,4 @@
 .Container {
-  border-radius: 30px;
   box-shadow:
     inset 6px 6px 9px var(--black-shadow),
     inset -6px -6px 9px var(--white-shadow);
