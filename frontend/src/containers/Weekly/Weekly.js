@@ -1,4 +1,11 @@
 import React, { useEffect, useCallback } from 'react'
+import {
+  format,
+  startOfToday,
+  endOfWeek,
+  eachWeekOfInterval,
+  subYears
+} from 'date-fns'
 import api from '../../api'
 import classes from './Weekly.module.css'
 import Progress from '../../components/Progress/Progress'
@@ -86,6 +93,13 @@ const Weekly = props => {
     totalExpenses += entry.amount
   }
 
+  const today = startOfToday()
+  const lastYear = subYears(today, 1)
+  const weeks = eachWeekOfInterval({ start: lastYear, end: today })
+  const weeksStringMap = weeks.map(day => {
+    return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
+  })
+
   return (
     <div className={classes.Weekly}>
       <Progress
@@ -99,7 +113,10 @@ const Weekly = props => {
           content={income}
           color='primary'
           canAdd />
-        <Chart title='Week' data={expenses} />
+        <Chart
+          title='Week'
+          data={expenses}
+          timePeriods={weeksStringMap} />
         <Breakdown
           title='Expenses'
           content={expenses}

@@ -1,6 +1,12 @@
 import React from 'react'
+import {
+  format,
+  startOfToday,
+  eachYearOfInterval,
+  subYears
+} from 'date-fns'
 import classes from './Yearly.module.css'
-import GraphSummary from '../../components/GraphSummary/GraphSummary'
+import Graph from '../../components/Graph/Graph'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
@@ -39,10 +45,17 @@ const Yearly = props => {
     }
   ]
 
+  const today = startOfToday()
+  const tenYearsAgo = subYears(today, 10)
+  const years = eachYearOfInterval({ start: tenYearsAgo, end: today })
+  const yearsStringMap = years.map(day => format(day, 'yyy').toString())
+
   return (
     <div className={classes.Yearly}>
       <div className={classes.Main}>
-        <GraphSummary showYearly />
+        <Graph
+          timePeriods={yearsStringMap}
+          showYearly />
         <div className={classes.Summaries}>
           <Breakdown
             content={income}
