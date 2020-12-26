@@ -22,29 +22,45 @@ const Weekly = props => {
     })
   }, [])
 
-  // const onAddIncome = useCallback(() => {
-  //   api.get('weekly').then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onAddIncome = useCallback((body, cb) => {
+    api.post('weekly', {
+      ...body,
+      isIncome: true
+    }).then(res => {
+      console.log(res.data)
+      cb(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
-  // const onUpdateIncome = useCallback(body => {
-  //   api.patch('weekly', body).then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onUpdateIncome = useCallback(body => {
+    api.patch('weekly', body).then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
-  // const onDeleteIncome = useCallback(body => {
-  //   api.delete('weekly', body).then(res => {
-  //     console.log(res.data)
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, [])
+  const onDeleteIncome = useCallback(() => {
+    api.delete('weekly').then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
+
+  const onAddExpense = useCallback((body, cb) => {
+    api.post('weekly', {
+      ...body,
+      isIncome: false
+    }).then(res => {
+      console.log(res.data)
+      cb(res)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [])
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
@@ -111,6 +127,9 @@ const Weekly = props => {
         <Breakdown
           title='Income'
           content={income}
+          addItem={onAddIncome}
+          updateItem={onUpdateIncome}
+          deleteItem={onDeleteIncome}
           color='primary'
           canAdd />
         <Chart
@@ -120,6 +139,9 @@ const Weekly = props => {
         <Breakdown
           title='Expenses'
           content={expenses}
+          addItem={onAddExpense}
+          updateItem={onUpdateIncome}
+          deleteItem={onDeleteIncome}
           color='danger'
           canAdd />
       </div>

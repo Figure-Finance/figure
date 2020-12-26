@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Container from '../UI/Container/Container'
 import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
 import BreakdownAddModal from './BreakdownAddModal/BreakdownAddModal'
+import BreakdownSavingsAddModal from './BreakdownAddSavingsModal/BreakdownAddSavingsModal'
 import BreakdownDetailModal from './BreakdownDetailModal/BreakdownDetailModal'
 
 const Breakdown = props => {
@@ -28,8 +29,8 @@ const Breakdown = props => {
     setShowDetailModal(false)
   }
 
-  const addItemHandler = goal => {
-    props.addItem(goal, res => {
+  const addItemHandler = item => {
+    props.addItem(item, res => {
       console.log(res.data)
       setShowAddModal(false)
     })
@@ -59,7 +60,16 @@ const Breakdown = props => {
       canAdd={props.canAdd} />
   )
 
-  if (showAddModal) {
+  if (showAddModal && props.isSavings) {
+    content = (
+      <BreakdownSavingsAddModal
+        title={props.title}
+        color={props.color}
+        closeModal={closeAddModalHandler}
+        onSubmit={addItemHandler}
+        isIncome={props.isIncome} />
+    )
+  } else if (showAddModal) {
     content = (
       <BreakdownAddModal
         title={props.title}
@@ -99,7 +109,8 @@ Breakdown.propTypes = {
   content: PropTypes.arrayOf(PropTypes.object),
   addItem: PropTypes.func,
   updateItem: PropTypes.func,
-  deleteItem: PropTypes.func
+  deleteItem: PropTypes.func,
+  isSavings: PropTypes.bool
 }
 
 export default Breakdown

@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './BreakdownAddModal.module.css'
+import classes from './BreakdownAddSavingsModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownAddModal = props => {
+const BreakdownAddSavingsModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
-    type: {
+    name: {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Type'
+        placeholder: 'Name'
       },
-      value: props.type || '',
+      value: props.name || '',
       validation: {
         required: true
       },
@@ -33,19 +33,6 @@ const BreakdownAddModal = props => {
       valid: false,
       touched: false
     },
-    location: {
-      type: 'input',
-      config: {
-        type: 'text',
-        placeholder: 'Location'
-      },
-      value: props.location || '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
-    },
     description: {
       type: 'textarea',
       config: {
@@ -57,29 +44,14 @@ const BreakdownAddModal = props => {
       },
       valid: false,
       touched: false
-    },
-    date: {
-      type: 'input',
-      config: {
-        type: 'date',
-        placeholder: 'Date'
-      },
-      value: props.date || '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
     }
   })
 
   const addItemHandler = () => {
     props.onSubmit({
-      category: formElements.type.value,
+      name: formElements.name.value,
       amount: formElements.amount.value,
-      location: formElements.location.value,
-      description: formElements.description.value,
-      date: formElements.date.value
+      description: formElements.description.value
     }, res => {
       console.log(res.data)
       props.closeModal()
@@ -153,7 +125,7 @@ const BreakdownAddModal = props => {
   )
 }
 
-BreakdownAddModal.propTypes = {
+BreakdownAddSavingsModal.propTypes = {
   title: PropTypes.string,
   type: PropTypes.string,
   name: PropTypes.string,
@@ -167,4 +139,4 @@ BreakdownAddModal.propTypes = {
   isIncome: PropTypes.bool
 }
 
-export default BreakdownAddModal
+export default BreakdownAddSavingsModal
