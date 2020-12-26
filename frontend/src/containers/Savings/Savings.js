@@ -11,6 +11,7 @@ const Savings = props => {
   const [goals, setGoals] = useState([])
   const [goalProgress, setGoalProgress] = useState(0)
   const [totalGoal, setTotalGoal] = useState(0)
+  const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
 
   const onFetchSavings = useCallback(() => {
     setLoading(true)
@@ -73,6 +74,10 @@ const Savings = props => {
 
   useEffect(onFetchSavings, [onFetchSavings])
 
+  const graphTimePeriodChangeHandler = event => {
+    setGraphTimePeriod(event.target.innerHTML)
+  }
+
   return (
     <div className={classes.Savings}>
       <Progress
@@ -84,7 +89,10 @@ const Savings = props => {
         single
         loading={loading} />
       <div className={classes.Main}>
-        <Graph isSavings />
+        <Graph
+          onNavSavingsChange={graphTimePeriodChangeHandler}
+          active={graphTimePeriod}
+          isSavings />
         <Breakdown
           addItem={onAddGoal}
           updateItem={onUpdateGoal}
