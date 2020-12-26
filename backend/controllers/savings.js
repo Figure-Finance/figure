@@ -78,9 +78,13 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
-      if (last && savingsItem.progressUpdates && last.date === startOfToday()) {
+      if (!last) {
+        savingsItem.progressUpdates = [{date: startOfToday(), curTotal: req.body.progressAmount}]
+      } else if (savingsItem.progressUpdates && last.date.toString() === startOfToday().toString()) {
+        console.log('in if block')
 	       last.curTotal += req.body.progressAmount
       } else {
+        console.log('in else block')
 	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: req.body.progressAmount})
       }
       savingsItem.totalSavingsProgress += req.body.progressAmount
@@ -94,11 +98,31 @@ exports.getByTimeFrame = (req, res, next) => {
   const timeFrame = req.params.timeFrame
   let interval
   let savings
+  let savingsToReturn
   // TODO: find by current user id
   Savings.findOne()
     .then(savingsItem => {
       if (timeFrame === 'month') {
         savings = filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
+          // return lastDayOfWeek() for each week, if lastDayOfWeek already present in filtered list, override that with new (to get latest)
+        console.log('Each week of interval: ' + eachWeekOfInterval({
+          start: savings[0].date,
+          end: savings[savings.length - 1].date
+        }))
+        // let savingsToReturn = []
+        // let lastDay
+        // let periodTotal
+        // if (!lastDay) {
+        //   lastDay = lastDayOfWeek(i.date)
+        //   periodTotal = i.cumTotal
+        //   savingsToReturn.push({period: lastDay, amount: periodTotal})
+        // } else if (lastDayOfWeek(i.date.toString()) === lastDay.toString()) {
+        //   periodTotal = i.cumTotal
+        // }
+        // Get weeks in interval, return dates within those weeks?
+        // [{period: week1, amount: cumTotal}, ...]
+        // So we could use the cumulative total from the last day of each week, but how do we figure out
+        // What the last day in the accurate weeks are?
       } else if (timeFrame === 'year') {
         savings = filterByTimeFrame('year', savingsItem.progressUpdates, startOfYear, lastDayOfYear)
       } else if (timeFrame === 'week') {
