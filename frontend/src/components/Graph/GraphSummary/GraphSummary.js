@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classes from './GraphSummary.module.css'
 import Graph from './Graph/Graph'
 import GraphSummaryTitle from './GraphSummaryTitle/GraphSummaryTitle'
-import NavbarSavings from '../../NavbarSavings/NavbarSavings'
+import Navbar from '../../Navbar/Navbar'
 
 const GraphSummary = props => {
   let title = null
@@ -21,14 +21,19 @@ const GraphSummary = props => {
 
   if (!props.showYearly) {
     nav = (
-      <NavbarSavings active='1w' />
+      <Navbar
+        onNavSavingsChange={props.onNavSavingsChange}
+        active={props.active}
+        isSavings />
     )
   }
 
   return (
     <div className={classes.GraphSummary}>
       {title}
-      <Graph isSavings={props.isSavings} />
+      <Graph
+        active={props.active}
+        isSavings={props.isSavings} />
       {nav}
     </div>
   )
@@ -40,7 +45,9 @@ GraphSummary.propTypes = {
   openModal: PropTypes.func,
   buttonContent: PropTypes.string,
   decrementNumber: PropTypes.func,
-  incrementNumber: PropTypes.func
+  incrementNumber: PropTypes.func,
+  onNavSavingsChange: PropTypes.func,
+  active: PropTypes.string
 }
 
 export default GraphSummary
