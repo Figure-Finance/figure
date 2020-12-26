@@ -52,7 +52,7 @@ exports.postUserFinances = (req, res, next) => {
       })
       finances.save()
       // Needs category and amount as response only
-      return res.status(201).json({ user: user, finances: finances })
+      return res.status(201).json(finances)
     })
     .catch(err => console.log(err))
 }

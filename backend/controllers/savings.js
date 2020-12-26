@@ -2,7 +2,7 @@ const User = require('../models/user')
 const Savings = require('../models/savings')
 const ItemGoal = require('../models/itemGoal')
 
-const filterByTimeFrame = require('../util/savingsByTimeFrame')
+const timeFrameUtils = require('../util/savingsByTimeFrame')
 
 const startOfToday = require('date-fns/startOfToday')
 
@@ -104,36 +104,23 @@ exports.getByTimeFrame = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       if (timeFrame === 'month') {
-        savings = filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
-          // return lastDayOfWeek() for each week, if lastDayOfWeek already present in filtered list, override that with new (to get latest)
-        console.log('Each week of interval: ' + eachWeekOfInterval({
-          start: savings[0].date,
-          end: savings[savings.length - 1].date
-        }))
+        let savingsToReturn = []
+        savings = timeFrameUtils.filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
         if (savings) {
           weeks = eachWeekOfInterval({
             start: savings[0].date,
             end: savings[savings.length - 1].date
           })
-          // for (let i in savings) {
-          //   if (i.date.toString() === )
-          // }
         }
-        // for each week of interval
-        // if last day of week
-        // create object & add to array of objets
-        // else if only entry
-        // create array of objects and return that
-        // else section monthly results by 4, return last item of each array (then optimize this later)
-
+        console.log(timeFrameUtils.filterSavingsData(savings, timeFrame, weeks.length, lastDayOfWeek, savingsToReturn, weeks))
         // Get weeks in interval, return dates within those weeks?
         // [{period: week1, amount: cumTotal}, ...]
         // So we could use the cumulative total from the last day of each week, but how do we figure out
         // What the last day in the accurate weeks are?
       } else if (timeFrame === 'year') {
-        savings = filterByTimeFrame('year', savingsItem.progressUpdates, startOfYear, lastDayOfYear)
+        savings = timeFrameUtils.filterByTimeFrame('year', savingsItem.progressUpdates, startOfYear, lastDayOfYear)
       } else if (timeFrame === 'week') {
-        savings = filterByTimeFrame('week', savingsItem.progressUpdates, startOfWeek, lastDayOfWeek)
+        savings = timeFrameUtils.filterByTimeFrame('week', savingsItem.progressUpdates, startOfWeek, lastDayOfWeek)
       } else if (timeFrame === 'all') {
         // TODO: edit this to make sense for 'all's arbitrary start date
         savings = updatesList.filter(i => {
@@ -144,7 +131,7 @@ exports.getByTimeFrame = (req, res, next) => {
           })
         })
       } else if (timeFrame === 'quarter') {
-        savings = filterByTimeFrame('quarter', savingsItem.progressUpdates, startOfQuarter, lastDayOfQuarter)
+        savings = timeFrameUtils.filterByTimeFrame('quarter', savingsItem.progressUpdates, startOfQuarter, lastDayOfQuarter)
       }
       return res.status(200).json(savings)
     })
