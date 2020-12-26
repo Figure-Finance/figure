@@ -6,9 +6,7 @@ import Button from '../../UI/Button/Button'
 
 const NavItem = props => (
   <div
-    className={
-      props.size === 'small' ? classes.NavItem : classes.NavItemSmall
-    }>
+    className={classes.NavItem}>
     <NavLink to={props.link}>
       <Button
         color={props.color}

@@ -10,7 +10,11 @@ const Graph = props => {
   )
 
   if (props.isSavings) {
-    content = <GraphSavings />
+    content = (
+      <GraphSavings
+        active={props.active}
+        onChange={props.onNavSavingsChange} />
+    )
   }
 
   return (
@@ -21,7 +25,9 @@ const Graph = props => {
 }
 
 Graph.propTypes = {
+  onNavSavingsChange: PropTypes.func,
   isSavings: PropTypes.bool,
+  active: PropTypes.string,
   timePeriods: PropTypes.arrayOf(PropTypes.string)
 }
 
