@@ -1,4 +1,10 @@
 import React from 'react'
+import {
+  format,
+  startOfToday,
+  eachMonthOfInterval,
+  subYears
+} from 'date-fns'
 import classes from './Monthly.module.css'
 import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
@@ -51,6 +57,11 @@ const Monthly = props => {
     totalExpenses += entry.amount
   }
 
+  const today = startOfToday()
+  const lastYear = subYears(today, 1)
+  const months = eachMonthOfInterval({ start: lastYear, end: today })
+  const monthStringMap = months.map(day => format(day, 'MMM. yyy').toString())
+
   return (
     <div className={classes.Monthly}>
       <Progress
@@ -63,7 +74,10 @@ const Monthly = props => {
           title='Income'
           content={income}
           color='primary' />
-        <Chart title='Month' data={expenses} />
+        <Chart
+          title='Month'
+          data={expenses}
+          timePeriods={monthStringMap} />
         <Breakdown
           title='Expenses'
           content={expenses}

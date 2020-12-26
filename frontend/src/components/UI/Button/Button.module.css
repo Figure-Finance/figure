@@ -44,7 +44,7 @@
 }
 
 .Button.Active {
-  background-color: var(--primary);
+  color: var(--white);
 }
 
 .Button.Active:hover {
@@ -55,20 +55,24 @@
   transform: none;
 }
 
+.Primary.Active {
+  background-color: var(--primary);
+}
+
+.Neutral.Active {
+  background-color: var(--neutral);
+}
+
+.Danger.Active {
+  background-color: var(--danger);
+}
+
 .Primary {
   color: var(--primary);
 }
 
-.Primary.Active {
-  color: var(--white);
-}
-
 .Neutral {
   color: var(--neutral);
-}
-
-.Neutral.Active {
-  color : var(--neutral);
 }
 
 .Danger {
@@ -115,6 +119,24 @@
     inset 6px 6px 9px var(--black-shadow);
 }
 
+.Small {
+  border-radius: 20px;
+  box-shadow:
+    -6px -6px 9px var(--white-shadow),
+    6px 6px 9px var(--black-shadow);
+  font-size: 20px;
+  height: 60px;
+  text-shadow:
+    2px 2px 2px var(--white-shadow);
+  width: 160px;
+}
+
+.Small:active {
+  box-shadow:
+    inset -6px -6px 9px var(--white-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+}
+
 .Thin {
   border-radius: 13px;
   box-shadow:
@@ -151,9 +173,36 @@
     inset 6px 6px 9px var(--black-shadow);
 }
 
-.Square.Active {
+.SquareSmall {
+  border-radius: 14px;
+  box-shadow:
+    -6px -6px 9px var(--white-shadow),
+    6px 6px 9px var(--black-shadow);
+  font-size: 20px;
+  height: 45px;
+  text-shadow:
+    2px 2px 2px var(--white-shadow);
+  width: 45px;
+}
+
+.SquareSmall:active {
+  box-shadow:
+    inset -6px -6px 9px var(--white-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+}
+
+.Square.Primary.Active,
+.SquareSmall.Primary.Active {
   box-shadow:
     inset -6px -6px 9px var(--primary-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+  text-shadow: none;
+}
+
+.Square.Neutral.Active,
+.SquareSmall.Neutral.Active {
+  box-shadow:
+    inset -6px -6px 9px var(--neutral-shadow),
     inset 6px 6px 9px var(--black-shadow);
   text-shadow: none;
 }

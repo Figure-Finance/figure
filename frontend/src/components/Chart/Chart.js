@@ -5,88 +5,69 @@ import ChartSummary from './ChartSummary/ChartSummary'
 import ChartModal from './ChartModal/ChartModal'
 
 const Chart = props => {
-  const [number, setNumber] = useState(1)
   const [showModal, setShowModal] = useState(false)
+  const [
+    currentTimePeriodIndex,
+    setCurrentTimePeriodIndex
+  ] = useState(props.timePeriods.length - 1)
 
-  const weeks = []
-
-  for (let i = 1; i <= 53; i++) {
-    weeks.push(`Week ${i}`)
-  }
-
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ]
-
-  const incrementNumber = () => {
-    if (props.title === 'Week' && number < 53) {
-      setNumber(number + 1)
-    } else if (props.title === 'Month' && number < 12) {
-      setNumber(number + 1)
-    }
-  }
-
-  const decrementNumber = () => {
-    if (number > 1) {
-      setNumber(number - 1)
-    }
-  }
+  // const months = [
+  //   'January',
+  //   'February',
+  //   'March',
+  //   'April',
+  //   'May',
+  //   'June',
+  //   'July',
+  //   'August',
+  //   'September',
+  //   'October',
+  //   'November',
+  //   'December'
+  // ]
 
   const openModalHandler = () => {
     setShowModal(true)
   }
 
   const changeSelection = event => {
-    if (props.title === 'Week') {
-      const index = weeks.findIndex(el => el === event.target.innerHTML)
-      setNumber(index + 1)
-      setShowModal(false)
-    } else if (props.title === 'Month') {
-      const index = months.findIndex(el => el === event.target.innerHTML)
-      setNumber(index + 1)
-      setShowModal(false)
+    const index = props.timePeriods.findIndex(el => el === event.target.innerHTML)
+    setCurrentTimePeriodIndex(index)
+    setShowModal(false)
+  }
+
+  const previousTimePeriod = () => {
+    if (currentTimePeriodIndex > 0) {
+      setCurrentTimePeriodIndex(currentTimePeriodIndex - 1)
+    }
+  }
+
+  const nextTimePeriod = () => {
+    if (currentTimePeriodIndex < props.timePeriods.length - 1) {
+      setCurrentTimePeriodIndex(currentTimePeriodIndex + 1)
     }
   }
 
   const names = props.data.map(item => item.name)
   const amounts = props.data.map(item => item.amount)
 
-  let buttonContent = (
-    `${props.title} ${number}`
-  )
-
-  if (props.title === 'Month') {
-    buttonContent = months[number - 1]
-  }
+  const currentTimePeriod = props.timePeriods[currentTimePeriodIndex].toString()
 
   let content = (
     <ChartSummary
-      buttonContent={buttonContent}
+      buttonContent={currentTimePeriod}
       names={names}
       amounts={amounts}
       openModal={openModalHandler}
-      leftArrowClick={decrementNumber}
-      rightArrowClick={incrementNumber} />
+      leftArrowClick={previousTimePeriod}
+      rightArrowClick={nextTimePeriod} />
   )
 
-  if (showModal && props.title === 'Month') {
+  if (showModal) {
     content = (
-      <ChartModal selection={months} onClick={changeSelection} />
-    )
-  } else if (showModal && props.title === 'Week') {
-    content = (
-      <ChartModal selection={weeks} onClick={changeSelection} />
+      <ChartModal
+        timePeriods={props.timePeriods}
+        onClick={changeSelection} />
     )
   }
 
@@ -99,6 +80,7 @@ const Chart = props => {
 
 Chart.propTypes = {
   title: PropTypes.string,
+  timePeriods: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 

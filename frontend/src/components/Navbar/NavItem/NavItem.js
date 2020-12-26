@@ -4,25 +4,28 @@ import { NavLink } from 'react-router-dom'
 import classes from './NavItem.module.css'
 import Button from '../../UI/Button/Button'
 
-const NavItem = props => {
-  return (
-    <div className={classes.NavItem}>
-      <NavLink to={props.link}>
-        <Button
-          color='primary'
-          size='square'
-          active={props.active}>
-          {props.children}
-        </Button>
-      </NavLink>
-    </div>
-  )
-}
+const NavItem = props => (
+  <div
+    className={
+      props.size === 'small' ? classes.NavItem : classes.NavItemSmall
+    }>
+    <NavLink to={props.link}>
+      <Button
+        color={props.color}
+        size={props.size}
+        active={props.active}>
+        {props.children}
+      </Button>
+    </NavLink>
+  </div>
+)
 
 NavItem.propTypes = {
   children: PropTypes.string,
+  color: PropTypes.string,
   active: PropTypes.bool,
-  link: PropTypes.string
+  link: PropTypes.string,
+  size: PropTypes.string
 }
 
 export default NavItem

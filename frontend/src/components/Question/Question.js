@@ -10,7 +10,7 @@ const Question = props => {
         key={answer}
         size='large'
         color='primary'
-        clicked={e => props.onAnswer(e.target.innerHTML, props.questionSet.setState)}>
+        onClick={e => props.onAnswer(e.target.innerHTML, props.questionSet.setState)}>
         {answer}
       </Button>
     ))

@@ -6,24 +6,22 @@ import LeftArrowButton from '../../UI/LeftArrowButton/LeftArrowButton'
 import RightArrowButton from '../../UI/RightArrowButton/RightArrowButton'
 import PieChart from './PieChart/PieChart'
 
-const ChartSummary = props => {
-  return (
-    <div className={classes.ChartSummary}>
-      <div className={classes.Buttons}>
-        <LeftArrowButton onClick={props.leftArrowClick} color='danger' />
-        <Button
-          size='large'
-          width='60%'
-          color='danger'
-          onClick={props.openModal}>
-          {props.buttonContent}
-        </Button>
-        <RightArrowButton onClick={props.rightArrowClick} color='danger' />
-      </div>
-      <PieChart names={props.names} amounts={props.amounts} />
+const ChartSummary = props => (
+  <div className={classes.ChartSummary}>
+    <div className={classes.Buttons}>
+      <LeftArrowButton onClick={props.leftArrowClick} color='danger' />
+      <Button
+        size='medium'
+        width='60%'
+        color='danger'
+        onClick={props.openModal}>
+        {props.buttonContent}
+      </Button>
+      <RightArrowButton onClick={props.rightArrowClick} color='danger' />
     </div>
-  )
-}
+    <PieChart names={props.names} amounts={props.amounts} />
+  </div>
+)
 
 ChartSummary.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object),

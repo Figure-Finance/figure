@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import classes from './ChartModal.module.css'
+import classes from './GraphModal.module.css'
 import Button from '../../UI/Button/Button'
 
-const ChartModal = props => {
+const GraphModal = props => {
   const content = (
-    props.timePeriods.map((item, index) => (
+    props.years.map((item, index) => (
       <Button
         key={index}
         size='large'
@@ -17,7 +17,7 @@ const ChartModal = props => {
   )
 
   return (
-    <div className={classes.ChartModal}>
+    <div className={classes.GraphModal}>
       <div className={classes.Buttons}>
         {content}
       </div>
@@ -25,9 +25,9 @@ const ChartModal = props => {
   )
 }
 
-ChartModal.propTypes = {
-  onClick: PropTypes.func,
-  timePeriods: PropTypes.arrayOf(PropTypes.string)
+GraphModal.propTypes = {
+  years: PropTypes.arrayOf(PropTypes.string),
+  onClick: PropTypes.func
 }
 
-export default ChartModal
+export default GraphModal
