@@ -29,8 +29,8 @@ const Breakdown = props => {
     setShowDetailModal(false)
   }
 
-  const addItemHandler = goal => {
-    props.addItem(goal, res => {
+  const addItemHandler = item => {
+    props.addItem(item, res => {
       console.log(res.data)
       setShowAddModal(false)
     })
