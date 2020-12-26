@@ -1,3 +1,7 @@
 .NavItem {
   margin: 20px;
 }
+
+.NavItemSmall {
+  margin: 15px;
+}
