@@ -20,6 +20,8 @@ const Button = props => {
     classNames.push(classes.Large)
   } else if (props.size === 'medium') {
     classNames.push(classes.Medium)
+  } else if (props.size === 'small') {
+    classNames.push(classes.Small)
   } else if (props.size === 'square') {
     classNames.push(classes.Square)
   } else if (props.size === 'thin') {
