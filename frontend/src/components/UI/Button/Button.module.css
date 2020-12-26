@@ -115,6 +115,24 @@
     inset 6px 6px 9px var(--black-shadow);
 }
 
+.Small {
+  border-radius: 20px;
+  box-shadow:
+    -6px -6px 9px var(--white-shadow),
+    6px 6px 9px var(--black-shadow);
+  font-size: 20px;
+  height: 60px;
+  text-shadow:
+    2px 2px 2px var(--white-shadow);
+  width: 160px;
+}
+
+.Small:active {
+  box-shadow:
+    inset -6px -6px 9px var(--white-shadow),
+    inset 6px 6px 9px var(--black-shadow);
+}
+
 .Thin {
   border-radius: 13px;
   box-shadow:
