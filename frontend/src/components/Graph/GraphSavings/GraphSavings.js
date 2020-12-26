@@ -1,8 +1,17 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import GraphSummary from '../GraphSummary/GraphSummary'
 
-const GraphYearly = props => (
-  <GraphSummary isSavings />
+const GraphSavings = props => (
+  <GraphSummary
+    onNavSavingsChange={props.onChange}
+    active={props.active}
+    isSavings />
 )
 
-export default GraphYearly
+GraphSavings.propTypes = {
+  onChange: PropTypes.func,
+  active: PropTypes.string
+}
+
+export default GraphSavings
