@@ -75,9 +75,11 @@ const BreakdownAddModal = props => {
 
   const addItemHandler = () => {
     props.onSubmit({
-      name: formElements.name.value,
+      category: formElements.type.value,
       amount: formElements.amount.value,
-      description: formElements.description.value
+      location: formElements.location.value,
+      description: formElements.description.value,
+      date: formElements.date.value
     }, res => {
       console.log(res.data)
       props.closeModal()
