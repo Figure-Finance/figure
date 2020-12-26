@@ -5,11 +5,11 @@ import Button from '../../UI/Button/Button'
 
 const ChartModal = props => {
   const content = (
-    props.selection.map((item, index) => (
+    props.timePeriods.map((item, index) => (
       <Button
         key={index}
         size='large'
-        color='default'
+        color='danger'
         onClick={props.onClick}>
         {item}
       </Button>
@@ -27,7 +27,7 @@ const ChartModal = props => {
 
 ChartModal.propTypes = {
   onClick: PropTypes.func,
-  selection: PropTypes.array
+  timePeriods: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default ChartModal
