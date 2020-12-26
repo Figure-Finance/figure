@@ -1,0 +1,16 @@
+.GraphModal {
+  height: 100%;
+  margin-bottom: 80px;
+  margin-top: 20px;
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.Buttons {
+  margin: auto;
+  width: 90%;
+}
+
+.Buttons > button {
+  margin: 10px 0;
+}
