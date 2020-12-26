@@ -53,9 +53,7 @@ const Yearly = props => {
   return (
     <div className={classes.Yearly}>
       <div className={classes.Main}>
-        <Graph
-          timePeriods={yearsStringMap}
-          showYearly />
+        <Graph timePeriods={yearsStringMap} />
         <div className={classes.Summaries}>
           <Breakdown
             content={income}
