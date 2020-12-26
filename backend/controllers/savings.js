@@ -78,14 +78,15 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
+      let curTotal = savingsItem.totalSavingsProgress + req.body.progressAmount
       if (!last) {
-        savingsItem.progressUpdates = [{date: startOfToday(), curTotal: req.body.progressAmount}]
-      } else if (savingsItem.progressUpdates && last.date.toString() === startOfToday().toString()) {
-        console.log('in if block')
-	       last.curTotal += req.body.progressAmount
+        savingsItem.progressUpdates = [{date: startOfToday(), curTotal: curTotal }]
+      } else if (last.date.toString() === startOfToday().toString()) {
+         console.log(`Adding: ${savingsItem.totalSavingsProgress + req.body.progressAmount}`)
+	       last.curTotal = curTotal
+         console.log(`Progress updates from else if ${savingsItem.progressUpdates}`)
       } else {
-        console.log('in else block')
-	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: req.body.progressAmount})
+	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: curTotal })
       }
       savingsItem.totalSavingsProgress += req.body.progressAmount
       savingsItem.save(err => console.log(err))
