@@ -110,16 +110,22 @@ exports.getByTimeFrame = (req, res, next) => {
           start: savings[0].date,
           end: savings[savings.length - 1].date
         }))
-        // let savingsToReturn = []
-        // let lastDay
-        // let periodTotal
-        // if (!lastDay) {
-        //   lastDay = lastDayOfWeek(i.date)
-        //   periodTotal = i.cumTotal
-        //   savingsToReturn.push({period: lastDay, amount: periodTotal})
-        // } else if (lastDayOfWeek(i.date.toString()) === lastDay.toString()) {
-        //   periodTotal = i.cumTotal
-        // }
+        if (savings) {
+          weeks = eachWeekOfInterval({
+            start: savings[0].date,
+            end: savings[savings.length - 1].date
+          })
+          // for (let i in savings) {
+          //   if (i.date.toString() === )
+          // }
+        }
+        // for each week of interval
+        // if last day of week
+        // create object & add to array of objets
+        // else if only entry
+        // create array of objects and return that
+        // else section monthly results by 4, return last item of each array (then optimize this later)
+
         // Get weeks in interval, return dates within those weeks?
         // [{period: week1, amount: cumTotal}, ...]
         // So we could use the cumulative total from the last day of each week, but how do we figure out

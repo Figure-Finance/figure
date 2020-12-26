@@ -22,7 +22,7 @@ exports.getUserFinances = (req, res, next) => {
             })
           })
           const financeData = weeklyFinances.map(entry => {
-            return { id: entry._id, category: entry.category, amount: entry.amount }
+            return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
           })
           return res.status(200).json(financeData)
         })
