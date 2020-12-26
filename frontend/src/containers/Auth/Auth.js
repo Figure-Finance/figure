@@ -15,14 +15,22 @@ const Auth = props => {
       <Container height='98%' width='50%'>
         <div className={classes.Main}>
           <Input
-            placeholder='Email'
+            type='input'
+            config={{
+              type: 'email',
+              placeholder: 'Email'
+            }}
             value={email}
             onChange={value => setEmail(value)} />
           <Input
-            placeholder='Password'
+            type='input'
+            config={{
+              type: 'password',
+              placeholder: 'Password'
+            }}
             value={password}
             onChange={value => setPassword(value)} />
-          <NavLink to='auth/questions'>
+          <NavLink to='auth/questions' style={{ width: '100%' }}>
             <Button color='primary' size='large'>
               Sign Up
             </Button>
