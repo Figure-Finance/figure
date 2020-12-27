@@ -1,0 +1,17 @@
+.ButtonProgress {
+  border-radius: 0 0 15px 15px;
+  box-shadow: inset 0px 2px 1px var(--black-shadow);
+  height: 10px;
+}
+
+.Primary {
+  background-color: var(--primary);
+}
+
+.Neutral {
+  background-color: var(--neutral);
+}
+
+.Danger {
+  background-color: var(--danger);
+}
