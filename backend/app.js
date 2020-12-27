@@ -27,7 +27,7 @@ app.use('/api/weekly', dashWeeklyRoutes)
 app.use('/api/monthly', dashMonthlyRoutes)
 app.use('/api/yearly', dashYearlyRoutes)
 app.use('/api/savings', savingsRoutes)
-app.use('/api', userRoutes)
+app.use('/api/user', userRoutes)
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
