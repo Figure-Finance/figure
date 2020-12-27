@@ -23,7 +23,7 @@ const Input = props => {
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
-          onChange={props.changed} />
+          onChange={props.onChange} />
       )
       break
     case ('textarea'):
@@ -34,7 +34,7 @@ const Input = props => {
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
-          onChange={props.changed} />
+          onChange={props.onChange} />
       )
       break
     case ('select'):
@@ -43,7 +43,7 @@ const Input = props => {
           className={classNames.join(' ')}
           value={props.value}
           style={{ width: props.width || '100%' }}
-          onChange={props.changed}>
+          onChange={props.onChange}>
           {props.config.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -59,7 +59,7 @@ const Input = props => {
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
-          onChange={props.changed} />
+          onChange={props.onChange} />
       )
   }
 
@@ -88,7 +88,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   width: PropTypes.string,
   value: PropTypes.string,
-  changed: PropTypes.func,
+  onChange: PropTypes.func,
   touched: PropTypes.bool,
   invalid: PropTypes.bool.isRequired,
   valueType: PropTypes.string,

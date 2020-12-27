@@ -6,20 +6,7 @@ const Graph = props => {
   let graph = (
     <Line
       data={{
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
-        ],
+        labels: props.labels,
         datasets: [
           {
             label: 'Income',
@@ -64,20 +51,7 @@ const Graph = props => {
     graph = (
       <Line
         data={{
-          labels: [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-          ],
+          labels: props.labels,
           datasets: [
             {
               label: 'Savings',
@@ -107,7 +81,8 @@ const Graph = props => {
 }
 
 Graph.propTypes = {
-  isSavings: PropTypes.bool
+  isSavings: PropTypes.bool,
+  labels: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default Graph

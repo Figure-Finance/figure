@@ -18,6 +18,7 @@ const Graph = props => {
     content = (
       <GraphSavings
         active={props.active}
+        labels={props.labels}
         onChange={props.onNavSavingsChange} />
     )
   }
@@ -37,7 +38,8 @@ Graph.propTypes = {
   currentTimePeriod: PropTypes.string,
   previousTimePeriod: PropTypes.func,
   nextTimePeriod: PropTypes.func,
-  selectTimePeriod: PropTypes.func
+  selectTimePeriod: PropTypes.func,
+  labels: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default Graph

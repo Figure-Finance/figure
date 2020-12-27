@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import api from '../../api'
 import classes from './Auth.module.css'
 import Container from '../../components/UI/Container/Container'
 import Input from '../../components/UI/Input/Input'
@@ -7,8 +8,21 @@ import Button from '../../components/UI/Button/Button'
 import Logo from '../../components/Logo/Logo'
 
 const Auth = props => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const onUserSignUp = () => {
+    const userData = { firstName, lastName, email, password }
+    console.log(userData)
+    api.post('user/signup', userData).then(res => {
+      console.log(res.data)
+      props.history.push('/')
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   return (
     <div className={classes.Auth}>
@@ -17,11 +31,27 @@ const Auth = props => {
           <Input
             type='input'
             config={{
+              type: 'text',
+              placeholder: 'First Name'
+            }}
+            value={firstName}
+            onChange={event => setFirstName(event.target.value)} />
+          <Input
+            type='input'
+            config={{
+              type: 'text',
+              placeholder: 'Last Name'
+            }}
+            value={lastName}
+            onChange={event => setLastName(event.target.value)} />
+          <Input
+            type='input'
+            config={{
               type: 'email',
               placeholder: 'Email'
             }}
             value={email}
-            onChange={value => setEmail(value)} />
+            onChange={event => setEmail(event.target.value)} />
           <Input
             type='input'
             config={{
@@ -29,12 +59,13 @@ const Auth = props => {
               placeholder: 'Password'
             }}
             value={password}
-            onChange={value => setPassword(value)} />
-          <NavLink to='auth/questions' style={{ width: '100%' }}>
-            <Button color='primary' size='large'>
-              Sign Up
-            </Button>
-          </NavLink>
+            onChange={event => setPassword(event.target.value)} />
+          <Button
+            onClick={onUserSignUp}
+            color='primary'
+            size='large'>
+            Sign Up
+          </Button>
         </div>
       </Container>
       <div>
@@ -42,6 +73,10 @@ const Auth = props => {
       </div>
     </div>
   )
+}
+
+Auth.propTypes = {
+  history: PropTypes.object.isRequired
 }
 
 export default Auth
