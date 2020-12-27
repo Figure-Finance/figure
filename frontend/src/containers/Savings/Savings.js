@@ -102,7 +102,8 @@ const Savings = props => {
           content={goals}
           loading={loading}
           canAdd
-          isSavings />
+          isSavings
+          buttonProgressPercent={30} />
       </div>
       <Navbar active='s' />
     </div>

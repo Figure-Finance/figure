@@ -32,7 +32,7 @@ const Weekly = props => {
     }).catch(err => {
       console.log(err)
     })
-  }, [])
+  }, [currentWeekIndex])
 
   const onAddIncome = useCallback((body, cb) => {
     api.post('weekly', {
@@ -133,8 +133,8 @@ const Weekly = props => {
           color='primary'
           canAdd />
         <Chart
-          title='Week'
           data={expenses}
+          timePeriods={weeksStringMap}
           previousTimePeriod={previousWeek}
           nextTimePeriod={nextWeek}
           selectTimePeriod={changeWeek}

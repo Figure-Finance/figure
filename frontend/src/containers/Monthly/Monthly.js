@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   format,
   startOfToday,
+  endOfMonth,
   eachMonthOfInterval,
   subYears
 } from 'date-fns'
+import api from '../../api'
 import classes from './Monthly.module.css'
 import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
@@ -12,39 +14,36 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Monthly = props => {
-  const income = [
-    {
-      name: 'Web Design',
-      amount: 484.92
-    },
-    {
-      name: 'Video Team',
-      amount: 200.00
-    },
-    {
-      name: 'Curriculum',
-      amount: 200.00
-    }
-  ]
+  const today = startOfToday()
+  const lastYear = subYears(today, 1)
+  const months = eachMonthOfInterval({ start: lastYear, end: today })
+  const monthStringMap = months.map(day => format(day, 'MMM. yyy').toString())
 
-  const expenses = [
-    {
-      name: 'Groceries',
-      amount: 235.84
-    },
-    {
-      name: 'Gas',
-      amount: 140.00
-    },
-    {
-      name: 'Eating Out',
-      amount: 128.49
-    },
-    {
-      name: 'Misc',
-      amount: 100.00
+  const [monthlyItems, setMonthlyItems] = useState([])
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(monthStringMap.length - 1)
+
+  const onFetchMonthly = useCallback(() => {
+    const startDate = months[currentMonthIndex]
+    const endDate = endOfMonth(startDate)
+    api.get(`monthly/${startDate}/${endDate}`).then(res => {
+      setMonthlyItems(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
+  }, [currentMonthIndex])
+
+  useEffect(onFetchMonthly, [onFetchMonthly])
+
+  const income = []
+  const expenses = []
+
+  for (const item of monthlyItems) {
+    if (item.isIncome) {
+      income.push(item)
+    } else {
+      expenses.push(item)
     }
-  ]
+  }
 
   let totalIncome = 0
   let totalExpenses = 0
@@ -57,10 +56,22 @@ const Monthly = props => {
     totalExpenses += entry.amount
   }
 
-  const today = startOfToday()
-  const lastYear = subYears(today, 1)
-  const months = eachMonthOfInterval({ start: lastYear, end: today })
-  const monthStringMap = months.map(day => format(day, 'MMM. yyy').toString())
+  const changeMonth = event => {
+    const index = monthStringMap.findIndex(el => el === event.target.innerHTML)
+    setCurrentMonthIndex(index)
+  }
+
+  const previousMonth = () => {
+    if (currentMonthIndex > 0) {
+      setCurrentMonthIndex(currentMonthIndex - 1)
+    }
+  }
+
+  const nextMonth = () => {
+    if (currentMonthIndex < monthStringMap.length - 1) {
+      setCurrentMonthIndex(currentMonthIndex + 1)
+    }
+  }
 
   return (
     <div className={classes.Monthly}>
@@ -75,9 +86,12 @@ const Monthly = props => {
           content={income}
           color='primary' />
         <Chart
-          title='Month'
           data={expenses}
-          timePeriods={monthStringMap} />
+          timePeriods={monthStringMap}
+          previousTimePeriod={previousMonth}
+          nextTimePeriod={nextMonth}
+          selectTimePeriod={changeMonth}
+          currentTimePeriod={monthStringMap[currentMonthIndex]} />
         <Breakdown
           title='Expenses'
           content={expenses}
