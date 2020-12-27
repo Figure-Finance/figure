@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classes from './Button.module.css'
+import ButtonProgressBar from './ButtonProgressBar/ButtonProgressBar'
 
 const Button = props => {
   const classNames = [classes.Button]
@@ -34,13 +35,15 @@ const Button = props => {
     classNames.push(classes.Active)
   }
 
-  if (props.dual) {
+  if (props.showProgress) {
+    classNames.push(classes.ShowProgress)
+  } else if (props.dual) {
     classNames.push(classes.Dual)
   }
 
   if (props.secondary) {
     content = (
-      <>
+      <div className={classes.ButtonInfo}>
         <span>
           {props.children}
         </span>
@@ -48,6 +51,29 @@ const Button = props => {
         <span>
           {props.secondary}
         </span>
+      </div>
+    )
+  }
+
+  if (props.showProgress) {
+    content = (
+      <>
+        <div className={classes.TopRow}>
+          <div className={classes.ButtonInfo}>
+            <span>
+              {props.children}
+            </span>
+            <span className={classes.Split}></span>
+            <span>
+              {props.secondary}
+            </span>
+          </div>
+        </div>
+        <div className={classes.BottomRow}>
+          <ButtonProgressBar
+            percent={props.progressPercent}
+            color={props.color} />
+        </div>
       </>
     )
   }
@@ -72,7 +98,9 @@ Button.propTypes = {
   dual: PropTypes.bool,
   secondary: PropTypes.string,
   width: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  showProgress: PropTypes.bool,
+  progressPercent: PropTypes.number
 }
 
 export default Button
