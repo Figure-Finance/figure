@@ -10,22 +10,11 @@ exports.getUserFinances = (req, res, next) => {
   const endDate = req.params.endDate
   User.findOne()
     .then(user => {
-      Finance.find({ userId: user._id })
-        .then(finances => {
-          const weeklyFinances = finances.filter(i => {
-            return isWithinInterval(new Date(i.date), {
-              start: new Date(startDate),
-              end: new Date(endDate)
-            })
-          })
-          const financeData = weeklyFinances.map(entry => {
-            return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
-          })
-          return res.status(200).json(financeData)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      const financeData = dashboardFunc(startDate, endDate, user)
+      return res.status(200).json(financeData)
+    })
+    .catch(err => {
+      console.log(err)
     })
 }
 
