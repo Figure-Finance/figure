@@ -6,68 +6,29 @@ import ChartModal from './ChartModal/ChartModal'
 
 const Chart = props => {
   const [showModal, setShowModal] = useState(false)
-  const [
-    currentTimePeriodIndex,
-    setCurrentTimePeriodIndex
-  ] = useState(props.timePeriods.length - 1)
-
-  // const months = [
-  //   'January',
-  //   'February',
-  //   'March',
-  //   'April',
-  //   'May',
-  //   'June',
-  //   'July',
-  //   'August',
-  //   'September',
-  //   'October',
-  //   'November',
-  //   'December'
-  // ]
 
   const openModalHandler = () => {
     setShowModal(true)
   }
 
-  const changeSelection = event => {
-    const index = props.timePeriods.findIndex(el => el === event.target.innerHTML)
-    setCurrentTimePeriodIndex(index)
-    setShowModal(false)
-  }
-
-  const previousTimePeriod = () => {
-    if (currentTimePeriodIndex > 0) {
-      setCurrentTimePeriodIndex(currentTimePeriodIndex - 1)
-    }
-  }
-
-  const nextTimePeriod = () => {
-    if (currentTimePeriodIndex < props.timePeriods.length - 1) {
-      setCurrentTimePeriodIndex(currentTimePeriodIndex + 1)
-    }
-  }
-
-  const names = props.data.map(item => item.name)
+  const names = props.data.map(item => item.name || item.category)
   const amounts = props.data.map(item => item.amount)
-
-  const currentTimePeriod = props.timePeriods[currentTimePeriodIndex].toString()
 
   let content = (
     <ChartSummary
-      buttonContent={currentTimePeriod}
+      buttonContent={props.currentTimePeriod}
       names={names}
       amounts={amounts}
       openModal={openModalHandler}
-      leftArrowClick={previousTimePeriod}
-      rightArrowClick={nextTimePeriod} />
+      leftArrowClick={props.previousTimePeriod}
+      rightArrowClick={props.nextTimePeriod} />
   )
 
   if (showModal) {
     content = (
       <ChartModal
         timePeriods={props.timePeriods}
-        onClick={changeSelection} />
+        onClick={props.changeTimePeriod} />
     )
   }
 
@@ -81,7 +42,11 @@ const Chart = props => {
 Chart.propTypes = {
   title: PropTypes.string,
   timePeriods: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.arrayOf(PropTypes.object).isRequired
+  currentTimePeriod: PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  previousTimePeriod: PropTypes.func,
+  nextTimePeriod: PropTypes.func,
+  changeTimePeriod: PropTypes.func
 }
 
 export default Chart
