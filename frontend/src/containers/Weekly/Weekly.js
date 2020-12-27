@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   format,
   startOfToday,
@@ -14,9 +14,21 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
+  const today = startOfToday()
+  const lastYear = subYears(today, 1)
+  const weeks = eachWeekOfInterval({ start: lastYear, end: today })
+  const weeksStringMap = weeks.map(day => {
+    return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
+  })
+
+  const [weeklyItems, setWeeklyItems] = useState([])
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
+
   const onFetchWeekly = useCallback(() => {
-    api.get('weekly').then(res => {
-      console.log(res.data)
+    const startDate = weeks[currentWeekIndex]
+    const endDate = endOfWeek(startDate)
+    api.get(`weekly/${startDate}/${endDate}`).then(res => {
+      setWeeklyItems(res.data)
     }).catch(err => {
       console.log(err)
     })
@@ -64,39 +76,16 @@ const Weekly = props => {
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
-  const income = [
-    {
-      name: 'Web Design',
-      amount: 84.92
-    },
-    {
-      name: 'Video Team',
-      amount: 50.00
-    },
-    {
-      name: 'Curriculum',
-      amount: 50.00
-    }
-  ]
+  const income = []
+  const expenses = []
 
-  const expenses = [
-    {
-      name: 'Groceries',
-      amount: 35.84
-    },
-    {
-      name: 'Gas',
-      amount: 40.00
-    },
-    {
-      name: 'Eating Out',
-      amount: 18.49
-    },
-    {
-      name: 'Misc',
-      amount: 20.00
+  for (const item of weeklyItems) {
+    if (item.isIncome) {
+      income.push(item)
+    } else {
+      expenses.push(item)
     }
-  ]
+  }
 
   let totalIncome = 0
   let totalExpenses = 0
@@ -109,12 +98,23 @@ const Weekly = props => {
     totalExpenses += entry.amount
   }
 
-  const today = startOfToday()
-  const lastYear = subYears(today, 1)
-  const weeks = eachWeekOfInterval({ start: lastYear, end: today })
-  const weeksStringMap = weeks.map(day => {
-    return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
-  })
+  const changeWeek = event => {
+    const index = weeksStringMap.findIndex(el => el === event.target.innerHTML)
+    setCurrentWeekIndex(index)
+    // setShowModal(false)
+  }
+
+  const previousWeek = () => {
+    if (currentWeekIndex > 0) {
+      setCurrentWeekIndex(currentWeekIndex - 1)
+    }
+  }
+
+  const nextWeek = () => {
+    if (currentWeekIndex < weeksStringMap.length - 1) {
+      setCurrentWeekIndex(currentWeekIndex + 1)
+    }
+  }
 
   return (
     <div className={classes.Weekly}>
@@ -135,7 +135,10 @@ const Weekly = props => {
         <Chart
           title='Week'
           data={expenses}
-          timePeriods={weeksStringMap} />
+          previousTimePeriod={previousWeek}
+          nextTimePeriod={nextWeek}
+          selectTimePeriod={changeWeek}
+          currentTimePeriod={weeksStringMap[currentWeekIndex]} />
         <Breakdown
           title='Expenses'
           content={expenses}
