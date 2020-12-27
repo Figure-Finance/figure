@@ -11,6 +11,11 @@ const Chart = props => {
     setShowModal(true)
   }
 
+  const closeModalHandler = event => {
+    props.selectTimePeriod(event)
+    setShowModal(false)
+  }
+
   const names = props.data.map(item => item.name || item.category)
   const amounts = props.data.map(item => item.amount)
 
@@ -28,7 +33,7 @@ const Chart = props => {
     content = (
       <ChartModal
         timePeriods={props.timePeriods}
-        onClick={props.changeTimePeriod} />
+        onClick={closeModalHandler} />
     )
   }
 
@@ -40,13 +45,12 @@ const Chart = props => {
 }
 
 Chart.propTypes = {
-  title: PropTypes.string,
   timePeriods: PropTypes.arrayOf(PropTypes.string),
   currentTimePeriod: PropTypes.string,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   previousTimePeriod: PropTypes.func,
   nextTimePeriod: PropTypes.func,
-  changeTimePeriod: PropTypes.func
+  selectTimePeriod: PropTypes.func
 }
 
 export default Chart

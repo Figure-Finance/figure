@@ -11,7 +11,7 @@ const Progress = props => {
     classNames.push(classes.Right)
   }
 
-  if (props.single) {
+  if (props.single || props.percent === 100) {
     classNames.push(classes.Single)
   }
 

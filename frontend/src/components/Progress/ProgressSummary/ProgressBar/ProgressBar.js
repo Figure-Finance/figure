@@ -7,12 +7,12 @@ const ProgressBar = props => (
   <div className={classes.ProgressBar}>
     <Progress
       color={props.leftColor}
-      percent={props.leftPercent}
+      percent={props.leftPercent || 0}
       position='left'
       single={props.single} />
     <Progress
       color={props.rightColor}
-      percent={props.rightPercent}
+      percent={props.rightPercent || 0}
       position='right' />
   </div>
 )

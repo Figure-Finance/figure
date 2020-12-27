@@ -6,7 +6,12 @@ import GraphSavings from './GraphSavings/GraphSavings'
 
 const Graph = props => {
   let content = (
-    <GraphYearly timePeriods={props.timePeriods} />
+    <GraphYearly
+      timePeriods={props.timePeriods}
+      buttonContent={props.currentTimePeriod}
+      onButtonClick={props.selectTimePeriod}
+      leftArrowClick={props.previousTimePeriod}
+      rightArrowClick={props.nextTimePeriod} />
   )
 
   if (props.isSavings) {
@@ -28,7 +33,11 @@ Graph.propTypes = {
   onNavSavingsChange: PropTypes.func,
   isSavings: PropTypes.bool,
   active: PropTypes.string,
-  timePeriods: PropTypes.arrayOf(PropTypes.string)
+  timePeriods: PropTypes.arrayOf(PropTypes.string),
+  currentTimePeriod: PropTypes.string,
+  previousTimePeriod: PropTypes.func,
+  nextTimePeriod: PropTypes.func,
+  selectTimePeriod: PropTypes.func
 }
 
 export default Graph

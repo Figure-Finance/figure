@@ -5,46 +5,30 @@ import GraphModal from '../GraphModal/GraphModal'
 
 const GraphYearly = props => {
   const [showModal, setShowModal] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(props.timePeriods.length - 1)
 
   const openModalHandler = () => {
     setShowModal(true)
   }
 
-  const changeSelection = event => {
-    const index = props.timePeriods.findIndex(el => el === event.target.innerHTML)
-    setCurrentIndex(index)
+  const closeModalHandler = event => {
+    props.onButtonClick(event)
     setShowModal(false)
   }
-
-  const decrementNumber = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1)
-    }
-  }
-
-  const incrementNumber = () => {
-    if (currentIndex < currentIndex.length - 1) {
-      setCurrentIndex(currentIndex + 1)
-    }
-  }
-
-  const currentTimePeriod = props.timePeriods[currentIndex].toString()
 
   let content = (
     <GraphSummary
       showYearly
       openModal={openModalHandler}
-      buttonContent={currentTimePeriod}
-      incrementNumber={incrementNumber}
-      decrementNumber={decrementNumber} />
+      buttonContent={props.buttonContent}
+      decrementNumber={props.leftArrowClick}
+      incrementNumber={props.rightArrowClick} />
   )
 
   if (showModal) {
     content = (
       <GraphModal
         years={props.timePeriods}
-        onClick={changeSelection} />
+        onClick={closeModalHandler} />
     )
   }
 
@@ -52,7 +36,11 @@ const GraphYearly = props => {
 }
 
 GraphYearly.propTypes = {
-  timePeriods: PropTypes.arrayOf(PropTypes.string)
+  timePeriods: PropTypes.arrayOf(PropTypes.string),
+  buttonContent: PropTypes.string,
+  onButtonClick: PropTypes.func,
+  leftArrowClick: PropTypes.func,
+  rightArrowClick: PropTypes.func
 }
 
 export default GraphYearly
