@@ -57,7 +57,9 @@ const Breakdown = props => {
       content={props.content}
       openDetailModal={id => openDetailModalHandler(id)}
       openAddModal={openAddModalHandler}
-      canAdd={props.canAdd} />
+      canAdd={props.canAdd}
+      isSavings={props.isSavings}
+      buttonProgressPercent={props.buttonProgressPercent} />
   )
 
   if (showAddModal && props.isSavings) {
@@ -110,7 +112,8 @@ Breakdown.propTypes = {
   addItem: PropTypes.func,
   updateItem: PropTypes.func,
   deleteItem: PropTypes.func,
-  isSavings: PropTypes.bool
+  isSavings: PropTypes.bool,
+  buttonProgressPercent: PropTypes.number
 }
 
 export default Breakdown
