@@ -21,14 +21,33 @@ const Weekly = props => {
     return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
   })
 
+  const [income, setIncome] = useState([])
+  const [expenses, setExpenses] = useState([])
   const [weeklyItems, setWeeklyItems] = useState([])
   const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
+
+  const updateIncomeExpenses = useCallback(() => {
+    const updatedIncome = []
+    const updatedExpenses = []
+    console.log(weeklyItems)
+    for (const item of weeklyItems) {
+      console.log(item)
+      if (item.isIncome) {
+        updatedIncome.push({ ...item })
+      } else {
+        updatedExpenses.push({ ...item })
+      }
+    }
+    setIncome(updatedIncome)
+    setExpenses(updatedExpenses)
+  }, [])
 
   const onFetchWeekly = useCallback(() => {
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
     api.get(`weekly/${startDate}/${endDate}`).then(res => {
       setWeeklyItems(res.data)
+      updateIncomeExpenses()
     }).catch(err => {
       console.log(err)
     })
@@ -76,17 +95,6 @@ const Weekly = props => {
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
-  const income = []
-  const expenses = []
-
-  for (const item of weeklyItems) {
-    if (item.isIncome) {
-      income.push(item)
-    } else {
-      expenses.push(item)
-    }
-  }
-
   let totalIncome = 0
   let totalExpenses = 0
 
@@ -101,7 +109,6 @@ const Weekly = props => {
   const changeWeek = event => {
     const index = weeksStringMap.findIndex(el => el === event.target.innerHTML)
     setCurrentWeekIndex(index)
-    // setShowModal(false)
   }
 
   const previousWeek = () => {
