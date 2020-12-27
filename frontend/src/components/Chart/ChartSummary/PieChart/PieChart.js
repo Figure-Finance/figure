@@ -9,18 +9,12 @@ const PieChart = props => (
       datasets: [{
         data: [...props.amounts],
         backgroundColor: [
-          'rgba(242, 133, 5, 0.2)',
-          'rgba(5, 242, 29, 0.2)',
-          'rgba(237, 242, 5, 0.2)',
-          'rgba(242, 5, 204, 0.2)'
-        ],
-        borderColor: [
           '#F28505',
           '#05F21D',
           '#EDF205',
           '#F205CC'
         ],
-        borderWidth: 2
+        borderColor: '#F2F2F2'
       }]
     }}
     height={550}
