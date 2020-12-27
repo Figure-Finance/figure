@@ -15,7 +15,7 @@ router.patch('/total', savingsController.editTotalSavings)
 
 router.patch('/progress', savingsController.updateTotalSavingsProgress)
 
-router.get('/:timeFrame', savingsController.getByTimeFrame)
+router.get('/progress/:timeFrame', savingsController.getByTimeFrame)
 
 router.post('/goal', itemGoalController.postItemGoals)
 
