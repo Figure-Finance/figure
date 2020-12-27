@@ -11,13 +11,19 @@ exports.filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOf
   return savings
 }
 
-exports.filterSavingsData = (savings, timeFrame, indeces, lastDayFunc, returnList, periodList, iterator = 0) => {
+exports.filterSavingsData = (savings, timeFrame, indeces, lastDayFunc, returnList, periodList, iterator) => {
   let cursor
+  const i = [...savings][iterator]
+  // console.log(`i from before base if: ${i}`)
+  // console.log(`period list: ${periodList}`)
+  // console.log(`Indeces before base case if statement: ${indeces}`)
   if (iterator === indeces) {
-    console.log('Base case iterator')
+    console.log(`Base case iterator: ${iterator}`)
+    console.log(`Return list: ${returnList}`)
     return returnList
   }
-  if (periodList[iterator].includes(i.date.toString())) {
+  if (periodList.length > 1 && periodList[iterator].includes(i.date.toString()) ||
+      periodList.length === 1 && periodList[0] === i.date.toString()) {
     if (i.date.toString() === periodList[iterator].lastDayFunc().toString()) {
       returnList.push({ period: 'timeFrame' + (iterator + 1), amount: i.curTotal })
       iterator++

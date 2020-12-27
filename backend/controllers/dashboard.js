@@ -8,17 +8,16 @@ const Finance = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   // TODO: uncomment this when date is passed through front end
   // const startDate = new Date(req.params.date)
-  const startDate = startOfToday()
+  const startDate = req.params.startDate
+  const endDate = req.params.endDate
   User.findOne()
     .then(user => {
       Finance.find({ userId: user._id })
         .then(finances => {
           const weeklyFinances = finances.filter(i => {
             return isWithinInterval(new Date(i.date), {
-              start: new Date(startDate),
-              end: new Date(add(startDate, {
-                days: 7
-              }))
+              start: startDate,
+              end: endDate
             })
           })
           const financeData = weeklyFinances.map(entry => {

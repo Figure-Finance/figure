@@ -6,7 +6,7 @@ const dashWeeklyController = require('../controllers/dashboard')
 
 const router = express.Router()
 
-router.get('/', dashWeeklyController.getUserFinances)
+router.get('/:startDate/:endDate', dashWeeklyController.getUserFinances)
 
 router.post('/', dashWeeklyController.postUserFinances)
 

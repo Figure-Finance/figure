@@ -112,7 +112,7 @@ exports.getByTimeFrame = (req, res, next) => {
             end: savings[savings.length - 1].date
           })
         }
-        console.log(timeFrameUtils.filterSavingsData(savings, timeFrame, weeks.length, lastDayOfWeek, savingsToReturn, weeks))
+        console.log(timeFrameUtils.filterSavingsData(savings, timeFrame, weeks.length, lastDayOfWeek, savingsToReturn, weeks, 0))
         // Get weeks in interval, return dates within those weeks?
         // [{period: week1, amount: cumTotal}, ...]
         // So we could use the cumulative total from the last day of each week, but how do we figure out
