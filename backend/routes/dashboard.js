@@ -2,7 +2,8 @@ const path = require('path')
 
 const express = require('express')
 
-const dashWeeklyController = require('../controllers/dashboard')
+const dashWeeklyController = require('../controllers/dashboard-weekly')
+const dashMonthlyController = require('../controllers/dashboard-monthly')
 
 const router = express.Router()
 

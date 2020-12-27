@@ -6,8 +6,6 @@ const User = require('../models/user')
 const Finance = require('../models/finances')
 
 exports.getUserFinances = (req, res, next) => {
-  // TODO: uncomment this when date is passed through front end
-  // const startDate = new Date(req.params.date)
   const startDate = req.params.startDate
   const endDate = req.params.endDate
   User.findOne()
