@@ -1,5 +1,5 @@
 // TODO: break this and the monthly/weekly routes up into a utility function
-
+const isWithinInterval = require('date-fns/isWithinInterval')
 const User = require('../models/user')
 const Finance = require('../models/finances')
 

@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Finance = require('../models/finances')
+const isWithinInterval = require('date-fns/isWithinInterval')
 
 exports.getUserMonthlyFinances = (req, res, next) => {
   const startDate = req.params.startDate
