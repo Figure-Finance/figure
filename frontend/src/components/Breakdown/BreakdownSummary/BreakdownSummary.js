@@ -41,6 +41,8 @@ const BreakdownSummary = props => {
       color={props.color}
       size='thin'
       width='90%'
+      showProgress={props.isSavings}
+      progressPercent={props.buttonProgressPercent}
       secondary={`$${item.amount.toFixed(2)}`}
       dual>
       {item.name || item.category}
@@ -69,7 +71,9 @@ BreakdownSummary.propTypes = {
   canAdd: PropTypes.bool,
   content: PropTypes.arrayOf(PropTypes.object),
   openAddModal: PropTypes.func,
-  openDetailModal: PropTypes.func
+  openDetailModal: PropTypes.func,
+  isSavings: PropTypes.bool,
+  buttonProgressPercent: PropTypes.number
 }
 
 export default BreakdownSummary
