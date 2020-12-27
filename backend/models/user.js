@@ -19,6 +19,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  categories: {
+    type: Array,
+    required: false
+  },
   finances: [{
     id: { type: Schema.Types.ObjectId, ref: 'Finance' }
   }]

@@ -14,3 +14,14 @@ exports.postUser = (req, res, next) => {
   user.save(err => console.log(err))
   res.status(201).json({ msg: 'User successfully created!', user: user })
 }
+
+exports.postUserCategories = (req, res, next) => {
+  const categories = req.body.categories
+  User.findOne()
+    .then(user => {
+      user.categories.push(...categories)
+      user.save(err => console.log(err))
+      res.status(201).json({ msg: 'User categories created!' })
+    })
+    .catch(err => console.log(err))
+}
