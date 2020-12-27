@@ -78,6 +78,16 @@ const Savings = props => {
     setGraphTimePeriod(event.target.innerHTML)
   }
 
+  const labels = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ]
+
   return (
     <div className={classes.Savings}>
       <Progress
@@ -92,6 +102,7 @@ const Savings = props => {
         <Graph
           onNavSavingsChange={graphTimePeriodChangeHandler}
           active={graphTimePeriod}
+          labels={labels}
           isSavings />
         <Breakdown
           addItem={onAddGoal}
