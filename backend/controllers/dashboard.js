@@ -16,8 +16,8 @@ exports.getUserFinances = (req, res, next) => {
         .then(finances => {
           const weeklyFinances = finances.filter(i => {
             return isWithinInterval(new Date(i.date), {
-              start: startDate,
-              end: endDate
+              start: new Date(startDate),
+              end: new Date(endDate)
             })
           })
           const financeData = weeklyFinances.map(entry => {
