@@ -36,14 +36,14 @@ const BreakdownSummary = props => {
 
   const buttons = props.content.map(item => (
     <Button
-      key={item.name}
+      key={item.name || item.category}
       onClick={() => props.openDetailModal(item._id)}
       color={props.color}
       size='thin'
       width='90%'
       secondary={`$${item.amount.toFixed(2)}`}
       dual>
-      {item.name}
+      {item.name || item.category}
     </Button>
   ))
 
