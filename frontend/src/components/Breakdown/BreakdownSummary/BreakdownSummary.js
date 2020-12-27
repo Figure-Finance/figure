@@ -34,20 +34,23 @@ const BreakdownSummary = props => {
     )
   }
 
-  const buttons = props.content.map(item => (
-    <Button
-      key={item.name || item.category}
-      onClick={() => props.openDetailModal(item._id)}
-      color={props.color}
-      size='thin'
-      width='90%'
-      showProgress={props.isSavings}
-      progressPercent={props.buttonProgressPercent}
-      secondary={`$${item.amount.toFixed(2)}`}
-      dual>
-      {item.name || item.category}
-    </Button>
-  ))
+  const buttons = props.content.map(item => {
+    console.log(item)
+    return (
+      <Button
+        key={item.id}
+        onClick={() => props.openDetailModal(item.id)}
+        color={props.color}
+        size='thin'
+        width='90%'
+        showProgress={props.isSavings}
+        progressPercent={props.buttonProgressPercent}
+        secondary={`$${item.amount.toFixed(2)}`}
+        dual>
+        {item.name || item.category}
+      </Button>
+    )
+  })
 
   return (
     <div className={classes.BreakdownSummary}>
