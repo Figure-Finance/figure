@@ -3,6 +3,7 @@
   border: none;
   font-weight: bold;
   outline: none;
+  padding: 0;
 }
 
 .Button:hover {
@@ -23,7 +24,44 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  height: 40px;
   justify-content: space-between;
+}
+
+.Button.ShowProgress {
+  align-items: center;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  justify-content: space-between;
+}
+
+.ButtonInfo {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0 10px;
+  width: 100%;
+}
+
+.TopRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.BottomRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 10px;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .Split {
