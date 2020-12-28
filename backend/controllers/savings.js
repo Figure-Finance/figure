@@ -44,7 +44,9 @@ exports.getSavings = (req, res, next) => {
     .catch(err => console.log(err))
   ItemGoal.find()
     .then(itemGoalArray => {
-      itemGoals = itemGoalArray
+      itemGoals = itemGoalArray.map(i => {
+        return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
+      })
       console.log(`savings from line 44 savings.js: ${savings}`)
       return res.status(200).json({ savings, itemGoals})
     })
