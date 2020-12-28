@@ -41,9 +41,6 @@ const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, pe
           returnList.push({ period: period + (iterator + 1), amount: cursor.curTotal })
           return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
         }
-      } else {
-        // TODO: probably remove this statement? I don't think it's necessary and I think it's fucking things up
-        break
       }
     }
     // Increment the iterator so we don't end up in an infinite loop
