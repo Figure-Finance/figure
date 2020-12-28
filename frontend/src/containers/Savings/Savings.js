@@ -13,66 +13,84 @@ const Savings = props => {
   const [totalGoal, setTotalGoal] = useState(0)
   const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
 
-  const onFetchSavings = useCallback(() => {
+  const onFetchSavings = useCallback(async () => {
     setLoading(true)
-    api.get('savings').then(res => {
+    try {
+      const res = await api.get('savings')
       setLoading(false)
       setGoals(res.data.itemGoals)
       setGoalProgress(res.data.totalSavingsProgress)
       setTotalGoal(res.data.totalSavingsGoal)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-      setLoading(false)
-    })
+    }
+    setLoading(false)
   }, [])
 
-  const onDeposit = useCallback((value, cb) => {
-    api.patch('savings/progress', {
-      progressAmount: value
-    }).then(res => {
+  const onDeposit = useCallback(async (value, cb) => {
+    try {
+      const res = await api.patch('savings/progress', {
+        progressAmount: value
+      })
       cb(res)
       setGoalProgress(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onUpdateTotalGoal = useCallback((value, cb) => {
-    api.patch('savings/total', {
-      totalSavingsGoal: value
-    }).then(res => {
+  const onUpdateTotalGoal = useCallback(async (value, cb) => {
+    try {
+      const res = api.patch('savings/total', {
+        totalSavingsGoal: value
+      })
       cb(res)
       setTotalGoal(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onAddGoal = useCallback((goal, cb) => {
-    api.post('savings/goal', goal).then(res => {
+  const onAddGoal = useCallback(async (goal, cb) => {
+    try {
+      const res = await api.post('savings/goal', goal)
       cb(res)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onUpdateGoal = useCallback((id, body, cb) => {
-    api.patch(`savings/goal/${id}`, body).then(res => {
+  const onUpdateGoal = useCallback(async (id, body, cb) => {
+    try {
+      const res = await api.patch(`savings/goal/${id}`, body)
       cb(res)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onDeleteGoal = useCallback((id, cb) => {
-    api.delete(`savings/goal/${id}`).then(res => {
+  const onDeleteGoal = useCallback(async (id, cb) => {
+    try {
+      const res = await api.delete(`savings/goal/${id}`)
       cb(res)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  useEffect(onFetchSavings, [onFetchSavings])
+  const onFetchGraphData = useCallback(async timeFrame => {
+    try {
+      const res = await api.get(`savings/progress/${timeFrame}`)
+      console.log(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  useEffect(() => {
+    onFetchSavings()
+    onFetchGraphData('month')
+  }, [onFetchSavings, onFetchGraphData])
 
   const graphTimePeriodChangeHandler = event => {
     setGraphTimePeriod(event.target.innerHTML)

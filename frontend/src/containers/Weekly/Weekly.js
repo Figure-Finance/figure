@@ -88,7 +88,7 @@ const Weekly = props => {
 
   const onAddExpense = useCallback(async (body, cb) => {
     try {
-      const res = api.post('weekly', {
+      const res = await api.post('weekly', {
         ...body,
         isIncome: false
       })

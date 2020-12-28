@@ -13,15 +13,15 @@ const Auth = props => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const onUserSignUp = () => {
+  const onUserSignUp = async () => {
     const userData = { firstName, lastName, email, password }
-    console.log(userData)
-    api.post('user/signup', userData).then(res => {
+    try {
+      const res = await api.post('user/signup', userData)
       console.log(res.data)
       props.history.push('/')
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }
 
   return (
