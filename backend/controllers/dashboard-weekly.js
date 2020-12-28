@@ -5,6 +5,8 @@ const startOfToday = require('date-fns/startOfToday')
 const User = require('../models/user')
 const Finance = require('../models/finances')
 
+const dashboardFunc = require('../util/dashboard')
+
 exports.getUserFinances = (req, res, next) => {
   const startDate = req.params.startDate
   const endDate = req.params.endDate

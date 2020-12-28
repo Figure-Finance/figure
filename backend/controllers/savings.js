@@ -33,14 +33,20 @@ exports.getSavings = (req, res, next) => {
   let itemGoals
   Savings.findOne()
     .then(savingsDoc => {
-      return savings = savingsDoc
+      return savings = {
+        id: savingsDoc._id,
+        totalSavingsGoal: savingsDoc.totalSavingsGoal,
+        totalSavingsProgress: savingsDoc.totalSavingsProgress,
+        progressUpdates: savingsDoc.progressUpdates
+      }
       next()
     })
     .catch(err => console.log(err))
   ItemGoal.find()
     .then(itemGoalArray => {
       itemGoals = itemGoalArray
-      return res.status(200).json({ ...savings._doc, itemGoals })
+      console.log(`savings from line 44 savings.js: ${savings}`)
+      return res.status(200).json({ savings, itemGoals})
     })
     .catch(err => console.log(err))
 }
