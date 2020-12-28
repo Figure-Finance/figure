@@ -26,7 +26,7 @@ const Weekly = props => {
   const [weeklyItems, setWeeklyItems] = useState([])
   const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
 
-  const updateIncomeExpenses = useCallback(() => {
+  const updateIncomeExpenses = () => {
     const updatedIncome = []
     const updatedExpenses = []
     console.log(weeklyItems)
@@ -40,57 +40,63 @@ const Weekly = props => {
     }
     setIncome(updatedIncome)
     setExpenses(updatedExpenses)
-  }, [])
+  }
 
-  const onFetchWeekly = useCallback(() => {
+  const onFetchWeekly = useCallback(async () => {
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
-    api.get(`weekly/${startDate}/${endDate}`).then(res => {
+    try {
+      const res = await api.get(`weekly/${startDate}/${endDate}`)
+      console.log(res)
       setWeeklyItems(res.data)
       updateIncomeExpenses()
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [currentWeekIndex])
 
-  const onAddIncome = useCallback((body, cb) => {
-    api.post('weekly', {
-      ...body,
-      isIncome: true
-    }).then(res => {
+  const onAddIncome = useCallback(async (body, cb) => {
+    try {
+      const res = await api.post('weekly', {
+        ...body,
+        isIncome: true
+      })
       console.log(res.data)
       cb(res)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onUpdateIncome = useCallback(body => {
-    api.patch('weekly', body).then(res => {
+  const onUpdateIncome = useCallback(async body => {
+    try {
+      const res = await api.patch('weekly', body)
       console.log(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onDeleteIncome = useCallback(() => {
-    api.delete('weekly').then(res => {
+  const onDeleteIncome = useCallback(async () => {
+    try {
+      const res = await api.delete('weekly')
       console.log(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
-  const onAddExpense = useCallback((body, cb) => {
-    api.post('weekly', {
-      ...body,
-      isIncome: false
-    }).then(res => {
+  const onAddExpense = useCallback(async (body, cb) => {
+    try {
+      const res = api.post('weekly', {
+        ...body,
+        isIncome: false
+      })
       console.log(res.data)
       cb(res)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [])
 
   useEffect(onFetchWeekly, [onFetchWeekly])
