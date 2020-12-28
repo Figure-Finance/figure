@@ -21,14 +21,15 @@ const Yearly = props => {
   const [yearlyItems, setYearlyItems] = useState([])
   const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
 
-  const onFetchYearly = useCallback(() => {
+  const onFetchYearly = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
-    api.get(`monthly/${startDate}/${endDate}`).then(res => {
+    try {
+      const res = await api.get(`monthly/${startDate}/${endDate}`)
       setYearlyItems(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [currentYearIndex])
 
   useEffect(onFetchYearly, [onFetchYearly])

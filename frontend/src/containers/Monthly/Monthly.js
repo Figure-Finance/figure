@@ -22,14 +22,16 @@ const Monthly = props => {
   const [monthlyItems, setMonthlyItems] = useState([])
   const [currentMonthIndex, setCurrentMonthIndex] = useState(monthStringMap.length - 1)
 
-  const onFetchMonthly = useCallback(() => {
+  const onFetchMonthly = useCallback(async () => {
     const startDate = months[currentMonthIndex]
     const endDate = endOfMonth(startDate)
-    api.get(`monthly/${startDate}/${endDate}`).then(res => {
+    const res = await api.get(`monthly/${startDate}/${endDate}`)
+    console.log(res)
+    try {
       setMonthlyItems(res.data)
-    }).catch(err => {
+    } catch (err) {
       console.log(err)
-    })
+    }
   }, [currentMonthIndex])
 
   useEffect(onFetchMonthly, [onFetchMonthly])
