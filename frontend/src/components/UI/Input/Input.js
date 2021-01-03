@@ -4,33 +4,38 @@ import classes from './Input.module.css'
 
 const Input = props => {
   let inputElement = null
-  const classNames = [classes.Input]
+  const labelClassNames = [classes.Label]
+  const inputClassNames = [classes.Input]
 
   if (props.invalid && props.shouldValidate && props.touched) {
-    classNames.push(classes.Invalid)
+    inputClassNames.push(classes.Invalid)
   }
 
   if (props.type === 'textarea') {
-    classNames.push(classes.TextArea)
+    inputClassNames.push(classes.TextArea)
+  }
+
+  const moveLabel = event => {
+    event.target.style.transform = 'translateY(0px)'
+    console.log(event.target.style.transform)
   }
 
   switch (props.type) {
     case ('input'):
       inputElement = (
         <input
-          placeholder={props.placeholder}
-          className={classNames.join(' ')}
+          className={inputClassNames.join(' ')}
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
+          onFocus={e => moveLabel(e)}
           onChange={props.onChange} />
       )
       break
     case ('textarea'):
       inputElement = (
         <textarea
-          placeholder={props.placeholder}
-          className={classNames.join(' ')}
+          className={inputClassNames.join(' ')}
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
@@ -40,7 +45,7 @@ const Input = props => {
     case ('select'):
       inputElement = (
         <select
-          className={classNames.join(' ')}
+          className={inputClassNames.join(' ')}
           value={props.value}
           style={{ width: props.width || '100%' }}
           onChange={props.onChange}>
@@ -55,7 +60,7 @@ const Input = props => {
     default:
       inputElement = (
         <input
-          className={classNames.join(' ')}
+          className={inputClassNames.join(' ')}
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
@@ -64,11 +69,14 @@ const Input = props => {
   }
 
   if (props.color === 'primary') {
-    classNames.push(classes.Primary)
+    inputClassNames.push(classes.Primary)
+    labelClassNames.push(classes.Primary)
   } else if (props.color === 'neutral') {
-    classNames.push(classes.Neutral)
+    inputClassNames.push(classes.Neutral)
+    labelClassNames.push(classes.Neutral)
   } else if (props.color === 'danger') {
-    classNames.push(classes.Danger)
+    inputClassNames.push(classes.Danger)
+    labelClassNames.push(classes.Danger)
   }
 
   // let validationError = null
@@ -80,7 +88,16 @@ const Input = props => {
   //   )
   // }
 
-  return inputElement
+  return (
+    <>
+      <label
+        className={labelClassNames.join(' ')}
+        onClick={e => moveLabel(e)}>
+        {props.config.placeholder}
+      </label>
+      {inputElement}
+    </>
+  )
 }
 
 Input.propTypes = {
