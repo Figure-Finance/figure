@@ -12,8 +12,18 @@
   text-align: center;
 }
 
+.Input:focus {
+  border: 2px ridge var(--primary);
+}
+
 .Input::placeholder {
   font-size: 20px;
+}
+
+.Label {
+  font-family: inherit;
+  font-size: 20px;
+  transform: translateY(63px)
 }
 
 .TextArea {
@@ -24,6 +34,10 @@
 
 .Primary, .Primary::placeholder {
   color: var(--primary);
+}
+
+.Primar:focus {
+  border: 1px solid var(--primary);
 }
 
 .Neutral, .Neutral::placeholder {
