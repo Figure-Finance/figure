@@ -26,11 +26,11 @@ const Weekly = props => {
   const [weeklyItems, setWeeklyItems] = useState([])
   const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
 
-  const updateIncomeExpenses = () => {
+  const updateIncomeExpenses = (updatedItems) => {
     const updatedIncome = []
     const updatedExpenses = []
     console.log(weeklyItems)
-    for (const item of weeklyItems) {
+    for (const item of updatedItems) {
       console.log(item)
       if (item.isIncome) {
         updatedIncome.push({ ...item })
@@ -47,9 +47,9 @@ const Weekly = props => {
     const endDate = endOfWeek(startDate)
     try {
       const res = await api.get(`weekly/${startDate}/${endDate}`)
-      console.log(res)
+      console.log(res.data)
       setWeeklyItems(res.data)
-      updateIncomeExpenses()
+      updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -99,7 +99,7 @@ const Weekly = props => {
     }
   }, [])
 
-  useEffect(onFetchWeekly, [onFetchWeekly])
+  useEffect(onFetchWeekly, [currentWeekIndex])
 
   let totalIncome = 0
   let totalExpenses = 0
