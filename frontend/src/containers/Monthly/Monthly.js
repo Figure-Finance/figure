@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   format,
   startOfToday,
@@ -14,13 +14,32 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Monthly = props => {
-  const today = startOfToday()
-  const lastYear = subYears(today, 1)
-  const months = eachMonthOfInterval({ start: lastYear, end: today })
-  const monthStringMap = months.map(day => format(day, 'MMM. yyy').toString())
+  const today = useMemo(() => startOfToday(), [])
+  const lastYear = useMemo(() => subYears(today, 1), [today])
+  const months = useMemo(
+    () => eachMonthOfInterval({ start: lastYear, end: today }), [lastYear, today]
+  )
+  const monthStringMap = useMemo(
+    () => months.map(day => format(day, 'MMM. yyy').toString()), [months]
+  )
 
-  const [monthlyItems, setMonthlyItems] = useState([])
+  const [income, setIncome] = useState([])
+  const [expenses, setExpenses] = useState([])
   const [currentMonthIndex, setCurrentMonthIndex] = useState(monthStringMap.length - 1)
+
+  const updateIncomeExpenses = updatedItems => {
+    const updatedIncome = []
+    const updatedExpenses = []
+    for (const item of updatedItems) {
+      if (item.isIncome) {
+        updatedIncome.push(item)
+      } else {
+        updatedExpenses.push(item)
+      }
+    }
+    setIncome(updatedIncome)
+    setExpenses(updatedExpenses)
+  }
 
   const onFetchMonthly = useCallback(async () => {
     const startDate = months[currentMonthIndex]
@@ -28,24 +47,13 @@ const Monthly = props => {
     const res = await api.get(`monthly/${startDate}/${endDate}`)
     console.log(res)
     try {
-      setMonthlyItems(res.data)
+      updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [currentMonthIndex])
+  }, [currentMonthIndex, months])
 
-  useEffect(onFetchMonthly, [onFetchMonthly])
-
-  const income = []
-  const expenses = []
-
-  for (const item of monthlyItems) {
-    if (item.isIncome) {
-      income.push(item)
-    } else {
-      expenses.push(item)
-    }
-  }
+  useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
 
   let totalIncome = 0
   let totalExpenses = 0
