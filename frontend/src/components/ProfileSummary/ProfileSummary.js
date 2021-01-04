@@ -7,16 +7,37 @@ import Input from '../UI/Input/Input'
 const ProfileSummary = props => {
   return (
     <Container
-      height={props.height || '100%'}
-      width={props.width ? props.width : '33%'}>
+      height={props.height || '100%'}>
       <div className={classes.ProfileSummary}>
         <h1 className='primary'>Profile</h1>
         <div className={classes.Name}>
-          <Input placeholder='First' width='40%' />
-          <Input placeholder='Last' width='40%' />
+          <div className={classes.FirstName}>
+            <Input
+              type='input'
+              color='primary'
+              config={{
+                type: 'text',
+                label: 'First Name'
+              }} />
+          </div>
+          <div className={classes.LastName}>
+            <Input
+              type='input'
+              color='primary'
+              config={{
+                type: 'text',
+                label: 'Last Name'
+              }} />
+          </div>
         </div>
         <div className={classes.Email}>
-          <Input placeholder='Email' width='90%' />
+          <Input
+            type='input'
+            color='primary'
+            config={{
+              type: 'text',
+              label: 'Email'
+            }} />
         </div>
       </div>
     </Container>
