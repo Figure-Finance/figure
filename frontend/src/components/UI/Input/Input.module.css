@@ -1,7 +1,7 @@
 .Input {
   background-color: var(--white);
-  border: none;
-  border-radius: 25px;
+  border: 2px ridge transparent;
+  border-radius: 21px;
   box-shadow:
     inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
@@ -12,18 +12,13 @@
   text-align: center;
 }
 
-.Input:focus {
-  border: 2px ridge var(--primary);
-}
-
-.Input::placeholder {
-  font-size: 20px;
-}
-
 .Label {
+  display: block;
   font-family: inherit;
   font-size: 20px;
-  transform: translateY(63px)
+  text-align: center;
+  /* transform: translateY(40px); */
+  /* z-index: 3; */
 }
 
 .TextArea {
@@ -31,18 +26,26 @@
   resize: none;
 }
 
-.Primary, .Primary::placeholder {
+.Primary {
   color: var(--primary);
 }
 
-.Primar:focus {
-  border: 1px solid var(--primary);
+.Primary:focus {
+  border: 2px ridge var(--primary)
 }
 
-.Neutral, .Neutral::placeholder {
+.Neutral {
   color: var(--neutral);
 }
 
-.Danger, .Danger::placeholder {
+.Neutral:focus {
+  border: 2px ridge var(--neutral);
+}
+
+.Danger {
   color: var(--danger);
+}
+
+.Danger:focus {
+  border: 2px ridge var(--danger);
 }
