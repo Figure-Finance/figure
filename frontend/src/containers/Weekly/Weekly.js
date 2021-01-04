@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   format,
   startOfToday,
@@ -14,28 +14,27 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
-  const today = startOfToday()
-  const lastYear = subYears(today, 1)
-  const weeks = eachWeekOfInterval({ start: lastYear, end: today })
-  const weeksStringMap = weeks.map(day => {
+  const today = useMemo(() => startOfToday(), [])
+  const lastYear = useMemo(() => subYears(today, 1), [today])
+  const weeks = useMemo(
+    () => eachWeekOfInterval({ start: lastYear, end: today }), [today, lastYear]
+  )
+  const weekStringMap = useMemo(() => weeks.map(day => {
     return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
-  })
+  }), [weeks])
 
   const [income, setIncome] = useState([])
   const [expenses, setExpenses] = useState([])
-  const [weeklyItems, setWeeklyItems] = useState([])
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(weekStringMap.length - 1)
 
-  const updateIncomeExpenses = () => {
+  const updateIncomeExpenses = updatedItems => {
     const updatedIncome = []
     const updatedExpenses = []
-    console.log(weeklyItems)
-    for (const item of weeklyItems) {
-      console.log(item)
+    for (const item of updatedItems) {
       if (item.isIncome) {
-        updatedIncome.push({ ...item })
+        updatedIncome.push(item)
       } else {
-        updatedExpenses.push({ ...item })
+        updatedExpenses.push(item)
       }
     }
     setIncome(updatedIncome)
@@ -47,13 +46,11 @@ const Weekly = props => {
     const endDate = endOfWeek(startDate)
     try {
       const res = await api.get(`weekly/${startDate}/${endDate}`)
-      console.log(res)
-      setWeeklyItems(res.data)
-      updateIncomeExpenses()
+      updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [currentWeekIndex])
+  }, [currentWeekIndex, weeks])
 
   const onAddIncome = useCallback(async (body, cb) => {
     try {
@@ -99,7 +96,7 @@ const Weekly = props => {
     }
   }, [])
 
-  useEffect(onFetchWeekly, [onFetchWeekly])
+  useEffect(onFetchWeekly, [onFetchWeekly, currentWeekIndex])
 
   let totalIncome = 0
   let totalExpenses = 0
@@ -113,7 +110,7 @@ const Weekly = props => {
   }
 
   const changeWeek = event => {
-    const index = weeksStringMap.findIndex(el => el === event.target.innerHTML)
+    const index = weekStringMap.findIndex(el => el === event.target.innerHTML)
     setCurrentWeekIndex(index)
   }
 
@@ -124,7 +121,7 @@ const Weekly = props => {
   }
 
   const nextWeek = () => {
-    if (currentWeekIndex < weeksStringMap.length - 1) {
+    if (currentWeekIndex < weekStringMap.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1)
     }
   }
@@ -147,11 +144,11 @@ const Weekly = props => {
           canAdd />
         <Chart
           data={expenses}
-          timePeriods={weeksStringMap}
+          timePeriods={weekStringMap}
           previousTimePeriod={previousWeek}
           nextTimePeriod={nextWeek}
           selectTimePeriod={changeWeek}
-          currentTimePeriod={weeksStringMap[currentWeekIndex]} />
+          currentTimePeriod={weekStringMap[currentWeekIndex]} />
         <Breakdown
           title='Expenses'
           content={expenses}

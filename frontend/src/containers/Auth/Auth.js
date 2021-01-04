@@ -18,7 +18,7 @@ const Auth = props => {
     try {
       const res = await api.post('user/signup', userData)
       console.log(res.data)
-      props.history.push('/')
+      props.history.push('/auth/questions')
     } catch (err) {
       console.log(err)
     }
@@ -29,6 +29,7 @@ const Auth = props => {
       <Container height='98%' width='50%'>
         <div className={classes.Main}>
           <Input
+            color='primary'
             type='input'
             config={{
               type: 'text',
@@ -37,6 +38,7 @@ const Auth = props => {
             value={firstName}
             onChange={event => setFirstName(event.target.value)} />
           <Input
+            color='primary'
             type='input'
             config={{
               type: 'text',
@@ -45,6 +47,7 @@ const Auth = props => {
             value={lastName}
             onChange={event => setLastName(event.target.value)} />
           <Input
+            color='primary'
             type='input'
             config={{
               type: 'email',
@@ -53,6 +56,7 @@ const Auth = props => {
             value={email}
             onChange={event => setEmail(event.target.value)} />
           <Input
+            color='primary'
             type='input'
             config={{
               type: 'password',
