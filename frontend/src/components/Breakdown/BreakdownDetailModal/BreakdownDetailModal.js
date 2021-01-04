@@ -11,9 +11,9 @@ const BreakdownDetailModal = props => {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Name'
+        label: 'Name'
       },
-      value: props.name,
+      value: props.name || '',
       validation: {
         required: true
       },
@@ -24,9 +24,9 @@ const BreakdownDetailModal = props => {
       type: 'input',
       config: {
         type: 'number',
-        placeholder: 'Amount'
+        label: 'Amount'
       },
-      value: props.amount,
+      value: props.amount || '',
       validation: {
         required: true
       },
@@ -34,11 +34,12 @@ const BreakdownDetailModal = props => {
       touched: false
     },
     description: {
-      type: 'textarea',
+      type: 'input',
       config: {
-        placeholder: 'Description'
+        type: 'text',
+        label: 'Description'
       },
-      value: props.description,
+      value: props.description || '',
       validation: {
         required: true
       },
@@ -86,33 +87,40 @@ const BreakdownDetailModal = props => {
 
   return (
     <div className={classes.BreakdownDetailModal}>
-      <Button size='thin' color='neutral' onClick={props.onCancel}>
-        X
+      <Button
+        size='medium'
+        color={props.color}
+        width='100%'
+        onClick={props.onCancel}>
+        Cancel
       </Button>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
+            color={props.color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={formElement.config.value}
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            changed={event => inputChangedHandler(event, formElement.id)} />
+            onChange={event => inputChangedHandler(event, formElement.id)} />
         ))}
       </div>
       <div className={classes.Buttons}>
         <Button
-          size='thin'
-          color='neutral'
+          size='medium'
+          color={props.color}
+          width='100%'
           onClick={addItemHandler}
           disabled={!formIsValid}>
           Update
         </Button>
         <Button
-          size='thin'
-          color='neutral'
+          size='medium'
+          color={props.color}
+          width='100%'
           onClick={props.onDelete}>
           Delete
         </Button>
@@ -122,6 +130,7 @@ const BreakdownDetailModal = props => {
 }
 
 BreakdownDetailModal.propTypes = {
+  color: PropTypes.string,
   name: PropTypes.string,
   amount: PropTypes.string,
   description: PropTypes.string,
