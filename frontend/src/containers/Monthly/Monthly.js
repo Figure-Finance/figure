@@ -45,7 +45,6 @@ const Monthly = props => {
     const startDate = months[currentMonthIndex]
     const endDate = endOfMonth(startDate)
     const res = await api.get(`monthly/${startDate}/${endDate}`)
-    console.log(res)
     try {
       updateIncomeExpenses(res.data)
     } catch (err) {
