@@ -47,7 +47,7 @@ exports.getSavings = (req, res, next) => {
       itemGoals = itemGoalArray.map(i => {
         return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
       })
-      return res.status(200).json({ savings, itemGoals })
+      return res.status(200).json({ ...savings, itemGoals })
     })
     .catch(err => console.log(err))
 }
