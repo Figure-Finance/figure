@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import Container from '../UI/Container/Container'
 import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
@@ -11,44 +11,53 @@ const Breakdown = props => {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [currentItem, setCurrentItem] = useState(null)
 
-  const openAddModalHandler = () => {
+  const openAddModalHandler = useCallback(() => {
     setShowAddModal(true)
-  }
+  }, [])
 
-  const closeAddModalHandler = () => {
+  const closeAddModalHandler = useCallback(() => {
     setShowAddModal(false)
-  }
+  }, [])
 
-  const openDetailModalHandler = id => {
-    const selectedItem = props.content.filter(item => item.id === id)
-    setCurrentItem(selectedItem[0])
-    setShowDetailModal(true)
-  }
+  const { getItem, addItem, updateItem, deleteItem } = props
 
-  const closeDetailModalHandler = () => {
-    setShowDetailModal(false)
-  }
+  const getItemHandler = useCallback(id => {
+    getItem(id, res => {
+      setCurrentItem(res.data)
+    })
+  }, [getItem])
 
-  const addItemHandler = item => {
-    props.addItem(item, res => {
+  const addItemHandler = useCallback(item => {
+    addItem(item, res => {
       console.log(res.data)
       setShowAddModal(false)
     })
-  }
+  }, [addItem])
 
-  const updateItemHandler = (id, updatedItem) => {
-    props.updateItem(id, updatedItem, res => {
+  const updateItemHandler = useCallback((id, updatedItem) => {
+    updateItem(id, updatedItem, res => {
       console.log(res.data)
       setShowDetailModal(false)
     })
-  }
+  }, [updateItem])
 
-  const deleteItemHandler = id => {
-    props.deleteItem(id, res => {
-      console.log(res.data)
+  const deleteItemHandler = useCallback(id => {
+    deleteItem(id, res => {
+      // console.log(res.data)
       setShowDetailModal(false)
     })
-  }
+  }, [deleteItem])
+
+  const openDetailModalHandler = useCallback(id => {
+    const selectedItem = props.content.filter(item => item.id === id)
+    setCurrentItem(selectedItem[0])
+    getItemHandler(id)
+    setShowDetailModal(true)
+  }, [getItemHandler, props.content])
+
+  const closeDetailModalHandler = useCallback(() => {
+    setShowDetailModal(false)
+  }, [])
 
   let content = (
     <BreakdownSummary
@@ -87,9 +96,11 @@ const Breakdown = props => {
         onCancel={closeDetailModalHandler}
         onSubmit={updatedItem => updateItemHandler(currentItem._id, updatedItem)}
         onDelete={() => deleteItemHandler(currentItem._id)}
-        name={currentItem.name || currentItem.category}
+        type={currentItem.category}
         amount={currentItem.amount.toString()}
-        description={currentItem.description} />
+        description={currentItem.description}
+        location={currentItem.location}
+        date={currentItem.date} />
     )
   }
 
@@ -110,6 +121,7 @@ Breakdown.propTypes = {
   title: PropTypes.string,
   canAdd: PropTypes.bool,
   content: PropTypes.arrayOf(PropTypes.object),
+  getItem: PropTypes.func,
   addItem: PropTypes.func,
   updateItem: PropTypes.func,
   deleteItem: PropTypes.func,

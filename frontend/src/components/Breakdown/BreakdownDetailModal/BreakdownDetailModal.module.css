@@ -8,12 +8,19 @@
   width: 90%;
 }
 
+.Buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .Inputs, .Buttons {
+  margin: auto;
   width: 100%;
 }
 
 .BreakdownDetailModal > button,
 .Buttons > button,
 .Inputs > input {
-  margin: 10px auto;
+  margin-bottom: 10px;
 }

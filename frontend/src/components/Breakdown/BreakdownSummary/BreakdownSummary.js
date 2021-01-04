@@ -8,24 +8,6 @@ import Button from '../../UI/Button/Button'
 const BreakdownSummary = props => {
   let addButton = null
 
-  // const addItemHandler = () => {
-  //   props.addItem(res => {
-  //     console.log(res.data)
-  //   })
-  // }
-  //
-  // const updateItemHandler = (id, updatedItem) => {
-  //   props.updateItem(id, updatedItem, res => {
-  //     console.log(res.data)
-  //   })
-  // }
-  //
-  // const deleteItemHandler = id => {
-  //   props.deleteItem(id, res => {
-  //     console.log(res.data)
-  //   })
-  // }
-
   if (props.canAdd) {
     addButton = (
       <AddButton

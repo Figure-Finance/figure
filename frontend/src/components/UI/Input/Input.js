@@ -7,6 +7,17 @@ const Input = props => {
   const labelClassNames = [classes.Label]
   const inputClassNames = [classes.Input]
 
+  if (props.color === 'primary') {
+    inputClassNames.push(classes.Primary)
+    labelClassNames.push(classes.Primary)
+  } else if (props.color === 'neutral') {
+    inputClassNames.push(classes.Neutral)
+    labelClassNames.push(classes.Neutral)
+  } else if (props.color === 'danger') {
+    inputClassNames.push(classes.Danger)
+    labelClassNames.push(classes.Danger)
+  }
+
   if (props.invalid && props.shouldValidate && props.touched) {
     inputClassNames.push(classes.Invalid)
   }
@@ -15,10 +26,14 @@ const Input = props => {
     inputClassNames.push(classes.TextArea)
   }
 
-  const moveLabel = event => {
-    event.target.style.transform = 'translateY(0px)'
-    console.log(event.target.style.transform)
-  }
+  // const moveLabelOut = event => {
+  //   event.target.style.transform = 'translateY(0px)'
+  //   console.log(event.target.parentElement)
+  // }
+
+  // const moveLabelIn = event => {
+  //   event.target.style.transform = 'translateY(40px)'
+  // }
 
   switch (props.type) {
     case ('input'):
@@ -28,7 +43,6 @@ const Input = props => {
           {...props.config}
           style={{ width: props.width || '100%' }}
           value={props.value}
-          onFocus={e => moveLabel(e)}
           onChange={props.onChange} />
       )
       break
@@ -68,17 +82,6 @@ const Input = props => {
       )
   }
 
-  if (props.color === 'primary') {
-    inputClassNames.push(classes.Primary)
-    labelClassNames.push(classes.Primary)
-  } else if (props.color === 'neutral') {
-    inputClassNames.push(classes.Neutral)
-    labelClassNames.push(classes.Neutral)
-  } else if (props.color === 'danger') {
-    inputClassNames.push(classes.Danger)
-    labelClassNames.push(classes.Danger)
-  }
-
   // let validationError = null
   // if (props.invalid && props.touched) {
   //   validationError = (
@@ -91,8 +94,7 @@ const Input = props => {
   return (
     <>
       <label
-        className={labelClassNames.join(' ')}
-        onClick={e => moveLabel(e)}>
+        className={labelClassNames.join(' ')}>
         {props.config.label}
       </label>
       {inputElement}

@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './Profile.module.css'
 import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
-import Breakdown from '../../components/Breakdown/Breakdown'
+import Type from '../../components/Type/Type'
 import Navbar from '../../components/Navbar/Navbar'
 import Logo from '../../components/Logo/Logo'
 
@@ -23,17 +23,15 @@ const Profile = props => {
     <div className={classes.Profile}>
       <div className={classes.Main}>
         <div className={classes.Column}>
-          <ProfileSummary height='50%' width='100%' />
+          <ProfileSummary height='50%' />
           <Logo />
         </div>
-        <Breakdown
+        <Type
           content={income}
-          color='primary'
-          canAdd />
-        <Breakdown
+          color='primary' />
+        <Type
           content={expenses}
-          color='danger'
-          canAdd />
+          color='danger' />
       </div>
       <Navbar active='p' />
     </div>
