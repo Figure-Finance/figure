@@ -1,0 +1,11 @@
+.Type {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.Type button {
+  margin: 10px 0;
+}
