@@ -47,7 +47,6 @@ exports.getSavings = (req, res, next) => {
       itemGoals = itemGoalArray.map(i => {
         return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
       })
-      console.log(`savings from line 44 savings.js: ${savings}`)
       return res.status(200).json({ savings, itemGoals})
     })
     .catch(err => console.log(err))
@@ -96,9 +95,7 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
       if (!last) {
         savingsItem.progressUpdates = [{date: startOfToday(), curTotal: curTotal }]
       } else if (last.date.toString() === startOfToday().toString()) {
-         console.log(`Adding: ${savingsItem.totalSavingsProgress + req.body.progressAmount}`)
 	       last.curTotal = curTotal
-         console.log(`Progress updates from else if ${savingsItem.progressUpdates}`)
       } else {
 	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: curTotal })
       }
@@ -122,6 +119,7 @@ exports.getByTimeFrame = (req, res, next) => {
         savings = filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
         if (savings) {
           // Use each week of interval as a helper
+          console.log(`Savings line 122: ${savings}`)
           weeks = eachWeekOfInterval({
             start: savings[0].date,
             end: savings[savings.length - 1].date

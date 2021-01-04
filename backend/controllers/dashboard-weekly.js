@@ -41,13 +41,19 @@ exports.postUserFinances = (req, res, next) => {
       })
       finances.save()
       // Needs category and amount as response only
-      return res.status(201).json(finances)
+      return res.status(201).json({
+        id: finances.id,
+        category: finances.category,
+        amount: finances.amount,
+        description: finances.description,
+        location: finances.location,
+        date: finances.date
+      })
     })
     .catch(err => console.log(err))
 }
 
 exports.getFinanceDetailsById = (req, res, next) => {
-  // TODO: look at lucidchart and refactor to only return what's needed
   const financeId = req.params.id
   Finance.findOne({ _id: financeId })
     .then(financeEntry => {
