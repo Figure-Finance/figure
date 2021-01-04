@@ -35,7 +35,6 @@ const BreakdownSummary = props => {
   }
 
   const buttons = props.content.map(item => {
-    // console.log(item)
     return (
       <Button
         key={item.id}
