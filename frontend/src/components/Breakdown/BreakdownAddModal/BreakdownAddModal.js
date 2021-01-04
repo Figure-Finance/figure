@@ -11,7 +11,7 @@ const BreakdownAddModal = props => {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Type'
+        label: 'Type'
       },
       value: props.type || '',
       validation: {
@@ -24,7 +24,9 @@ const BreakdownAddModal = props => {
       type: 'input',
       config: {
         type: 'number',
-        placeholder: 'Amount'
+        label: 'Amount',
+        min: '0',
+        step: '0.01'
       },
       value: props.amount || '',
       validation: {
@@ -37,7 +39,7 @@ const BreakdownAddModal = props => {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Location'
+        label: 'Location'
       },
       value: props.location || '',
       validation: {
@@ -47,9 +49,10 @@ const BreakdownAddModal = props => {
       touched: false
     },
     description: {
-      type: 'textarea',
+      type: 'input',
       config: {
-        placeholder: 'Description'
+        type: 'text',
+        label: 'Description'
       },
       value: props.description || '',
       validation: {
@@ -62,7 +65,7 @@ const BreakdownAddModal = props => {
       type: 'input',
       config: {
         type: 'date',
-        placeholder: 'Date'
+        label: 'Date'
       },
       value: props.date || '',
       validation: {
@@ -117,9 +120,6 @@ const BreakdownAddModal = props => {
 
   return (
     <div className={classes.BreakdownAddModal}>
-      <h1 className={props.color}>
-        {`Add ${props.title}`}
-      </h1>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
@@ -131,21 +131,23 @@ const BreakdownAddModal = props => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            changed={event => inputChangedHandler(event, formElement.id)} />
+            onChange={event => inputChangedHandler(event, formElement.id)} />
         ))}
       </div>
       <div className={classes.Buttons}>
         <Button
-          size='large'
+          size='medium'
           color={props.color}
-          onClick={props.closeModal}>
+          onClick={props.closeModal}
+          width='48%'>
           Cancel
         </Button>
         <Button
           color={props.color}
-          size='large'
+          size='medium'
           onClick={addItemHandler}
-          disabled={!formIsValid}>
+          disabled={!formIsValid}
+          width='48%'>
           Add
         </Button>
       </div>
