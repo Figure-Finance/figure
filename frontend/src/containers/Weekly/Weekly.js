@@ -14,8 +14,6 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
-  console.log('MOUNTED')
-
   const today = useMemo(() => startOfToday(), [])
   const lastYear = useMemo(() => subYears(today, 1), [today])
   const weeks = useMemo(
