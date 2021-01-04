@@ -30,12 +30,13 @@ const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, pe
         returnList.push({ period: period + (iterator + 1), amount: i.curTotal })
         return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
       // If it isn't exactly the last day of the week, month, etc. we need to find out what the latest date in that period is
-      } else if (i.date.toString() !== lastDayFunc(periodList[iterator]).toString()) {
+      } else if (i.date.toString() !== lastDayFunc(periodList[iterator]).toString() && !cursor) {
         // Set the cursor variable to the item's date
         cursor = i.date
         if (isAfter(new Date(i.date), new Date(cursor))) {
           // If this re-executes and the new item's date is after the current cursor, we make that new date the cursor
           cursor = i.date
+          return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
         } else {
           // Eventually, when we have the latest date we can, we append this date and total to the returnList
           returnList.push({ period: period + (iterator + 1), amount: cursor.curTotal })
