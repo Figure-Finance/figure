@@ -20,9 +20,9 @@ const Breakdown = props => {
   }
 
   const openDetailModalHandler = id => {
-    setShowDetailModal(true)
-    const selectedItem = props.content.filter(item => item._id === id)
+    const selectedItem = props.content.filter(item => item.id === id)
     setCurrentItem(selectedItem[0])
+    setShowDetailModal(true)
   }
 
   const closeDetailModalHandler = () => {
@@ -83,10 +83,11 @@ const Breakdown = props => {
   } else if (showDetailModal) {
     content = (
       <BreakdownDetailModal
+        color={props.color}
         onCancel={closeDetailModalHandler}
         onSubmit={updatedItem => updateItemHandler(currentItem._id, updatedItem)}
         onDelete={() => deleteItemHandler(currentItem._id)}
-        name={currentItem.name}
+        name={currentItem.name || currentItem.category}
         amount={currentItem.amount.toString()}
         description={currentItem.description} />
     )
