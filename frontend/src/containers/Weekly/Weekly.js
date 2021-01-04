@@ -67,14 +67,27 @@ const Weekly = props => {
         ...body,
         isIncome: true
       })
-      console.log(res.data)
+      setIncome([...income, res.data])
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [income])
 
-  const onUpdateIncome = useCallback(async (body, cb) => {
+  const onAddExpense = useCallback(async (body, cb) => {
+    try {
+      const res = await api.post('weekly', {
+        ...body,
+        isIncome: false
+      })
+      setExpenses([...expenses, res.data])
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [expenses])
+
+  const onUpdateIncomeExpense = useCallback(async (body, cb) => {
     try {
       const res = await api.patch('weekly', body)
       console.log(res.data)
@@ -84,28 +97,27 @@ const Weekly = props => {
     }
   }, [])
 
-  const onDeleteIncome = useCallback(async cb => {
+  const onDeleteIncome = useCallback(async (id, cb) => {
     try {
-      const res = await api.delete('weekly')
-      console.log(res.data)
+      const res = await api.delete(`weekly/${id}`)
+      const updatedIncome = income.filter(item => item.id !== id)
+      setIncome(updatedIncome)
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [income])
 
-  const onAddExpense = useCallback(async (body, cb) => {
+  const onDeleteExpense = useCallback(async (id, cb) => {
     try {
-      const res = await api.post('weekly', {
-        ...body,
-        isIncome: false
-      })
-      console.log(res.data)
+      const res = await api.delete(`weekly/${id}`)
+      const updatedExpenses = expenses.filter(item => item.id !== id)
+      setExpenses(updatedExpenses)
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [expenses])
 
   useEffect(onFetchWeekly, [onFetchWeekly, currentWeekIndex])
 
@@ -150,7 +162,7 @@ const Weekly = props => {
           content={income}
           getItem={onFetchWeeklyItem}
           addItem={onAddIncome}
-          updateItem={onUpdateIncome}
+          updateItem={onUpdateIncomeExpense}
           deleteItem={onDeleteIncome}
           color='primary'
           canAdd />
@@ -166,8 +178,8 @@ const Weekly = props => {
           content={expenses}
           getItem={onFetchWeeklyItem}
           addItem={onAddExpense}
-          updateItem={onUpdateIncome}
-          deleteItem={onDeleteIncome}
+          updateItem={onUpdateIncomeExpense}
+          deleteItem={onDeleteExpense}
           color='danger'
           canAdd />
       </div>
