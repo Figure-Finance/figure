@@ -52,6 +52,15 @@ const Weekly = props => {
     }
   }, [currentWeekIndex, weeks])
 
+  const onFetchWeeklyItem = useCallback(async (id, cb) => {
+    try {
+      const res = await api.get(`weekly/${id}`)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
   const onAddIncome = useCallback(async (body, cb) => {
     try {
       const res = await api.post('weekly', {
@@ -65,19 +74,21 @@ const Weekly = props => {
     }
   }, [])
 
-  const onUpdateIncome = useCallback(async body => {
+  const onUpdateIncome = useCallback(async (body, cb) => {
     try {
       const res = await api.patch('weekly', body)
       console.log(res.data)
+      cb(res)
     } catch (err) {
       console.log(err)
     }
   }, [])
 
-  const onDeleteIncome = useCallback(async () => {
+  const onDeleteIncome = useCallback(async cb => {
     try {
       const res = await api.delete('weekly')
       console.log(res.data)
+      cb(res)
     } catch (err) {
       console.log(err)
     }
@@ -137,6 +148,7 @@ const Weekly = props => {
         <Breakdown
           title='Income'
           content={income}
+          getItem={onFetchWeeklyItem}
           addItem={onAddIncome}
           updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
@@ -152,6 +164,7 @@ const Weekly = props => {
         <Breakdown
           title='Expenses'
           content={expenses}
+          getItem={onFetchWeeklyItem}
           addItem={onAddExpense}
           updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
