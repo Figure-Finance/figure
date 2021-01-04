@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import classes from './Type.module.css'
 import Container from '../UI/Container/Container'
 import Button from '../UI/Button/Button'
+import AddButton from '../UI/AddButton/AddButton'
 
 const Type = props => {
   const buttons = props.content.map(item => {
@@ -23,7 +24,12 @@ const Type = props => {
       height='100%'
       width='33%'>
       <div className={classes.Type}>
-        {buttons}
+        <div className={classes.Buttons}>
+          {buttons}
+        </div>
+        <div className={classes.Add}>
+          <AddButton color={props.color} />
+        </div>
       </div>
     </Container>
   )
