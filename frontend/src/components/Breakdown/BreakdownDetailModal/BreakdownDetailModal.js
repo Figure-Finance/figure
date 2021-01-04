@@ -76,8 +76,6 @@ const BreakdownDetailModal = props => {
     }
   })
 
-  console.log(props.location)
-
   const addItemHandler = () => {
     props.onSubmit({
       name: formElements.name.value,
@@ -119,6 +117,8 @@ const BreakdownDetailModal = props => {
   }, [formElements, formElementsArray])
 
   useEffect(updateFormElementsArray, [updateFormElementsArray])
+
+  console.log(props.location)
 
   console.log(formElementsArray)
 
