@@ -16,7 +16,7 @@ const BreakdownSummary = props => {
     )
   }
 
-  const buttons = props.content.map(item => {
+  let buttons = props.content.map(item => {
     return (
       <Button
         key={item.id}
@@ -32,6 +32,12 @@ const BreakdownSummary = props => {
       </Button>
     )
   })
+
+  if (props.content.length === 0) {
+    buttons = (
+      <h2 className={props.color}>No Data</h2>
+    )
+  }
 
   return (
     <div className={classes.BreakdownSummary}>
