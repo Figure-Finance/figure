@@ -93,7 +93,7 @@ const Input = props => {
       <label
         className={labelClassNames.join(' ')}
         onClick={e => moveLabel(e)}>
-        {props.config.placeholder}
+        {props.config.label}
       </label>
       {inputElement}
     </>
