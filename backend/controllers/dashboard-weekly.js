@@ -47,11 +47,20 @@ exports.postUserFinances = (req, res, next) => {
 }
 
 exports.getFinanceDetailsById = (req, res, next) => {
+  // TODO: look at lucidchart and refactor to only return what's needed
   const financeId = req.params.id
   Finance.findOne({ _id: financeId })
     .then(financeEntry => {
       console.log(financeEntry)
-      return res.status(200).json(financeEntry)
+      const finance = {
+        id: financeEntry._id,
+        category: financeEntry.category,
+        amount: financeEntry.amount,
+        description: financeEntry.description,
+        location: financeEntry.location,
+        date: financeEntry.date
+      }
+      return res.status(200).json(finance)
     })
     .catch(err => console.log(err))
 }
