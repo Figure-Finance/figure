@@ -29,7 +29,6 @@ const Breakdown = props => {
 
   const addItemHandler = useCallback(item => {
     addItem(item, res => {
-      console.log(res.data)
       setShowAddModal(false)
     })
   }, [addItem])
@@ -43,7 +42,6 @@ const Breakdown = props => {
 
   const deleteItemHandler = useCallback(id => {
     deleteItem(id, res => {
-      // console.log(res.data)
       setShowDetailModal(false)
     })
   }, [deleteItem])
@@ -94,8 +92,8 @@ const Breakdown = props => {
       <BreakdownDetailModal
         color={props.color}
         onCancel={closeDetailModalHandler}
-        onSubmit={updatedItem => updateItemHandler(currentItem._id, updatedItem)}
-        onDelete={() => deleteItemHandler(currentItem._id)}
+        onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
+        onDelete={() => deleteItemHandler(currentItem.id)}
         type={currentItem.category}
         amount={currentItem.amount.toString()}
         description={currentItem.description}
