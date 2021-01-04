@@ -56,7 +56,7 @@ const ProgressModal = props => {
           shouldValidate={formElement.validation}
           touched={formElement.touched}
           width='200px'
-          changed={event => inputChangedHandler(event)} />
+          onChange={event => inputChangedHandler(event)} />
       </div>
       <Button
         onClick={submitHandler}
