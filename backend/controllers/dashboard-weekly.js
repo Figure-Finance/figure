@@ -80,7 +80,7 @@ exports.deleteFinanceEntryById = (req, res, next) => {
 }
 
 exports.editFinanceEntryById = (req, res, next) => {
-  const financeId = req.params.id
+  const financeId = req.body.id
   const newCategory = req.body.category
   const newAmount = req.body.amount
   const newDescription = req.body.description
@@ -94,7 +94,14 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.location = newLocation
       financeEntry.date = newDate
       financeEntry.save(err => console.log(err))
-      return res.status(200).json(financeEntry)
+      return res.status(200).json({
+        id: financeEntry.id,
+        category: financeEntry.category,
+        amount: financeEntry.amount,
+        description: financeEntry.description,
+        location: financeEntry.location,
+        date: financeEntry.date
+      })
     })
     .catch(err => console.log(err))
 }
