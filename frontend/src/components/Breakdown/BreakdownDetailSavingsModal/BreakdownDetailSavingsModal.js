@@ -52,11 +52,9 @@ const BreakdownDetailSavingsModal = props => {
 
   const updateHandler = () => {
     props.onSubmit({
-      category: formElements.type.value,
+      name: formElements.type.value,
       amount: formElements.amount.value,
-      location: formElements.location.value,
-      description: formElements.description.value,
-      date: formElements.date.value
+      description: formElements.description.value
     })
   }
 
