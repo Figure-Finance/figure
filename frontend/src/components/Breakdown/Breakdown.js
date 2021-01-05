@@ -5,6 +5,7 @@ import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
 import BreakdownAddModal from './BreakdownAddModal/BreakdownAddModal'
 import BreakdownSavingsAddModal from './BreakdownAddSavingsModal/BreakdownAddSavingsModal'
 import BreakdownDetailModal from './BreakdownDetailModal/BreakdownDetailModal'
+import BreakdownDetailSavingsModal from './BreakdownDetailSavingsModal/BreakdownDetailSavingsModal'
 
 const Breakdown = props => {
   const [showAddModal, setShowAddModal] = useState(false)
@@ -91,14 +92,16 @@ const Breakdown = props => {
         isIncome={props.isIncome} />
     )
   } else if (showDetailModal && props.isSavings) {
-    <BreakdownDetailModal
-      color={props.color}
-      onCancel={closeDetailModalHandler}
-      onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
-      onDelete={() => deleteItemHandler(currentItem.id)}
-      name={currentItem.name}
-      amount={currentItem.amount.toString()}
-      description={currentItem.description} />
+    content = (
+      <BreakdownDetailSavingsModal
+        color={props.color}
+        onCancel={closeDetailModalHandler}
+        onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
+        onDelete={() => deleteItemHandler(currentItem.id)}
+        name={currentItem.name}
+        amount={currentItem.amount.toString()}
+        description={currentItem.description} />
+    )
   } else if (showDetailModal) {
     content = (
       <BreakdownDetailModal
