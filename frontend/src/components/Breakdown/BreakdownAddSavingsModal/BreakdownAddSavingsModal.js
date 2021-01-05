@@ -11,7 +11,7 @@ const BreakdownAddSavingsModal = props => {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Name'
+        label: 'Name'
       },
       value: props.name || '',
       validation: {
@@ -24,7 +24,7 @@ const BreakdownAddSavingsModal = props => {
       type: 'input',
       config: {
         type: 'number',
-        placeholder: 'Amount'
+        label: 'Amount'
       },
       value: props.amount || '',
       validation: {
@@ -34,9 +34,10 @@ const BreakdownAddSavingsModal = props => {
       touched: false
     },
     description: {
-      type: 'textarea',
+      type: 'input',
       config: {
-        placeholder: 'Description'
+        type: 'text',
+        label: 'Description'
       },
       value: props.description || '',
       validation: {
@@ -89,9 +90,6 @@ const BreakdownAddSavingsModal = props => {
 
   return (
     <div className={classes.BreakdownAddModal}>
-      <h1 className={props.color}>
-        {`Add ${props.title}`}
-      </h1>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
@@ -103,7 +101,7 @@ const BreakdownAddSavingsModal = props => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            changed={event => inputChangedHandler(event, formElement.id)} />
+            onChange={event => inputChangedHandler(event, formElement.id)} />
         ))}
       </div>
       <div className={classes.Buttons}>
