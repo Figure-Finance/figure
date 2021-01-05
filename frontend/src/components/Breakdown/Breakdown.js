@@ -5,6 +5,7 @@ import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
 import BreakdownAddModal from './BreakdownAddModal/BreakdownAddModal'
 import BreakdownSavingsAddModal from './BreakdownAddSavingsModal/BreakdownAddSavingsModal'
 import BreakdownDetailModal from './BreakdownDetailModal/BreakdownDetailModal'
+import BreakdownDetailSavingsModal from './BreakdownDetailSavingsModal/BreakdownDetailSavingsModal'
 
 const Breakdown = props => {
   const [showAddModal, setShowAddModal] = useState(false)
@@ -19,7 +20,7 @@ const Breakdown = props => {
     setShowAddModal(false)
   }, [])
 
-  const { getItem, addItem, updateItem, deleteItem } = props
+  const { getItem, addItem, updateItem, deleteItem, allocateSavings } = props
 
   const getItemHandler = useCallback(id => {
     getItem(id, res => {
@@ -60,6 +61,12 @@ const Breakdown = props => {
     setShowDetailModal(false)
   }, [])
 
+  const allocateHandler = useCallback((id, amount) => {
+    allocateSavings(id, amount, res => {
+      console.log(res.data)
+    })
+  }, [allocateSavings])
+
   let content = (
     <BreakdownSummary
       title={props.title}
@@ -91,14 +98,17 @@ const Breakdown = props => {
         isIncome={props.isIncome} />
     )
   } else if (showDetailModal && props.isSavings) {
-    <BreakdownDetailModal
-      color={props.color}
-      onCancel={closeDetailModalHandler}
-      onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
-      onDelete={() => deleteItemHandler(currentItem.id)}
-      name={currentItem.name}
-      amount={currentItem.amount.toString()}
-      description={currentItem.description} />
+    content = (
+      <BreakdownDetailSavingsModal
+        color={props.color}
+        onCancel={closeDetailModalHandler}
+        onAllocate={amount => allocateHandler(currentItem.id, amount)}
+        onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
+        onDelete={() => deleteItemHandler(currentItem.id)}
+        name={currentItem.name}
+        amount={currentItem.amount.toString()}
+        description={currentItem.description} />
+    )
   } else if (showDetailModal) {
     content = (
       <BreakdownDetailModal
@@ -136,7 +146,8 @@ Breakdown.propTypes = {
   updateItem: PropTypes.func,
   deleteItem: PropTypes.func,
   isSavings: PropTypes.bool,
-  buttonProgressPercent: PropTypes.number
+  buttonProgressPercent: PropTypes.number,
+  allocateSavings: PropTypes.func
 }
 
 export default Breakdown

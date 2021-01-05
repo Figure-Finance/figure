@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import classes from './BreakdownAddSavingsModal.module.css'
-import Input from '../../UI/Input/Input'
+import classes from './TypeAddModal.module.css'
 import Button from '../../UI/Button/Button'
+import Input from '../../UI/Input/Input'
 
-const BreakdownAddSavingsModal = props => {
+const TypeAddModal = props => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     name: {
@@ -19,40 +19,12 @@ const BreakdownAddSavingsModal = props => {
       },
       valid: false,
       touched: false
-    },
-    amount: {
-      type: 'input',
-      config: {
-        type: 'number',
-        label: 'Amount'
-      },
-      value: props.amount || '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
-    },
-    description: {
-      type: 'input',
-      config: {
-        type: 'text',
-        label: 'Description'
-      },
-      value: props.description || '',
-      validation: {
-        required: true
-      },
-      valid: false,
-      touched: false
     }
   })
 
   const addItemHandler = () => {
     props.onSubmit({
-      name: formElements.name.value,
-      amount: formElements.amount.value,
-      description: formElements.description.value
+      name: formElements.type.name
     }, res => {
       console.log(res.data)
       props.closeModal()
@@ -106,16 +78,18 @@ const BreakdownAddSavingsModal = props => {
       </div>
       <div className={classes.Buttons}>
         <Button
-          size='large'
+          size='medium'
           color={props.color}
-          onClick={props.closeModal}>
+          onClick={props.closeModal}
+          width='48%'>
           Cancel
         </Button>
         <Button
           color={props.color}
-          size='large'
+          size='medium'
           onClick={addItemHandler}
-          disabled={!formIsValid}>
+          disabled={!formIsValid}
+          width='48%'>
           Add
         </Button>
       </div>
@@ -123,18 +97,11 @@ const BreakdownAddSavingsModal = props => {
   )
 }
 
-BreakdownAddSavingsModal.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string,
-  name: PropTypes.string,
-  amount: PropTypes.number,
-  location: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  closeModal: PropTypes.func,
-  onSubmit: PropTypes.func,
+TypeAddModal.propTypes = {
   color: PropTypes.string,
-  isIncome: PropTypes.bool
+  name: PropTypes.string,
+  closeModal: PropTypes.func,
+  onSubmit: PropTypes.func
 }
 
-export default BreakdownAddSavingsModal
+export default TypeAddModal
