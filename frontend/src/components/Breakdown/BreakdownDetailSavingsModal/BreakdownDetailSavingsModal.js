@@ -95,6 +95,13 @@ const BreakdownDetailSavingsModal = props => {
 
   return (
     <div className={classes.BreakdownDetailSavingsModal}>
+      <Button
+        size='medium'
+        color={props.color}
+        width='100%'
+        onClick={() => props.onAllocate('10')}>
+        Allocate
+      </Button>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
@@ -143,7 +150,8 @@ BreakdownDetailSavingsModal.propTypes = {
   location: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  onAllocate: PropTypes.func
 }
 
 export default BreakdownDetailSavingsModal
