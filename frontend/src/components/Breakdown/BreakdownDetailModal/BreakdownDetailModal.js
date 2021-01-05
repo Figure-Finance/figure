@@ -76,11 +76,13 @@ const BreakdownDetailModal = props => {
     }
   })
 
-  const addItemHandler = () => {
+  const updateHandler = () => {
     props.onSubmit({
-      name: formElements.name.value,
+      category: formElements.type.value,
       amount: formElements.amount.value,
-      description: formElements.description.value
+      location: formElements.location.value,
+      description: formElements.description.value,
+      date: formElements.date.value
     })
   }
 
@@ -108,6 +110,7 @@ const BreakdownDetailModal = props => {
   const formElementsArray = useMemo(() => [], [])
 
   const updateFormElementsArray = useCallback(() => {
+    formElementsArray.length = 0
     for (const key in formElements) {
       formElementsArray.push({
         id: key,
@@ -117,6 +120,13 @@ const BreakdownDetailModal = props => {
   }, [formElements, formElementsArray])
 
   useEffect(updateFormElementsArray, [updateFormElementsArray])
+
+  // for (const key in formElements) {
+  //   formElementsArray.push({
+  //     id: key,
+  //     config: formElements[key]
+  //   })
+  // }
 
   console.log(props.location)
 
@@ -154,7 +164,7 @@ const BreakdownDetailModal = props => {
           size='medium'
           color={props.color}
           width='48%'
-          onClick={addItemHandler}
+          onClick={updateHandler}
           disabled={!formIsValid}>
           Update
         </Button>
