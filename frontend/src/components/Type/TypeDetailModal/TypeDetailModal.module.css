@@ -1,0 +1,22 @@
+.TypeDetailModal {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.Buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: auto;
+  width: 100%;
+}
+
+.TypeDetailModal > h2,
+.Buttons > button {
+  margin-bottom: 10px;
+}
