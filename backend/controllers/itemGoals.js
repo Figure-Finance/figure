@@ -29,7 +29,13 @@ exports.getItemGoalDetails = (req, res, next) => {
   ItemGoal.findOne({ _id: itemGoalId })
     .then(itemGoal => {
       console.log(`Item goal: ${itemGoal}`)
-      res.status(200).json(itemGoal)
+      res.status(200).json({
+        id: itemGoal.id,
+        name: itemGoal.name,
+        amount: itemGoal.amount,
+        description: itemGoal.description,
+        progress: itemGoal.progress
+      })
     })
     .catch(err => console.log(err))
 }

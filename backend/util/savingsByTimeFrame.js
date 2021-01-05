@@ -21,6 +21,7 @@ const filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOfTi
 }
 
 const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, periodList, iterator) => {
+  // console.log(`Return list from top of func call: ${returnList} Iterator: ${iterator}`)
   // Create a helper cursor variable
   let cursor
   // Create helper i variable that begins at the index of iterator (parameter passed in initially as zero)
@@ -30,6 +31,7 @@ const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, pe
     if (periodList[iterator]) {
       // If item.date.toString (to be able to truly check equality) = the last day in the given period, we want that date's total
       // So we append it to our returnList
+      console.log(`i from line 34: ${i} iterator: ${iterator}`)
       if (i.date.toString() === lastDayFunc(periodList[iterator]).toString()) {
         returnList.push({ period: period + (iterator + 1), amount: i.curTotal })
         return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
