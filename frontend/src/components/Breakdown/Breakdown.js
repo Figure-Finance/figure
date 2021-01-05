@@ -20,7 +20,7 @@ const Breakdown = props => {
     setShowAddModal(false)
   }, [])
 
-  const { getItem, addItem, updateItem, deleteItem } = props
+  const { getItem, addItem, updateItem, deleteItem, allocateSavings } = props
 
   const getItemHandler = useCallback(id => {
     getItem(id, res => {
@@ -61,6 +61,12 @@ const Breakdown = props => {
     setShowDetailModal(false)
   }, [])
 
+  const allocateHandler = useCallback((id, amount) => {
+    allocateSavings(id, amount, res => {
+      console.log(res.data)
+    })
+  }, [allocateSavings])
+
   let content = (
     <BreakdownSummary
       title={props.title}
@@ -96,6 +102,7 @@ const Breakdown = props => {
       <BreakdownDetailSavingsModal
         color={props.color}
         onCancel={closeDetailModalHandler}
+        onAllocate={amount => allocateHandler(currentItem.id, amount)}
         onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
         onDelete={() => deleteItemHandler(currentItem.id)}
         name={currentItem.name}
@@ -139,7 +146,8 @@ Breakdown.propTypes = {
   updateItem: PropTypes.func,
   deleteItem: PropTypes.func,
   isSavings: PropTypes.bool,
-  buttonProgressPercent: PropTypes.number
+  buttonProgressPercent: PropTypes.number,
+  allocateSavings: PropTypes.func
 }
 
 export default Breakdown
