@@ -51,6 +51,16 @@ const Savings = props => {
     }
   }, [])
 
+  const onGetGoal = useCallback(async (id, cb) => {
+    try {
+      const res = await api.get(`savings/goal/${id}`)
+      console.log(res.data)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
   const onAddGoal = useCallback(async (goal, cb) => {
     try {
       const res = await api.post('savings/goal', goal)
@@ -123,6 +133,7 @@ const Savings = props => {
           labels={labels}
           isSavings />
         <Breakdown
+          getItem={onGetGoal}
           addItem={onAddGoal}
           updateItem={onUpdateGoal}
           deleteItem={onDeleteGoal}
