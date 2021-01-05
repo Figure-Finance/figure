@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import api from '../../api'
 import classes from './Profile.module.css'
 import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
 import Type from '../../components/Type/Type'
@@ -6,24 +7,46 @@ import Navbar from '../../components/Navbar/Navbar'
 import Logo from '../../components/Logo/Logo'
 
 const Profile = props => {
-  const income = [
-    'Web Design',
-    'Video Team',
-    'Curriculum'
-  ]
+  const [income, setIncome] = useState([])
+  const [expenses, setExpenses] = useState([])
+  // const [firstName, setFirstName] = useState('')
+  // const [lastName, setLastName] = useState('')
+  // const [email, setEmail] = useState('')
 
-  const expenses = [
-    'Groceries',
-    'Gas',
-    'Eating Out',
-    'Misc'
-  ]
+  const updateIncomeExpenses = updatedItems => {
+    const updatedIncome = []
+    const updatedExpenses = []
+    for (const item of updatedItems) {
+      if (item.isIncome) {
+        updatedIncome.push(item)
+      } else {
+        updatedExpenses.push(item)
+      }
+    }
+    setIncome(updatedIncome)
+    setExpenses(updatedExpenses)
+  }
+
+  const onFetchProfile = useCallback(async () => {
+    try {
+      const res = await api.get('user')
+      updateIncomeExpenses(res.data.categories)
+      // const { firstName, lastName, email } = res.data
+      // setFirstName(firstName)
+      // setLastName(lastName)
+      // setEmail(email)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  useEffect(onFetchProfile, [onFetchProfile])
 
   return (
     <div className={classes.Profile}>
       <div className={classes.Main}>
         <div className={classes.Column}>
-          <ProfileSummary height='50%' />
+          <ProfileSummary />
           <Logo />
         </div>
         <Type
