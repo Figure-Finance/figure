@@ -21,7 +21,6 @@ const filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOfTi
 }
 
 const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, periodList, iterator) => {
-  // console.log(`Return list from top of func call: ${returnList} Iterator: ${iterator}`)
   // Create a helper cursor variable
   let cursor
   // Create helper i variable that begins at the index of iterator (parameter passed in initially as zero)
