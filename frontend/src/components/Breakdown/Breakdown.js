@@ -21,7 +21,7 @@ const Breakdown = props => {
 
   const openDetailModalHandler = id => {
     setShowDetailModal(true)
-    const selectedItem = props.content.filter(item => item._id === id)
+    const selectedItem = props.content.filter(item => item.id === id)
     setCurrentItem(selectedItem[0])
   }
 
