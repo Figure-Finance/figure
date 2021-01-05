@@ -18,7 +18,13 @@ exports.postItemGoals = (req, res, next) => {
             userId: user._id
           })
           newGoal.save(err => console.log(err))
-          return res.status(201).json(newGoal)
+          return res.status(201).json({
+            id: newGoal._id,
+            name: newGoal.name,
+            amount: newGoal.amount,
+            description: newGoal.description,
+            progress: newGoal.progress
+          })
         })
     })
     .catch(err => console.log(err))
