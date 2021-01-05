@@ -87,15 +87,33 @@ const Weekly = props => {
     }
   }, [expenses])
 
-  const onUpdateIncomeExpense = useCallback(async (body, cb) => {
+  const onUpdateIncome = useCallback(async (body, cb) => {
+    console.log(body)
     try {
       const res = await api.patch('weekly', body)
       console.log(res.data)
+      const itemToReplace = income.findIndex(item => item.id === body.id)
+      const updatedIncome = [...income].splice(itemToReplace, 1, res.data)
+      setIncome(updatedIncome)
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [income])
+
+  const onUpdateExpense = useCallback(async (body, cb) => {
+    console.log(body)
+    try {
+      const res = await api.patch('weekly', body)
+      console.log(res.data)
+      const itemToReplace = expenses.findIndex(item => item.id === body.id)
+      const updatedExpenses = [...expenses].splice(itemToReplace, 1, res.data)
+      setExpenses(updatedExpenses)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [expenses])
 
   const onDeleteIncome = useCallback(async (id, cb) => {
     try {
@@ -162,7 +180,7 @@ const Weekly = props => {
           content={income}
           getItem={onFetchWeeklyItem}
           addItem={onAddIncome}
-          updateItem={onUpdateIncomeExpense}
+          updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
           color='primary'
           canAdd />
@@ -178,7 +196,7 @@ const Weekly = props => {
           content={expenses}
           getItem={onFetchWeeklyItem}
           addItem={onAddExpense}
-          updateItem={onUpdateIncomeExpense}
+          updateItem={onUpdateExpense}
           deleteItem={onDeleteExpense}
           color='danger'
           canAdd />
