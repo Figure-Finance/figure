@@ -95,7 +95,7 @@ exports.allocateGoalFunds = (req, res, next) => {
           }
         })
         .catch(err => console.log(err))
-      return res.status(200).json(totalSavings)
+      return res.status(200).json({ message: 'Funds successfully allocated!' })
     })
     .catch(err => console.log(err))
 }
