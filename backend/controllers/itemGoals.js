@@ -72,7 +72,7 @@ exports.editItemGoal = (req, res, next) => {
 
 exports.allocateGoalFunds = (req, res, next) => {
   // TODO: when we have users, find this savings doc by current user
-  const itemGoalId = req.params.id
+  const itemGoalId = req.body.id
   const allocateAmount = req.body.allocateAmount
   Savings.findOne()
     .then(totalSavings => {

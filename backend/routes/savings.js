@@ -25,6 +25,6 @@ router.delete('/goal/:id', itemGoalController.deleteItemGoal)
 
 router.patch('/goal/:id', itemGoalController.editItemGoal)
 
-router.patch('/goal/allocate/:id', itemGoalController.allocateGoalFunds)
+router.patch('/goal/allocate', itemGoalController.allocateGoalFunds)
 
 module.exports = router
