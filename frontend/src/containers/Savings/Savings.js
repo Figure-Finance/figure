@@ -64,11 +64,13 @@ const Savings = props => {
   const onAddGoal = useCallback(async (goal, cb) => {
     try {
       const res = await api.post('savings/goal', goal)
+      console.log(res.data)
+      setGoals([...goals, res.data])
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goals])
 
   const onUpdateGoal = useCallback(async (id, body, cb) => {
     try {
@@ -82,11 +84,13 @@ const Savings = props => {
   const onDeleteGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.delete(`savings/goal/${id}`)
+      const updatedGoals = goals.filter(goal => goal.id !== id)
+      setGoals(updatedGoals)
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goals])
 
   const onFetchGraphData = useCallback(async timeFrame => {
     try {
