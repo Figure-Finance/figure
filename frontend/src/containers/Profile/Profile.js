@@ -30,6 +30,7 @@ const Profile = props => {
   const onFetchProfile = useCallback(async () => {
     try {
       const res = await api.get('user')
+      console.log(res.data.categories)
       updateIncomeExpenses(res.data.categories)
       // const { firstName, lastName, email } = res.data
       // setFirstName(firstName)
@@ -38,6 +39,14 @@ const Profile = props => {
     } catch (err) {
       console.log(err)
     }
+  }, [])
+
+  const onAddGoal = useCallback(async (goal, cb) => {
+    console.log('ADDED GOAL')
+  }, [])
+
+  const onDeleteGoal = useCallback(async (id, cb) => {
+    console.log('DELETED GOAL')
   }, [])
 
   useEffect(onFetchProfile, [onFetchProfile])
@@ -51,10 +60,14 @@ const Profile = props => {
         </div>
         <Type
           content={income}
-          color='primary' />
+          color='primary'
+          addGoal={onAddGoal}
+          deleteGoal={onDeleteGoal} />
         <Type
           content={expenses}
-          color='danger' />
+          color='danger'
+          addGoal={onAddGoal}
+          deleteGoal={onDeleteGoal} />
       </div>
       <Navbar active='p' />
     </div>
