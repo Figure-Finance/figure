@@ -23,11 +23,13 @@ exports.postUser = (req, res, next) => {
   const firstName = req.body.firstName
   const lastName = req.body.lastName
   const password = req.body.password
+  const categories = [{ category: 'Groceries', isIncome: false }]
   const user = new User({
     email: email,
     firstName: firstName,
     lastName: lastName,
-    password: password
+    password: password,
+    categories: categories
   })
   user.save(err => console.log(err))
   res.status(201).json({ msg: 'User successfully created!', user: user })
