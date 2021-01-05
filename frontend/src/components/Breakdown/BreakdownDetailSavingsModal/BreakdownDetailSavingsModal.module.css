@@ -1,4 +1,4 @@
-.BreakdownDetailModal {
+.BreakdownDetailSavingsModal {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   width: 100%;
 }
 
-.BreakdownDetailModal > button,
+.BreakdownDetailSavingsModal > button,
 .Buttons > button,
 .Inputs > input {
   margin-bottom: 10px;

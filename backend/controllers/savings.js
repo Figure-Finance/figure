@@ -47,8 +47,7 @@ exports.getSavings = (req, res, next) => {
       itemGoals = itemGoalArray.map(i => {
         return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
       })
-      console.log(`savings from line 44 savings.js: ${savings}`)
-      return res.status(200).json({ savings, itemGoals})
+      return res.status(200).json({ ...savings, itemGoals })
     })
     .catch(err => console.log(err))
 }
@@ -68,7 +67,11 @@ exports.postTotalSavings = (req, res, next) => {
           })
           totalSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
           totalSavings.save(err => console.log(err))
-          return res.status(201).json(totalSavings)
+          return res.status(201).json({
+            id: totalSavings._id,
+            totalSavingsGoal: totalSavings.totalSavingsGoal,
+            totalSavingsProgress: totalSavings.totalSavingsProgress
+          })
         })
         .catch(err => console.log(err))
     })
@@ -92,13 +95,11 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
-      let curTotal = savingsItem.totalSavingsProgress + req.body.progressAmount
+      const curTotal = savingsItem.totalSavingsProgress + req.body.progressAmount
       if (!last) {
-        savingsItem.progressUpdates = [{date: startOfToday(), curTotal: curTotal }]
+        savingsItem.progressUpdates = [{ date: startOfToday(), curTotal: curTotal }]
       } else if (last.date.toString() === startOfToday().toString()) {
-         console.log(`Adding: ${savingsItem.totalSavingsProgress + req.body.progressAmount}`)
 	       last.curTotal = curTotal
-         console.log(`Progress updates from else if ${savingsItem.progressUpdates}`)
       } else {
 	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: curTotal })
       }
@@ -119,42 +120,56 @@ exports.getByTimeFrame = (req, res, next) => {
     .then(savingsItem => {
       if (timeFrame === 'month') {
         // If user clicks monthly view, filter to show their progress data by week
-        savings = filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
-        if (savings) {
-          // Use each week of interval as a helper
-          weeks = eachWeekOfInterval({
-            start: savings[0].date,
-            end: savings[savings.length - 1].date
+        filterByTimeFrame('month', savingsItem.progressUpdates, startOfMonth, lastDayOfMonth)
+          .then(filteredSavings => {
+            savings = filteredSavings
+            // Use each week of interval as a helper
+            return eachWeekOfInterval({
+              start: savings[0].date,
+              end: savings[savings.length - 1].date
+            })
           })
-        }
-        // Use filterSavingsData from utils to return data in correct format for FE
-        savingsToReturn = filterSavingsData(savings, 'Week ', weeks.length, lastDayOfWeek, savingsToReturn, weeks, 0)
+          .then(weeks => {
+          // Use filterSavingsData from utils to return data in correct format for FE
+            savingsToReturn = filterSavingsData(savings, 'Week ', weeks.length, lastDayOfWeek, savingsToReturn, weeks, 0)
+            return res.status(200).json(savingsToReturn)
+          })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'year') {
         // If user clicks yearly view, filter to show their progress data by month
-        savings = filterByTimeFrame('year', savingsItem.progressUpdates, startOfYear, lastDayOfYear)
-        if (savings) {
-          // Use each month of interval as a helper
-          months = eachMonthOfInterval({
-            start: savings[0].date,
-            end: savings[savings.length - 1].date
+        filterByTimeFrame('year', savingsItem.progressUpdates, startOfYear, lastDayOfYear)
+          .then(filteredSavings => {
+            savings = filteredSavings
+            // Use each week of interval as a helper
+            return eachMonthOfInterval({
+              start: savings[0].date,
+              end: savings[savings.length - 1].date
+            })
           })
-        }
-        // Use filterSavingsData from utils to return data in correct format for FE
-        savingsToReturn = filterSavingsData(savings, 'Month ', months.length, lastDayOfMonth, savingsToReturn, months, 0)
+          .then(months => {
+          // Use filterSavingsData from utils to return data in correct format for FE
+            savingsToReturn = filterSavingsData(savings, 'Month ', months.length, lastDayOfMonth, savingsToReturn, months, 0)
+            return res.status(200).json(savingsToReturn)
+          })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'week') {
         // If user clicks weekly view, filter to show their progress data by day
-        console.log(savingsItem)
-        savings = filterByTimeFrame('week', savingsItem.progressUpdates, startOfWeek, lastDayOfWeek)
-        console.log(savings)
-        if (savings) {
-          // Use each week of interval as a helper
-          days = eachDayOfInterval({
-            start: savings[0].date,
-            end: savings[savings.length - 1].date
+        filterByTimeFrame('week', savingsItem.progressUpdates, startOfWeek, lastDayOfWeek)
+          .then(filteredSavings => {
+            savings = filteredSavings
+            // Use each week of interval as a helper
+            return eachDayOfInterval({
+              start: savings[0].date,
+              end: savings[savings.length - 1].date
+            })
           })
-        }
-        // Use filterSavingsData from utils to return data in correct format for FE
-        savingsToReturn = filterSavingsData(savings, 'Day ', days.length, lastDayOfWeek, savingsToReturn, days, 0)
+          .then(days => {
+          // Use filterSavingsData from utils to return data in correct format for FE
+            savingsToReturn = filterSavingsData(savings, 'Day ', days.length, lastDayOfWeek, savingsToReturn, days, 0)
+            console.log(`Savings to return amount line 165: ${savingsToReturn.amount}`)
+            return res.status(200).json(savingsToReturn)
+          })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'all') {
         // If user clicks all view, filter to show their progress data by quarter
         savings = savingsItem.progressUpdates.filter(i => {
@@ -173,19 +188,24 @@ exports.getByTimeFrame = (req, res, next) => {
         }
         // Use filterSavingsData from utils to return data in correct format for FE
         savingsToReturn = filterSavingsData(savings, 'Quarter ', quarters.length, lastDayOfQuarter, savingsToReturn, quarters, 0)
+        return res.status(200).json(savingsToReturn)
       } else if (timeFrame === 'quarter') {
         // If user clicks quarterly view, filter to show their progress data by week
-        savings = timeFrameUtils.filterByTimeFrame('quarter', savingsItem.progressUpdates, startOfQuarter, lastDayOfQuarter)
-        if (savings) {
-          // Use each week of interval as a helper
-          weeks = eachWeekOfInterval({
-            start: savings[0].date,
-            end: savings[savings.length - 1].date
+        filterByTimeFrame('quarter', savingsItem.progressUpdates, startOfQuarter, lastDayOfQuarter)
+          .then(filteredSavings => {
+            savings = filteredSavings
+            // Use each week of interval as a helper
+            return eachWeekOfInterval({
+              start: savings[0].date,
+              end: savings[savings.length - 1].date
+            })
           })
-        }
-        // Use filterSavingsData from utils to return data in correct format for FE
-        savingsToReturn = filterSavingsData(savings, 'Week ', weeks.length, lastDayOfWeek, savingsToReturn, weeks, 0)
+          .then(weeks => {
+          // Use filterSavingsData from utils to return data in correct format for FE
+            savingsToReturn = filterSavingsData(savings, 'Week ', weeks.length, lastDayOfQuarter, savingsToReturn, weeks, 0)
+            return res.status(200).json(savingsToReturn)
+          })
+          .catch(err => console.log(err))
       }
-      return res.status(200).json(savingsToReturn)
     })
 }

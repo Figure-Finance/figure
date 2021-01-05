@@ -6,25 +6,36 @@ import LeftArrowButton from '../../UI/LeftArrowButton/LeftArrowButton'
 import RightArrowButton from '../../UI/RightArrowButton/RightArrowButton'
 import PieChart from './PieChart/PieChart'
 
-const ChartSummary = props => (
-  <div className={classes.ChartSummary}>
-    <div className={classes.Buttons}>
-      <LeftArrowButton onClick={props.leftArrowClick} color='danger' />
-      <Button
-        size='medium'
-        width='60%'
-        color='danger'
-        onClick={props.openModal}>
-        {props.buttonContent}
-      </Button>
-      <RightArrowButton onClick={props.rightArrowClick} color='danger' />
-    </div>
+const ChartSummary = props => {
+  let content = (
     <PieChart names={props.names} amounts={props.amounts} />
-  </div>
-)
+  )
+
+  if (props.amounts.length === 0) {
+    content = (
+      <h2 className='danger'>No Data</h2>
+    )
+  }
+
+  return (
+    <div className={classes.ChartSummary}>
+      <div className={classes.Buttons}>
+        <LeftArrowButton onClick={props.leftArrowClick} color='danger' />
+        <Button
+          size='medium'
+          width='60%'
+          color='danger'
+          onClick={props.openModal}>
+          {props.buttonContent}
+        </Button>
+        <RightArrowButton onClick={props.rightArrowClick} color='danger' />
+      </div>
+      {content}
+    </div>
+  )
+}
 
 ChartSummary.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
   leftArrowClick: PropTypes.func,
   rightArrowClick: PropTypes.func,
   names: PropTypes.arrayOf(PropTypes.string),

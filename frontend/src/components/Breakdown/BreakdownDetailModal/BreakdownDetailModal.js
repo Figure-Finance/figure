@@ -1,57 +1,88 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import classes from './BreakdownDetailModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
 const BreakdownDetailModal = props => {
-  const [formIsValid, setFormIsValid] = useState(false)
+  const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
-    name: {
+    type: {
       type: 'input',
       config: {
         type: 'text',
-        placeholder: 'Name'
+        label: 'Type'
       },
-      value: props.name,
+      value: props.type,
       validation: {
         required: true
       },
-      valid: false,
+      valid: true,
       touched: false
     },
     amount: {
       type: 'input',
       config: {
         type: 'number',
-        placeholder: 'Amount'
+        label: 'Amount',
+        min: '0',
+        step: '0.01'
       },
       value: props.amount,
       validation: {
         required: true
       },
-      valid: false,
+      valid: true,
+      touched: false
+    },
+    location: {
+      type: 'input',
+      config: {
+        type: 'text',
+        label: 'Location'
+      },
+      value: props.location,
+      validation: {
+        required: true
+      },
+      valid: true,
       touched: false
     },
     description: {
-      type: 'textarea',
+      type: 'input',
       config: {
-        placeholder: 'Description'
+        type: 'text',
+        label: 'Description'
       },
       value: props.description,
       validation: {
         required: true
       },
-      valid: false,
+      valid: true,
+      touched: false
+    },
+    date: {
+      type: 'input',
+      config: {
+        type: 'date',
+        label: 'Date'
+      },
+      value: props.date,
+      validation: {
+        required: true
+      },
+      valid: true,
       touched: false
     }
   })
 
-  const addItemHandler = () => {
+  const updateHandler = () => {
     props.onSubmit({
-      name: formElements.name.value,
+      category: formElements.type.value,
       amount: formElements.amount.value,
-      description: formElements.description.value
+      location: formElements.location.value,
+      description: formElements.description.value,
+      date: formElements.date.value
     })
   }
 
@@ -76,45 +107,66 @@ const BreakdownDetailModal = props => {
     setFormIsValid(formIsValid)
   }
 
-  const formElementsArray = []
-  for (const key in formElements) {
-    formElementsArray.push({
-      id: key,
-      config: formElements[key]
-    })
-  }
+  const formElementsArray = useMemo(() => [], [])
+
+  const updateFormElementsArray = useCallback(() => {
+    formElementsArray.length = 0
+    for (const key in formElements) {
+      formElementsArray.push({
+        id: key,
+        config: formElements[key]
+      })
+    }
+  }, [formElements, formElementsArray])
+
+  useEffect(updateFormElementsArray, [updateFormElementsArray])
+
+  // for (const key in formElements) {
+  //   formElementsArray.push({
+  //     id: key,
+  //     config: formElements[key]
+  //   })
+  // }
+
+  console.log(props.location)
+
+  console.log(formElementsArray)
 
   return (
     <div className={classes.BreakdownDetailModal}>
-      <Button size='thin' color='neutral' onClick={props.onCancel}>
-        X
-      </Button>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
+            color={props.color}
             type={formElement.config.type}
             config={formElement.config.config}
-            value={formElement.config.value}
+            value={
+              formElement.config.config.type === 'number'
+                ? (+formElement.config.value).toFixed(2).toString()
+                : formElement.config.value
+            }
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            changed={event => inputChangedHandler(event, formElement.id)} />
+            onChange={event => inputChangedHandler(event, formElement.id)} />
         ))}
       </div>
       <div className={classes.Buttons}>
         <Button
-          size='thin'
-          color='neutral'
-          onClick={addItemHandler}
-          disabled={!formIsValid}>
-          Update
-        </Button>
-        <Button
-          size='thin'
-          color='neutral'
+          size='medium'
+          color={props.color}
+          width='48%'
           onClick={props.onDelete}>
           Delete
+        </Button>
+        <Button
+          size='medium'
+          color={props.color}
+          width='48%'
+          onClick={updateHandler}
+          disabled={!formIsValid}>
+          Update
         </Button>
       </div>
     </div>
@@ -122,9 +174,12 @@ const BreakdownDetailModal = props => {
 }
 
 BreakdownDetailModal.propTypes = {
-  name: PropTypes.string,
+  color: PropTypes.string,
+  type: PropTypes.string,
   amount: PropTypes.string,
   description: PropTypes.string,
+  date: PropTypes.string,
+  location: PropTypes.string,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   onDelete: PropTypes.func

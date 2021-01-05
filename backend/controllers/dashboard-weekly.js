@@ -41,7 +41,14 @@ exports.postUserFinances = (req, res, next) => {
       })
       finances.save()
       // Needs category and amount as response only
-      return res.status(201).json(finances)
+      return res.status(201).json({
+        id: finances.id,
+        category: finances.category,
+        amount: finances.amount,
+        description: finances.description,
+        location: finances.location,
+        date: finances.date
+      })
     })
     .catch(err => console.log(err))
 }
@@ -51,7 +58,15 @@ exports.getFinanceDetailsById = (req, res, next) => {
   Finance.findOne({ _id: financeId })
     .then(financeEntry => {
       console.log(financeEntry)
-      return res.status(200).json(financeEntry)
+      const finance = {
+        id: financeEntry._id,
+        category: financeEntry.category,
+        amount: financeEntry.amount,
+        description: financeEntry.description,
+        location: financeEntry.location,
+        date: financeEntry.date
+      }
+      return res.status(200).json(finance)
     })
     .catch(err => console.log(err))
 }
@@ -65,7 +80,7 @@ exports.deleteFinanceEntryById = (req, res, next) => {
 }
 
 exports.editFinanceEntryById = (req, res, next) => {
-  const financeId = req.params.id
+  const financeId = req.body.id
   const newCategory = req.body.category
   const newAmount = req.body.amount
   const newDescription = req.body.description
@@ -79,7 +94,14 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.location = newLocation
       financeEntry.date = newDate
       financeEntry.save(err => console.log(err))
-      return res.status(200).json(financeEntry)
+      return res.status(200).json({
+        id: financeEntry.id,
+        category: financeEntry.category,
+        amount: financeEntry.amount,
+        description: financeEntry.description,
+        location: financeEntry.location,
+        date: financeEntry.date
+      })
     })
     .catch(err => console.log(err))
 }

@@ -1,4 +1,7 @@
 .ProfileSummary {
+  align-items:center;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   text-align: center;
   width: 100%;
@@ -12,8 +15,19 @@
   margin-bottom: 10px;
 }
 
+.FirstName {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.LastName {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
 
 .Email {
-  margin: auto;
-  width: 90%;
+  padding: 5px;
 }

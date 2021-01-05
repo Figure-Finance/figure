@@ -11,10 +11,10 @@ router.get('/:startDate/:endDate', dashWeeklyController.getUserFinances)
 
 router.post('/', dashWeeklyController.postUserFinances)
 
-router.get('/:date/:id', dashWeeklyController.getFinanceDetailsById)
+router.patch('/', dashWeeklyController.editFinanceEntryById)
 
-router.delete('/delete/:id', dashWeeklyController.deleteFinanceEntryById)
+router.get('/:id', dashWeeklyController.getFinanceDetailsById)
 
-router.patch('/edit/:id', dashWeeklyController.editFinanceEntryById)
+router.delete('/:id', dashWeeklyController.deleteFinanceEntryById)
 
 module.exports = router

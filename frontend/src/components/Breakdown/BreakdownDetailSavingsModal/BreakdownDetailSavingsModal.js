@@ -1,23 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import classes from './BreakdownAddModal.module.css'
+import classes from './BreakdownDetailSavingsModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownAddModal = props => {
-  const [formIsValid, setFormIsValid] = useState(false)
+const BreakdownDetailSavingsModal = props => {
+  const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
-    type: {
+    name: {
       type: 'input',
       config: {
         type: 'text',
         label: 'Type'
       },
-      value: props.type || '',
+      value: props.name,
       validation: {
         required: true
       },
-      valid: false,
+      valid: true,
       touched: false
     },
     amount: {
@@ -28,24 +28,11 @@ const BreakdownAddModal = props => {
         min: '0',
         step: '0.01'
       },
-      value: props.amount || '',
+      value: props.amount,
       validation: {
         required: true
       },
-      valid: false,
-      touched: false
-    },
-    location: {
-      type: 'input',
-      config: {
-        type: 'text',
-        label: 'Location'
-      },
-      value: props.location || '',
-      validation: {
-        required: true
-      },
-      valid: false,
+      valid: true,
       touched: false
     },
     description: {
@@ -54,38 +41,20 @@ const BreakdownAddModal = props => {
         type: 'text',
         label: 'Description'
       },
-      value: props.description || '',
+      value: props.description,
       validation: {
         required: true
       },
-      valid: false,
-      touched: false
-    },
-    date: {
-      type: 'input',
-      config: {
-        type: 'date',
-        label: 'Date'
-      },
-      value: props.date || '',
-      validation: {
-        required: true
-      },
-      valid: false,
+      valid: true,
       touched: false
     }
   })
 
-  const addItemHandler = () => {
+  const updateHandler = () => {
     props.onSubmit({
-      category: formElements.type.value,
+      name: formElements.type.value,
       amount: formElements.amount.value,
-      location: formElements.location.value,
-      description: formElements.description.value,
-      date: formElements.date.value
-    }, res => {
-      console.log(res.data)
-      props.closeModal()
+      description: formElements.description.value
     })
   }
 
@@ -110,16 +79,22 @@ const BreakdownAddModal = props => {
     setFormIsValid(formIsValid)
   }
 
-  const formElementsArray = []
-  for (const key in formElements) {
-    formElementsArray.push({
-      id: key,
-      config: formElements[key]
-    })
-  }
+  const formElementsArray = useMemo(() => [], [])
+
+  const updateFormElementsArray = useCallback(() => {
+    formElementsArray.length = 0
+    for (const key in formElements) {
+      formElementsArray.push({
+        id: key,
+        config: formElements[key]
+      })
+    }
+  }, [formElements, formElementsArray])
+
+  useEffect(updateFormElementsArray, [updateFormElementsArray])
 
   return (
-    <div className={classes.BreakdownAddModal}>
+    <div className={classes.BreakdownDetailSavingsModal}>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
@@ -127,7 +102,11 @@ const BreakdownAddModal = props => {
             color={props.color}
             type={formElement.config.type}
             config={formElement.config.config}
-            value={formElement.config.value}
+            value={
+              formElement.config.config.type === 'number'
+                ? (+formElement.config.value).toFixed(2).toString()
+                : formElement.config.value
+            }
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
@@ -138,35 +117,33 @@ const BreakdownAddModal = props => {
         <Button
           size='medium'
           color={props.color}
-          onClick={props.closeModal}
-          width='48%'>
-          Cancel
+          width='48%'
+          onClick={props.onDelete}>
+          Delete
         </Button>
         <Button
-          color={props.color}
           size='medium'
-          onClick={addItemHandler}
-          disabled={!formIsValid}
-          width='48%'>
-          Add
+          color={props.color}
+          width='48%'
+          onClick={updateHandler}
+          disabled={!formIsValid}>
+          Update
         </Button>
       </div>
     </div>
   )
 }
 
-BreakdownAddModal.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string,
+BreakdownDetailSavingsModal.propTypes = {
+  color: PropTypes.string,
   name: PropTypes.string,
-  amount: PropTypes.number,
-  location: PropTypes.string,
+  amount: PropTypes.string,
   description: PropTypes.string,
   date: PropTypes.string,
-  closeModal: PropTypes.func,
+  location: PropTypes.string,
+  onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
-  color: PropTypes.string,
-  isIncome: PropTypes.bool
+  onDelete: PropTypes.func
 }
 
-export default BreakdownAddModal
+export default BreakdownDetailSavingsModal

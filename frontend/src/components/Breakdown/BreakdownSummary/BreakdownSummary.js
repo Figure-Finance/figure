@@ -8,24 +8,6 @@ import Button from '../../UI/Button/Button'
 const BreakdownSummary = props => {
   let addButton = null
 
-  // const addItemHandler = () => {
-  //   props.addItem(res => {
-  //     console.log(res.data)
-  //   })
-  // }
-  //
-  // const updateItemHandler = (id, updatedItem) => {
-  //   props.updateItem(id, updatedItem, res => {
-  //     console.log(res.data)
-  //   })
-  // }
-  //
-  // const deleteItemHandler = id => {
-  //   props.deleteItem(id, res => {
-  //     console.log(res.data)
-  //   })
-  // }
-
   if (props.canAdd) {
     addButton = (
       <AddButton
@@ -34,8 +16,7 @@ const BreakdownSummary = props => {
     )
   }
 
-  const buttons = props.content.map(item => {
-    console.log(item)
+  let buttons = props.content.map(item => {
     return (
       <Button
         key={item.id}
@@ -44,13 +25,19 @@ const BreakdownSummary = props => {
         size='thin'
         width='90%'
         showProgress={props.isSavings}
-        progressPercent={props.buttonProgressPercent}
+        progressPercent={item.progress / item.amount}
         secondary={`$${item.amount.toFixed(2)}`}
         dual>
         {item.name || item.category}
       </Button>
     )
   })
+
+  if (props.content.length === 0) {
+    buttons = (
+      <h2 className={props.color}>No Data</h2>
+    )
+  }
 
   return (
     <div className={classes.BreakdownSummary}>

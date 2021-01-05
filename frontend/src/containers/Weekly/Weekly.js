@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   format,
   startOfToday,
@@ -14,28 +14,27 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Weekly = props => {
-  const today = startOfToday()
-  const lastYear = subYears(today, 1)
-  const weeks = eachWeekOfInterval({ start: lastYear, end: today })
-  const weeksStringMap = weeks.map(day => {
+  const today = useMemo(() => startOfToday(), [])
+  const lastYear = useMemo(() => subYears(today, 1), [today])
+  const weeks = useMemo(
+    () => eachWeekOfInterval({ start: lastYear, end: today }), [today, lastYear]
+  )
+  const weekStringMap = useMemo(() => weeks.map(day => {
     return `${format(day, 'MMM. dd')} - ${format(endOfWeek(day), 'MMM. dd')}`
-  })
+  }), [weeks])
 
   const [income, setIncome] = useState([])
   const [expenses, setExpenses] = useState([])
-  const [weeklyItems, setWeeklyItems] = useState([])
-  const [currentWeekIndex, setCurrentWeekIndex] = useState(weeksStringMap.length - 1)
+  const [currentWeekIndex, setCurrentWeekIndex] = useState(weekStringMap.length - 1)
 
-  const updateIncomeExpenses = (updatedItems) => {
+  const updateIncomeExpenses = updatedItems => {
     const updatedIncome = []
     const updatedExpenses = []
-    console.log(weeklyItems)
     for (const item of updatedItems) {
-      console.log(item)
       if (item.isIncome) {
-        updatedIncome.push({ ...item })
+        updatedIncome.push(item)
       } else {
-        updatedExpenses.push({ ...item })
+        updatedExpenses.push(item)
       }
     }
     setIncome(updatedIncome)
@@ -47,13 +46,20 @@ const Weekly = props => {
     const endDate = endOfWeek(startDate)
     try {
       const res = await api.get(`weekly/${startDate}/${endDate}`)
-      console.log(res.data)
-      setWeeklyItems(res.data)
       updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [currentWeekIndex])
+  }, [currentWeekIndex, weeks])
+
+  const onFetchWeeklyItem = useCallback(async (id, cb) => {
+    try {
+      const res = await api.get(`weekly/${id}`)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
 
   const onAddIncome = useCallback(async (body, cb) => {
     try {
@@ -61,30 +67,12 @@ const Weekly = props => {
         ...body,
         isIncome: true
       })
-      console.log(res.data)
+      setIncome([...income, res.data])
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
-
-  const onUpdateIncome = useCallback(async body => {
-    try {
-      const res = await api.patch('weekly', body)
-      console.log(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
-
-  const onDeleteIncome = useCallback(async () => {
-    try {
-      const res = await api.delete('weekly')
-      console.log(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
+  }, [income])
 
   const onAddExpense = useCallback(async (body, cb) => {
     try {
@@ -92,14 +80,64 @@ const Weekly = props => {
         ...body,
         isIncome: false
       })
-      console.log(res.data)
+      setExpenses([...expenses, res.data])
       cb(res)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [expenses])
 
-  useEffect(onFetchWeekly, [currentWeekIndex])
+  const onUpdateIncome = useCallback(async (body, cb) => {
+    console.log(body)
+    try {
+      const res = await api.patch('weekly', body)
+      console.log(res.data)
+      const itemToReplace = income.findIndex(item => item.id === body.id)
+      const updatedIncome = [...income].splice(itemToReplace, 1, res.data)
+      setIncome(updatedIncome)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [income])
+
+  const onUpdateExpense = useCallback(async (body, cb) => {
+    console.log(body)
+    try {
+      const res = await api.patch('weekly', body)
+      console.log(res.data)
+      const itemToReplace = expenses.findIndex(item => item.id === body.id)
+      const updatedExpenses = [...expenses].splice(itemToReplace, 1, res.data)
+      setExpenses(updatedExpenses)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [expenses])
+
+  const onDeleteIncome = useCallback(async (id, cb) => {
+    try {
+      const res = await api.delete(`weekly/${id}`)
+      const updatedIncome = income.filter(item => item.id !== id)
+      setIncome(updatedIncome)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [income])
+
+  const onDeleteExpense = useCallback(async (id, cb) => {
+    try {
+      const res = await api.delete(`weekly/${id}`)
+      const updatedExpenses = expenses.filter(item => item.id !== id)
+      setExpenses(updatedExpenses)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [expenses])
+
+  useEffect(onFetchWeekly, [onFetchWeekly, currentWeekIndex])
 
   let totalIncome = 0
   let totalExpenses = 0
@@ -113,7 +151,7 @@ const Weekly = props => {
   }
 
   const changeWeek = event => {
-    const index = weeksStringMap.findIndex(el => el === event.target.innerHTML)
+    const index = weekStringMap.findIndex(el => el === event.target.innerHTML)
     setCurrentWeekIndex(index)
   }
 
@@ -124,7 +162,7 @@ const Weekly = props => {
   }
 
   const nextWeek = () => {
-    if (currentWeekIndex < weeksStringMap.length - 1) {
+    if (currentWeekIndex < weekStringMap.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1)
     }
   }
@@ -140,6 +178,7 @@ const Weekly = props => {
         <Breakdown
           title='Income'
           content={income}
+          getItem={onFetchWeeklyItem}
           addItem={onAddIncome}
           updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
@@ -147,17 +186,18 @@ const Weekly = props => {
           canAdd />
         <Chart
           data={expenses}
-          timePeriods={weeksStringMap}
+          timePeriods={weekStringMap}
           previousTimePeriod={previousWeek}
           nextTimePeriod={nextWeek}
           selectTimePeriod={changeWeek}
-          currentTimePeriod={weeksStringMap[currentWeekIndex]} />
+          currentTimePeriod={weekStringMap[currentWeekIndex]} />
         <Breakdown
           title='Expenses'
           content={expenses}
+          getItem={onFetchWeeklyItem}
           addItem={onAddExpense}
-          updateItem={onUpdateIncome}
-          deleteItem={onDeleteIncome}
+          updateItem={onUpdateExpense}
+          deleteItem={onDeleteExpense}
           color='danger'
           canAdd />
       </div>

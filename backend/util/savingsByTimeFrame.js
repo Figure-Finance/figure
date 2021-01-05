@@ -2,6 +2,8 @@ const isWithinInterval = require('date-fns/isWithinInterval')
 const startOfToday = require('date-fns/startOfToday')
 const isAfter = require('date-fns/isAfter')
 
+// TODO: Improve error handling
+
 const filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOfTimeFrameFunc) => {
   // Take updates list and return a filtered list
   savings = updatesList.filter(i => {
@@ -13,7 +15,9 @@ const filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOfTi
       end: endOfTimeFrameFunc(startOfToday())
     })
   })
-  return savings
+  return new Promise((resolve, reject) => {
+    savings ? resolve(savings) : reject('Failed to filter')
+  })
 }
 
 const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, periodList, iterator) => {
@@ -26,16 +30,18 @@ const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, pe
     if (periodList[iterator]) {
       // If item.date.toString (to be able to truly check equality) = the last day in the given period, we want that date's total
       // So we append it to our returnList
+      console.log(`i from line 34: ${i} iterator: ${iterator}`)
       if (i.date.toString() === lastDayFunc(periodList[iterator]).toString()) {
         returnList.push({ period: period + (iterator + 1), amount: i.curTotal })
         return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
       // If it isn't exactly the last day of the week, month, etc. we need to find out what the latest date in that period is
-      } else if (i.date.toString() !== lastDayFunc(periodList[iterator]).toString()) {
+      } else if (i.date.toString() !== lastDayFunc(periodList[iterator]).toString() && !cursor) {
         // Set the cursor variable to the item's date
-        cursor = i.date
+        cursor = i
         if (isAfter(new Date(i.date), new Date(cursor))) {
           // If this re-executes and the new item's date is after the current cursor, we make that new date the cursor
-          cursor = i.date
+          cursor = i
+          return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
         } else {
           // Eventually, when we have the latest date we can, we append this date and total to the returnList
           returnList.push({ period: period + (iterator + 1), amount: cursor.curTotal })
