@@ -54,7 +54,6 @@ const Savings = props => {
   const onGetGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`savings/goal/${id}`)
-      console.log(res.data)
       cb(res)
     } catch (err) {
       console.log(err)
@@ -71,6 +70,19 @@ const Savings = props => {
       console.log(err)
     }
   }, [goals])
+
+  const onAllocateSavings = useCallback(async (id, amount, cb) => {
+    try {
+      const res = await api.patch('savings/goal/allocate', {
+        id,
+        amount
+      })
+      console.log(res.data)
+      cb(res)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
 
   const onUpdateGoal = useCallback(async (id, body, cb) => {
     try {
@@ -137,6 +149,7 @@ const Savings = props => {
           labels={labels}
           isSavings />
         <Breakdown
+          allocateSavings={onAllocateSavings}
           getItem={onGetGoal}
           addItem={onAddGoal}
           updateItem={onUpdateGoal}
