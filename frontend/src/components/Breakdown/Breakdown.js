@@ -34,8 +34,11 @@ const Breakdown = props => {
   }, [addItem])
 
   const updateItemHandler = useCallback((id, updatedItem) => {
-    updateItem(id, updatedItem, res => {
-      console.log(res.data)
+    const body = {
+      id,
+      ...updatedItem
+    }
+    updateItem(body, res => {
       setShowDetailModal(false)
     })
   }, [updateItem])
@@ -87,6 +90,15 @@ const Breakdown = props => {
         onSubmit={addItemHandler}
         isIncome={props.isIncome} />
     )
+  } else if (showDetailModal && props.isSavings) {
+    <BreakdownDetailModal
+      color={props.color}
+      onCancel={closeDetailModalHandler}
+      onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
+      onDelete={() => deleteItemHandler(currentItem.id)}
+      name={currentItem.name}
+      amount={currentItem.amount.toString()}
+      description={currentItem.description} />
   } else if (showDetailModal) {
     content = (
       <BreakdownDetailModal
