@@ -9,7 +9,9 @@ exports.getUserProfile = (req, res, next) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        categories: user.categories
+        categories: user.categories.map(category => {
+          return { id: category._id, category: category.category, isIncome: category.isIncome }
+        })
       }
       return res.status(200).json(returnUser)
     })
