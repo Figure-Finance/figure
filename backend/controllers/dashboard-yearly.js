@@ -5,10 +5,8 @@ const { filterByTimeFrame, filterSavingsData } = require('../util/savingsByTimeF
 const getMonth = require('date-fns/getMonth')
 const isWithinInterval = require('date-fns/isWithinInterval')
 
-// TODO: Figure out why this is throwing an error on the last recursive function call
-
 exports.getUserYearlyFinances = (req, res, next) => {
-  // This route needs to return finance data by month for graph
+  // Return finances for YTD by month for FE graph
   const startDate = new Date(req.params.startDate)
   const endDate = new Date(req.params.endDate)
   let dates
@@ -17,7 +15,6 @@ exports.getUserYearlyFinances = (req, res, next) => {
   // TODO: find user by authenticated/current user
   User.findOne()
     .then(user => {
-      console.log(`In first then, user line 24: ${user}`)
       Finance.find({
         userId: user._id,
         date: {
@@ -26,7 +23,6 @@ exports.getUserYearlyFinances = (req, res, next) => {
         }
       })
         .then(financeData => {
-          console.log(`In nested then, financeData line 33: ${financeData}`)
           // cursor = # of month finance belongs to for each month in interval between start and end date
           dates = financeData.map(i => {
             cursor = getMonth(new Date(i.date))
