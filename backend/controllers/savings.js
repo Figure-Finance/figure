@@ -164,7 +164,6 @@ exports.getByTimeFrame = (req, res, next) => {
           .then(days => {
           // Use filterSavingsData from utils to return data in correct format for FE
             savingsToReturn = filterSavingsData(savings, 'Day ', days.length, lastDayOfWeek, savingsToReturn, days, 0)
-            console.log(`Savings to return amount line 165: ${savingsToReturn.amount}`)
             return res.status(200).json(savingsToReturn)
           })
           .catch(err => console.log(err))

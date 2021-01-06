@@ -61,7 +61,6 @@ exports.getFinanceDetailsById = (req, res, next) => {
   const financeId = req.params.id
   Finance.findOne({ _id: financeId })
     .then(financeEntry => {
-      console.log(financeEntry)
       const finance = {
         id: financeEntry._id,
         category: financeEntry.category,
@@ -70,7 +69,13 @@ exports.getFinanceDetailsById = (req, res, next) => {
         location: financeEntry.location,
         date: financeEntry.date
       }
-      return res.status(200).json(finance)
+      return res.status(200).json({
+        category: finance.category,
+        amount: finance.amount,
+        description: finance.description,
+        location: finance.location,
+        data: finance.date
+      })
     })
     .catch(err => console.log(err))
 }
