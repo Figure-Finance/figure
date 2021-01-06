@@ -1,112 +1,116 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import classes from './ProfileSummary.module.css'
 import Container from '../UI/Container/Container'
+import Button from '../UI/Button/Button'
 import Input from '../UI/Input/Input'
 
 const ProfileSummary = props => {
-  // const [formIsValid, setFormIsValid] = useState(false)
-  // const [formElements, setFormElements] = useState({
-  //   type: {
-  //     type: 'input',
-  //     config: {
-  //       type: 'text',
-  //       label: 'Type'
-  //     },
-  //     value: props.type || '',
-  //     validation: {
-  //       required: true
-  //     },
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   amount: {
-  //     type: 'input',
-  //     config: {
-  //       type: 'number',
-  //       label: 'Amount',
-  //       min: '0',
-  //       step: '0.01'
-  //     },
-  //     value: props.amount || '',
-  //     validation: {
-  //       required: true
-  //     },
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   location: {
-  //     type: 'input',
-  //     config: {
-  //       type: 'text',
-  //       label: 'Location'
-  //     },
-  //     value: props.location || '',
-  //     validation: {
-  //       required: true
-  //     },
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   description: {
-  //     type: 'input',
-  //     config: {
-  //       type: 'text',
-  //       label: 'Description'
-  //     },
-  //     value: props.description || '',
-  //     validation: {
-  //       required: true
-  //     },
-  //     valid: false,
-  //     touched: false
-  //   },
-  //   date: {
-  //     type: 'input',
-  //     config: {
-  //       type: 'date',
-  //       label: 'Date'
-  //     },
-  //     value: props.date || '',
-  //     validation: {
-  //       required: true
-  //     },
-  //     valid: false,
-  //     touched: false
-  //   }
-  // })
+  const [formIsValid, setFormIsValid] = useState(false)
+  const [formElements, setFormElements] = useState({
+    firstName: {
+      type: 'input',
+      config: {
+        type: 'text',
+        label: 'First Name'
+      },
+      value: props.firstName,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    lastName: {
+      type: 'input',
+      config: {
+        type: 'text',
+        label: 'Last Name'
+      },
+      value: props.lastName,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    },
+    email: {
+      type: 'input',
+      config: {
+        type: 'email',
+        label: 'Email'
+      },
+      value: props.email,
+      validation: {
+        required: true
+      },
+      valid: false,
+      touched: false
+    }
+  })
+
+  const inputChangedHandler = (event, inputIdentifier) => {
+    const updatedAuthForm = {
+      ...formElements
+    }
+    const updatedFormElement = {
+      ...updatedAuthForm[inputIdentifier]
+    }
+    updatedFormElement.value = event.target.value
+    updatedFormElement.valid = true
+    // updatedFormElement.valid = checkValidity(updatedFormElement.value, updatedFormElement.validation)
+    updatedFormElement.touched = true
+    updatedAuthForm[inputIdentifier] = updatedFormElement
+
+    let formIsValid = true
+    for (const inputIdentifier in updatedAuthForm) {
+      formIsValid = updatedAuthForm[inputIdentifier].valid && formIsValid
+    }
+    setFormElements(updatedAuthForm)
+    setFormIsValid(formIsValid)
+  }
+
+  const formElementsArray = useMemo(() => [], [])
+
+  const updateFormElementsArray = useCallback(() => {
+    formElementsArray.length = 0
+    for (const key in formElements) {
+      formElementsArray.push({
+        id: key,
+        config: formElements[key]
+      })
+    }
+  }, [formElements, formElementsArray])
+
+  useEffect(updateFormElementsArray, [updateFormElementsArray])
 
   return (
     <Container
-      height='50%'>
+      height='auto'
+      width='100%'>
       <div className={classes.ProfileSummary}>
         <h1 className='primary'>Profile</h1>
         <div className={classes.Inputs}>
-          <Input
-            type='input'
-            color='primary'
-            config={{
-              type: 'text',
-              label: 'First Name'
-            }}
-            value={props.firstName} />
-          <Input
-            type='input'
-            color='primary'
-            config={{
-              type: 'text',
-              label: 'Last Name'
-            }}
-            value={props.lastName} />
-          <Input
-            type='input'
-            color='primary'
-            config={{
-              type: 'text',
-              label: 'Email'
-            }}
-            value={props.email} />
+          {formElementsArray.map(formElement => (
+            <Input
+              key={formElement.id}
+              color='primary'
+              type={formElement.config.type}
+              config={formElement.config.config}
+              value={formElement.config.value}
+              invalid={!formElement.config.valid}
+              shouldValidate={formElement.config.validation}
+              touched={formElement.config.touched}
+              onChange={event => inputChangedHandler(event, formElement.id)} />
+          ))}
         </div>
+        <Button
+          size='medium'
+          color='primary'
+          width='100%'
+          disabled={!formIsValid}>
+          Update
+        </Button>
       </div>
     </Container>
   )
