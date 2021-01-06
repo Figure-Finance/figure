@@ -9,9 +9,9 @@ import Logo from '../../components/Logo/Logo'
 const Profile = props => {
   const [income, setIncome] = useState([])
   const [expenses, setExpenses] = useState([])
-  // const [firstName, setFirstName] = useState('')
-  // const [lastName, setLastName] = useState('')
-  // const [email, setEmail] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
 
   const updateIncomeExpenses = updatedItems => {
     const updatedIncome = []
@@ -30,12 +30,11 @@ const Profile = props => {
   const onFetchProfile = useCallback(async () => {
     try {
       const res = await api.get('user')
-      console.log(res.data.categories)
       updateIncomeExpenses(res.data.categories)
-      // const { firstName, lastName, email } = res.data
-      // setFirstName(firstName)
-      // setLastName(lastName)
-      // setEmail(email)
+      const { firstName, lastName, email } = res.data
+      setFirstName(firstName)
+      setLastName(lastName)
+      setEmail(email)
     } catch (err) {
       console.log(err)
     }
@@ -76,11 +75,16 @@ const Profile = props => {
 
   useEffect(onFetchProfile, [onFetchProfile])
 
+  // console.log(firstName)
+
   return (
     <div className={classes.Profile}>
       <div className={classes.Main}>
         <div className={classes.Column}>
-          <ProfileSummary />
+          <ProfileSummary
+            firstName={firstName}
+            lastName={lastName}
+            email={email} />
           <Logo />
         </div>
         <Type
