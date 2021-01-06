@@ -55,7 +55,6 @@ const Weekly = props => {
   const onFetchWeeklyItem = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`weekly/${id}`)
-      console.log(res.data)
       const data = { id, ...res.data }
       cb(data)
     } catch (err) {
@@ -63,27 +62,31 @@ const Weekly = props => {
     }
   }, [])
 
-  const onAddIncome = useCallback(async (body, cb) => {
+  const onAddIncome = useCallback(async (newIncome, cb) => {
     try {
       const res = await api.post('weekly', {
-        ...body,
+        ...newIncome,
         isIncome: true
       })
-      setIncome([...income, res.data])
-      cb(res)
+      const id = res.data.id
+      newIncome.amount = +newIncome.amount
+      setIncome([...income, { id, ...newIncome }])
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
   }, [income])
 
-  const onAddExpense = useCallback(async (body, cb) => {
+  const onAddExpense = useCallback(async (newExpense, cb) => {
     try {
       const res = await api.post('weekly', {
-        ...body,
+        ...newExpense,
         isIncome: false
       })
-      setExpenses([...expenses, res.data])
-      cb(res)
+      const id = res.data.id
+      newExpense.amount = +newExpense.amount
+      setExpenses([...expenses, { id, ...newExpense }])
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -97,7 +100,7 @@ const Weekly = props => {
       const itemToReplace = income.findIndex(item => item.id === body.id)
       const updatedIncome = [...income].splice(itemToReplace, 1, res.data)
       setIncome(updatedIncome)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -111,7 +114,7 @@ const Weekly = props => {
       const itemToReplace = expenses.findIndex(item => item.id === body.id)
       const updatedExpenses = [...expenses].splice(itemToReplace, 1, res.data)
       setExpenses(updatedExpenses)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -133,7 +136,7 @@ const Weekly = props => {
       const res = await api.delete(`weekly/${id}`)
       const updatedExpenses = expenses.filter(item => item.id !== id)
       setExpenses(updatedExpenses)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -152,22 +155,22 @@ const Weekly = props => {
     totalExpenses += entry.amount
   }
 
-  const changeWeek = event => {
+  const changeWeek = useCallback(event => {
     const index = weekStringMap.findIndex(el => el === event.target.innerHTML)
     setCurrentWeekIndex(index)
-  }
+  }, [weekStringMap])
 
-  const previousWeek = () => {
+  const previousWeek = useCallback(() => {
     if (currentWeekIndex > 0) {
       setCurrentWeekIndex(currentWeekIndex - 1)
     }
-  }
+  }, [currentWeekIndex])
 
-  const nextWeek = () => {
+  const nextWeek = useCallback(() => {
     if (currentWeekIndex < weekStringMap.length - 1) {
       setCurrentWeekIndex(currentWeekIndex + 1)
     }
-  }
+  }, [currentWeekIndex, weekStringMap.length])
 
   return (
     <div className={classes.Weekly}>
