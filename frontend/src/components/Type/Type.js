@@ -20,7 +20,7 @@ const Type = props => {
 
   const openDetailModalHandler = useCallback(id => {
     const selectedItem = props.content.filter(item => item.id === id)
-    setCurrentItem(selectedItem)
+    setCurrentItem(selectedItem[0])
     setShowDetailModal(true)
   }, [props.content])
 
@@ -46,7 +46,7 @@ const Type = props => {
     <TypeSummary
       color={props.color}
       content={props.content}
-      openDetailModal={() => openDetailModalHandler(currentItem.id)}
+      openDetailModal={id => openDetailModalHandler(id)}
       openAddModal={openAddModalHandler} />
   )
 
