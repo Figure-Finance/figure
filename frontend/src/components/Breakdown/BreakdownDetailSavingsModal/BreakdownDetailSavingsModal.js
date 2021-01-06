@@ -51,6 +51,10 @@ const BreakdownDetailSavingsModal = props => {
     }
   })
 
+  const allocateHandler = () => {
+    props.onAllocate(allocateAmount)
+  }
+
   const updateHandler = () => {
     props.onSubmit({
       name: formElements.type.value,
@@ -112,7 +116,7 @@ const BreakdownDetailSavingsModal = props => {
         size='medium'
         color={props.color}
         width='100%'
-        onClick={() => props.onAllocate('10')}>
+        onClick={allocateHandler}>
         Allocate
       </Button>
       <div
