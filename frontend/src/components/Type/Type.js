@@ -30,8 +30,8 @@ const Type = props => {
 
   const { addType, deleteType } = props
 
-  const addTypeHandler = useCallback(goal => {
-    addType(goal, data => {
+  const addTypeHandler = useCallback(type => {
+    addType(type, data => {
       setShowAddModal(false)
     })
   }, [addType])
@@ -60,6 +60,7 @@ const Type = props => {
   } else if (showDetailModal) {
     content = (
       <TypeDetailModal
+        type={currentItem}
         color={props.color}
         onDelete={() => deleteTypeHandler(currentItem.id)}
         closeModal={closeDetailModalHandler} />
