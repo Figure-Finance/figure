@@ -54,7 +54,9 @@ const Savings = props => {
   const onGetGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`savings/goal/${id}`)
-      cb(res)
+      const data = { id, ...res.data }
+      data.amount = +data.amount
+      cb(data)
     } catch (err) {
       console.log(err)
     }
@@ -63,8 +65,11 @@ const Savings = props => {
   const onAddGoal = useCallback(async (goal, cb) => {
     try {
       const res = await api.post('savings/goal', goal)
-      setGoals([...goals, res.data])
-      cb(res)
+      const id = res.data.id
+      const data = { id, ...goal }
+      data.amount = +data.amount
+      setGoals([...goals, data])
+      cb(data)
     } catch (err) {
       console.log(err)
     }
@@ -72,12 +77,13 @@ const Savings = props => {
 
   const onAllocateSavings = useCallback(async (id, allocateAmount, cb) => {
     try {
-      const res = await api.patch('savings/goal/allocate', {
+      await api.patch('savings/goal/allocate', {
         id,
         allocateAmount
       })
-      console.log(res.data)
-      cb(res)
+      const data = { id, allocateAmount }
+      console.log(data)
+      cb(data)
     } catch (err) {
       console.log(err)
     }
@@ -86,7 +92,7 @@ const Savings = props => {
   const onUpdateGoal = useCallback(async (id, body, cb) => {
     try {
       const res = await api.patch(`savings/goal/${id}`, body)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -97,7 +103,7 @@ const Savings = props => {
       const res = await api.delete(`savings/goal/${id}`)
       const updatedGoals = goals.filter(goal => goal.id !== id)
       setGoals(updatedGoals)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
