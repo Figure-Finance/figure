@@ -10,6 +10,6 @@ router.get('/', userController.getUserProfile)
 
 router.post('/signup', userController.postUser)
 
-router.post('/categories', userController.postUserCategories)
+router.patch('/category', userController.addUserCategory)
 
 module.exports = router

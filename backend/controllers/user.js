@@ -37,11 +37,12 @@ exports.postUser = (req, res, next) => {
   res.status(201).json({ msg: 'User successfully created!', user: user })
 }
 
-exports.postUserCategories = (req, res, next) => {
-  const categories = req.body.categories
+exports.addUserCategory = (req, res, next) => {
+  const category = req.body.category
+  const isIncome = req.body.isIncome
   User.findOne()
     .then(user => {
-      user.categories.push(...categories)
+      user.categories.push({ category: category, isIncome: isIncome })
       user.save(err => console.log(err))
       res.status(201).json({ msg: 'User categories created!' })
     })
