@@ -32,20 +32,20 @@ const Savings = props => {
       const res = await api.patch('savings/progress', {
         progressAmount: value
       })
-      cb(res)
-      setGoalProgress(res.data)
+      cb(res.data)
+      setGoalProgress(goalProgress + value)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goalProgress])
 
   const onUpdateTotalGoal = useCallback(async (value, cb) => {
     try {
-      const res = api.patch('savings/total', {
+      const res = await api.patch('savings/total', {
         totalSavingsGoal: value
       })
-      cb(res)
-      setTotalGoal(res.data)
+      cb(res.data)
+      setTotalGoal(value)
     } catch (err) {
       console.log(err)
     }
@@ -54,7 +54,10 @@ const Savings = props => {
   const onGetGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`savings/goal/${id}`)
-      cb(res)
+      console.log(res.data)
+      const data = { id, ...res.data }
+      data.amount = +data.amount
+      cb(data)
     } catch (err) {
       console.log(err)
     }
@@ -63,31 +66,38 @@ const Savings = props => {
   const onAddGoal = useCallback(async (goal, cb) => {
     try {
       const res = await api.post('savings/goal', goal)
-      console.log(res.data)
-      setGoals([...goals, res.data])
-      cb(res)
+      const id = res.data.id
+      const data = { id, ...goal }
+      data.amount = +data.amount
+      setGoals([...goals, data])
+      cb(data)
     } catch (err) {
       console.log(err)
     }
   }, [goals])
 
-  const onAllocateSavings = useCallback(async (id, amount, cb) => {
+  const onAllocateSavings = useCallback(async (id, allocateAmount, cb) => {
     try {
-      const res = await api.patch('savings/goal/allocate', {
+      allocateAmount = +allocateAmount
+      await api.patch('savings/goal/allocate', {
         id,
-        amount
+        allocateAmount: allocateAmount
       })
-      console.log(res.data)
-      cb(res)
+      const data = { id, allocateAmount }
+      const updatedGoalIndex = goals.findIndex(goal => goal.id === id)
+      const updatedGoals = [...goals]
+      updatedGoals[updatedGoalIndex].progress += allocateAmount
+      setGoals(updatedGoals)
+      cb(data)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goals])
 
   const onUpdateGoal = useCallback(async (id, body, cb) => {
     try {
       const res = await api.patch(`savings/goal/${id}`, body)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -97,8 +107,9 @@ const Savings = props => {
     try {
       const res = await api.delete(`savings/goal/${id}`)
       const updatedGoals = goals.filter(goal => goal.id !== id)
+      console.log(res.data)
       setGoals(updatedGoals)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
@@ -115,7 +126,7 @@ const Savings = props => {
 
   useEffect(() => {
     onFetchSavings()
-    onFetchGraphData('month')
+    onFetchGraphData('year')
   }, [onFetchSavings, onFetchGraphData])
 
   const graphTimePeriodChangeHandler = event => {

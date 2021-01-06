@@ -23,13 +23,13 @@ const Breakdown = props => {
   const { getItem, addItem, updateItem, deleteItem, allocateSavings } = props
 
   const getItemHandler = useCallback(id => {
-    getItem(id, res => {
-      setCurrentItem(res.data)
+    getItem(id, data => {
+      setCurrentItem(data)
     })
   }, [getItem])
 
   const addItemHandler = useCallback(item => {
-    addItem(item, res => {
+    addItem(item, data => {
       setShowAddModal(false)
     })
   }, [addItem])
@@ -39,13 +39,13 @@ const Breakdown = props => {
       id,
       ...updatedItem
     }
-    updateItem(body, res => {
+    updateItem(body, data => {
       setShowDetailModal(false)
     })
   }, [updateItem])
 
   const deleteItemHandler = useCallback(id => {
-    deleteItem(id, res => {
+    deleteItem(id, data => {
       setShowDetailModal(false)
     })
   }, [deleteItem])
@@ -62,8 +62,8 @@ const Breakdown = props => {
   }, [])
 
   const allocateHandler = useCallback((id, amount) => {
-    allocateSavings(id, amount, res => {
-      console.log(res.data)
+    allocateSavings(id, amount, data => {
+      setShowDetailModal(false)
     })
   }, [allocateSavings])
 

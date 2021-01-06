@@ -1,33 +1,16 @@
 .ProfileSummary {
-  align-items:center;
+  align-items: center;
   display: flex;
   flex-direction: column;
   height: 100%;
+  justify-content: space-between;
   text-align: center;
   width: 100%;
 }
 
-.Name {
+.Inputs {
   align-items: center;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-bottom: 10px;
-}
-
-.FirstName {
-  display: flex;
   flex-direction: column;
-  padding: 5px;
-}
-
-.LastName {
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-}
-
-
-.Email {
-  padding: 5px;
+  width: 100%;
 }

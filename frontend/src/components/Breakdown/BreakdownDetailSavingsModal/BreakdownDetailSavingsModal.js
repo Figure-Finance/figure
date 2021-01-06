@@ -5,6 +5,7 @@ import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
 const BreakdownDetailSavingsModal = props => {
+  const [allocateAmount, setAllocateAmount] = useState('0')
   const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
     name: {
@@ -49,6 +50,10 @@ const BreakdownDetailSavingsModal = props => {
       touched: false
     }
   })
+
+  const allocateHandler = () => {
+    props.onAllocate(allocateAmount)
+  }
 
   const updateHandler = () => {
     props.onSubmit({
@@ -95,13 +100,27 @@ const BreakdownDetailSavingsModal = props => {
 
   return (
     <div className={classes.BreakdownDetailSavingsModal}>
+      <Input
+        key='allocate'
+        color={props.color}
+        type='input'
+        config={{
+          type: 'number',
+          label: 'Amount',
+          min: '0',
+          step: '0.01'
+        }}
+        value={allocateAmount}
+        onChange={e => setAllocateAmount(e.target.value)} />
       <Button
         size='medium'
         color={props.color}
         width='100%'
-        onClick={() => props.onAllocate('10')}>
+        onClick={allocateHandler}>
         Allocate
       </Button>
+      <div
+        className={classes.Divider} />
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input

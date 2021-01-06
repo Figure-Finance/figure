@@ -41,12 +41,37 @@ const Profile = props => {
     }
   }, [])
 
-  const onAddGoal = useCallback(async (goal, cb) => {
-    console.log('ADDED GOAL')
+  const onAddIncomeType = useCallback(async (goal, cb) => {
+    try {
+      const res = await api.patch('user/category', {
+        category: goal,
+        isIncome: true
+      })
+      cb(res.data)
+    } catch (err) {
+      console.log(err)
+    }
   }, [])
 
-  const onDeleteGoal = useCallback(async (id, cb) => {
-    console.log('DELETED GOAL')
+  const onAddExpenseType = useCallback(async (goal, cb) => {
+    try {
+      const res = await api.patch('user/category', {
+        category: goal,
+        isIncome: false
+      })
+      cb(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  const onDeleteType = useCallback(async (id, cb) => {
+    try {
+      const res = await api.delete(`user/category/${id}`)
+      cb(res.data)
+    } catch (err) {
+      console.log(err)
+    }
   }, [])
 
   useEffect(onFetchProfile, [onFetchProfile])
@@ -61,13 +86,13 @@ const Profile = props => {
         <Type
           content={income}
           color='primary'
-          addGoal={onAddGoal}
-          deleteGoal={onDeleteGoal} />
+          addType={onAddIncomeType}
+          deleteType={onDeleteType} />
         <Type
           content={expenses}
           color='danger'
-          addGoal={onAddGoal}
-          deleteGoal={onDeleteGoal} />
+          addType={onAddExpenseType}
+          deleteType={onDeleteType} />
       </div>
       <Navbar active='p' />
     </div>

@@ -8,12 +8,12 @@ const TypeSummary = props => {
   const buttons = props.content.map(item => {
     return (
       <Button
-        key={item}
+        key={item.id}
         onClick={() => props.openDetailModal(item)}
         color={props.color}
         size='thin'
         width='90%'>
-        {item}
+        {item.category}
       </Button>
     )
   })
@@ -33,7 +33,7 @@ const TypeSummary = props => {
 }
 
 TypeSummary.propTypes = {
-  content: PropTypes.arrayOf(PropTypes.string),
+  content: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.string,
   openDetailModal: PropTypes.func,
   openAddModal: PropTypes.func

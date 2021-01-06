@@ -81,29 +81,23 @@ const ProfileSummary = props => {
       height='50%'>
       <div className={classes.ProfileSummary}>
         <h1 className='primary'>Profile</h1>
-        <div className={classes.Name}>
-          <div className={classes.FirstName}>
-            <Input
-              type='input'
-              color='primary'
-              config={{
-                type: 'text',
-                label: 'First Name'
-              }}
-              value={props.firstName} />
-          </div>
-          <div className={classes.LastName}>
-            <Input
-              type='input'
-              color='primary'
-              config={{
-                type: 'text',
-                label: 'Last Name'
-              }}
-              value={props.lastName} />
-          </div>
-        </div>
-        <div className={classes.Email}>
+        <div className={classes.Inputs}>
+          <Input
+            type='input'
+            color='primary'
+            config={{
+              type: 'text',
+              label: 'First Name'
+            }}
+            value={props.firstName} />
+          <Input
+            type='input'
+            color='primary'
+            config={{
+              type: 'text',
+              label: 'Last Name'
+            }}
+            value={props.lastName} />
           <Input
             type='input'
             color='primary'

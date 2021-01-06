@@ -25,7 +25,7 @@ const BreakdownSummary = props => {
         size='thin'
         width='90%'
         showProgress={props.isSavings}
-        progressPercent={item.progress / item.amount}
+        progressPercent={item.progress / item.amount * 100}
         secondary={`$${item.amount.toFixed(2)}`}
         dual>
         {item.name || item.category}

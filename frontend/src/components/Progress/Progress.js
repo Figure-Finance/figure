@@ -24,7 +24,7 @@ const Progress = props => {
   }
 
   const rightModalSubmitHandler = value => {
-    props.updateGoal(value, res => {
+    props.updateGoal(value, data => {
       rightModalCloseHandler()
     })
   }
