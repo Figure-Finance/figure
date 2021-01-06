@@ -5,19 +5,27 @@ const startOfToday = require('date-fns/startOfToday')
 const User = require('../models/user')
 const Finance = require('../models/finances')
 
-const dashboardFunc = require('../util/dashboard')
-
 exports.getUserFinances = (req, res, next) => {
   const startDate = req.params.startDate
   const endDate = req.params.endDate
-  let financeData
   User.findOne()
     .then(user => {
-      financeData = dashboardFunc(startDate, endDate, user, res)
-      return financeData
-    })
-    .catch(err => {
-      console.log(err)
+      Finance.find({ userId: user._id })
+        .then(finances => {
+          const weeklyFinances = finances.filter(i => {
+            return isWithinInterval(new Date(i.date), {
+              start: new Date(startDate),
+              end: new Date(endDate)
+            })
+          })
+          const financeData = weeklyFinances.map(entry => {
+            return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
+          })
+          return res.status(200).json(financeData)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     })
 }
 
@@ -39,15 +47,11 @@ exports.postUserFinances = (req, res, next) => {
         date: date,
         userId: user._id
       })
+      user.finances.push(finances)
+      user.save()
       finances.save()
-      // Needs category and amount as response only
       return res.status(201).json({
-        id: finances.id,
-        category: finances.category,
-        amount: finances.amount,
-        description: finances.description,
-        location: finances.location,
-        date: finances.date
+        id: finances._id
       })
     })
     .catch(err => console.log(err))
@@ -94,14 +98,7 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.location = newLocation
       financeEntry.date = newDate
       financeEntry.save(err => console.log(err))
-      return res.status(200).json({
-        id: financeEntry.id,
-        category: financeEntry.category,
-        amount: financeEntry.amount,
-        description: financeEntry.description,
-        location: financeEntry.location,
-        date: financeEntry.date
-      })
+      return res.status(200).json({ message: 'Finance entry successfully updated.' })
     })
     .catch(err => console.log(err))
 }

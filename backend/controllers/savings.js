@@ -85,7 +85,7 @@ exports.editTotalSavings = (req, res, next) => {
     .then(savingsItem => {
       savingsItem.totalSavingsGoal = newTotalSavingsGoal
       savingsItem.save(err => console.log(err))
-      return res.status(200).json(savingsItem.totalSavingsGoal)
+      return res.status(200).json({ message: "Savings goal successfully updated."})
     })
     .catch(err => console.log(err))
 }
