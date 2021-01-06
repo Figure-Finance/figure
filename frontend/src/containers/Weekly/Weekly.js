@@ -55,7 +55,9 @@ const Weekly = props => {
   const onFetchWeeklyItem = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`weekly/${id}`)
-      cb(res)
+      console.log(res.data)
+      const data = { id, ...res.data }
+      cb(data)
     } catch (err) {
       console.log(err)
     }
@@ -120,7 +122,7 @@ const Weekly = props => {
       const res = await api.delete(`weekly/${id}`)
       const updatedIncome = income.filter(item => item.id !== id)
       setIncome(updatedIncome)
-      cb(res)
+      cb(res.data)
     } catch (err) {
       console.log(err)
     }
