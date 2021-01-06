@@ -12,4 +12,6 @@ router.post('/signup', userController.postUser)
 
 router.patch('/category', userController.addUserCategory)
 
+router.delete('/category/:id', userController.deleteUserCategory)
+
 module.exports = router

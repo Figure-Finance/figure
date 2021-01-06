@@ -48,3 +48,19 @@ exports.addUserCategory = (req, res, next) => {
     })
     .catch(err => console.log(err))
 }
+
+exports.deleteUserCategory = (req, res, next) => {
+  const categoryId = req.params.id
+  // TODO: find user based on logged in user (JWT)
+  User.findOne()
+    .then(user => {
+      user.categories = user.categories.filter(category => {
+        return category._id.toString() !== categoryId.toString()
+      })
+      user.save(err => console.log(err))
+      return res.status(200).json({ message: 'Category successfully deleted.' })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
