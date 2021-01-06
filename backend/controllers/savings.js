@@ -37,7 +37,9 @@ exports.getSavings = (req, res, next) => {
         id: savingsDoc._id,
         totalSavingsGoal: savingsDoc.totalSavingsGoal,
         totalSavingsProgress: savingsDoc.totalSavingsProgress,
-        progressUpdates: savingsDoc.progressUpdates
+        progressUpdates: savingsDoc.progressUpdates.map(update => {
+          return { id: update._id, date: update.date, curTotal: update.curTotal }
+        })
       }
       next()
     })
