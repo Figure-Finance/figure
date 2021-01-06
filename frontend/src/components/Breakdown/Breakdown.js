@@ -23,8 +23,8 @@ const Breakdown = props => {
   const { getItem, addItem, updateItem, deleteItem, allocateSavings } = props
 
   const getItemHandler = useCallback(id => {
-    getItem(id, res => {
-      setCurrentItem(res.data)
+    getItem(id, data => {
+      setCurrentItem(data)
     })
   }, [getItem])
 
@@ -45,7 +45,7 @@ const Breakdown = props => {
   }, [updateItem])
 
   const deleteItemHandler = useCallback(id => {
-    deleteItem(id, res => {
+    deleteItem(id, data => {
       setShowDetailModal(false)
     })
   }, [deleteItem])
