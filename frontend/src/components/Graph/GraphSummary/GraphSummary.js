@@ -34,7 +34,8 @@ const GraphSummary = props => {
       <Graph
         active={props.active}
         isSavings={props.isSavings}
-        labels={props.labels} />
+        labels={props.labels}
+        data={props.data} />
       {nav}
     </div>
   )
@@ -49,7 +50,8 @@ GraphSummary.propTypes = {
   incrementNumber: PropTypes.func,
   onNavSavingsChange: PropTypes.func,
   active: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.string)
+  labels: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.object
 }
 
 export default GraphSummary
