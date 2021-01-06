@@ -44,8 +44,8 @@ const Monthly = props => {
   const onFetchMonthly = useCallback(async () => {
     const startDate = months[currentMonthIndex]
     const endDate = endOfMonth(startDate)
-    const res = await api.get(`monthly/${startDate}/${endDate}`)
     try {
+      const res = await api.get(`monthly/${startDate}/${endDate}`)
       updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
