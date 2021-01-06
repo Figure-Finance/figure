@@ -103,7 +103,7 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
       }
       savingsItem.totalSavingsProgress += req.body.progressAmount
       savingsItem.save(err => console.log(err))
-      return res.status(200).json(savingsItem.totalSavingsProgress)
+      return res.status(200).json({ message: "Total savings progress successfully updated." })
     })
     .catch(err => console.log(err))
 }
