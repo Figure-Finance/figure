@@ -7,6 +7,8 @@ import GraphSavings from './GraphSavings/GraphSavings'
 const Graph = props => {
   let content = (
     <GraphYearly
+      data={props.data}
+      labels={props.labels}
       timePeriods={props.timePeriods}
       buttonContent={props.currentTimePeriod}
       onButtonClick={props.selectTimePeriod}
@@ -39,7 +41,8 @@ Graph.propTypes = {
   previousTimePeriod: PropTypes.func,
   nextTimePeriod: PropTypes.func,
   selectTimePeriod: PropTypes.func,
-  labels: PropTypes.arrayOf(PropTypes.string)
+  labels: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.object
 }
 
 export default Graph
