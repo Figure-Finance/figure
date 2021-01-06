@@ -41,11 +41,9 @@ const Savings = props => {
 
   const onUpdateTotalGoal = useCallback(async (value, cb) => {
     try {
-      console.log(value)
-      const res = api.patch('savings/total', {
+      const res = await api.patch('savings/total', {
         totalSavingsGoal: value
       })
-      console.log(res.data)
       cb(res.data)
       setTotalGoal(value)
     } catch (err) {
