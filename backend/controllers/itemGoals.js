@@ -18,13 +18,7 @@ exports.postItemGoals = (req, res, next) => {
             userId: user._id
           })
           newGoal.save(err => console.log(err))
-          return res.status(201).json({
-            id: newGoal._id,
-            name: newGoal.name,
-            amount: newGoal.amount,
-            description: newGoal.description,
-            progress: newGoal.progress
-          })
+          return res.status(201).json({ id: newGoal._id })
         })
     })
     .catch(err => console.log(err))
@@ -36,7 +30,6 @@ exports.getItemGoalDetails = (req, res, next) => {
     .then(itemGoal => {
       console.log(`Item goal: ${itemGoal}`)
       res.status(200).json({
-        id: itemGoal.id,
         name: itemGoal.name,
         amount: itemGoal.amount,
         description: itemGoal.description,
@@ -48,10 +41,19 @@ exports.getItemGoalDetails = (req, res, next) => {
 
 exports.deleteItemGoal = (req, res, next) => {
   const itemGoalId = req.params.id
-  ItemGoal.findByIdAndDelete(itemGoalId, err => {
-    console.log(err)
-  })
-  return res.status(200).json({ msg: 'Goal deleted successfully!' })
+  ItemGoal.findOne({ _id: itemGoalId })
+    .then(itemGoal => {
+      Savings.findOne({ userId: itemGoal.userId })
+        .then(savings => {
+          savings.totalSavingsProgress = savings.totalSavingsProgress + itemGoal.progress
+          savings.save(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+      ItemGoal.findByIdAndDelete(itemGoalId, err => {
+        console.log(err)
+      })
+      return res.status(200).json({ message: 'Goal successfully deleted.' })
+    })
 }
 
 exports.editItemGoal = (req, res, next) => {
@@ -65,7 +67,7 @@ exports.editItemGoal = (req, res, next) => {
       itemGoal.amount = newAmount
       itemGoal.description = newDescription
       itemGoal.save()
-      return res.status(200).json(itemGoal)
+      return res.status(200).json({ message: 'Item goal successfully updated!' })
     })
     .catch(err => console.log(err))
 }
