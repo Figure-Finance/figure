@@ -10,7 +10,7 @@ const Graph = props => {
         datasets: [
           {
             label: 'Income',
-            data: [12, 19, 3, 5, 2, 3, 1, 22, 88, 99, 2, 6],
+            data: props.data.income,
             backgroundColor: [
               'rgba(5, 242, 155, 0.2)'
             ],
@@ -26,7 +26,7 @@ const Graph = props => {
           },
           {
             label: 'Expenses',
-            data: [12, 19, 3, 5, 2, 3, 1, 22, 88, 99, 2, 6].reverse(),
+            data: props.data.expenses,
             backgroundColor: [
               'rgba(255, 101, 101, 0.2)'
             ],
@@ -82,7 +82,8 @@ const Graph = props => {
 
 Graph.propTypes = {
   isSavings: PropTypes.bool,
-  labels: PropTypes.arrayOf(PropTypes.string)
+  labels: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.object
 }
 
 export default Graph
