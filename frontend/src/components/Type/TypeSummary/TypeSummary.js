@@ -9,7 +9,7 @@ const TypeSummary = props => {
     return (
       <Button
         key={item.id}
-        onClick={() => props.openDetailModal(item)}
+        onClick={() => props.openDetailModal(item.id)}
         color={props.color}
         size='thin'
         width='90%'>
