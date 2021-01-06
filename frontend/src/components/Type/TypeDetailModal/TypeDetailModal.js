@@ -6,7 +6,9 @@ import Button from '../../UI/Button/Button'
 const TypeDetailModal = props => {
   return (
     <div className={classes.TypeDetailModal}>
-      <h2>{props.type}</h2>
+      <h1 className={props.color}>
+        {props.type.category}
+      </h1>
       <div className={classes.Buttons}>
         <Button
           size='medium'
@@ -28,7 +30,7 @@ const TypeDetailModal = props => {
 }
 
 TypeDetailModal.propTypes = {
-  type: PropTypes.string,
+  type: PropTypes.object,
   color: PropTypes.string,
   onDelete: PropTypes.func,
   closeModal: PropTypes.func
