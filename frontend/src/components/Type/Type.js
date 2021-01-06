@@ -20,7 +20,7 @@ const Type = props => {
 
   const openDetailModalHandler = useCallback(id => {
     const selectedItem = props.content.filter(item => item.id === id)
-    setCurrentItem(selectedItem[0])
+    setCurrentItem(selectedItem)
     setShowDetailModal(true)
   }, [props.content])
 
@@ -28,19 +28,19 @@ const Type = props => {
     setShowDetailModal(false)
   }, [])
 
-  const { addGoal, deleteGoal } = props
+  const { addType, deleteType } = props
 
-  const addGoalHandler = useCallback(goal => {
-    addGoal(goal, res => {
+  const addTypeHandler = useCallback(goal => {
+    addType(goal, data => {
       setShowAddModal(false)
     })
-  }, [addGoal])
+  }, [addType])
 
-  const deleteGoalHandler = useCallback(id => {
-    deleteGoal(id, res => {
+  const deleteTypeHandler = useCallback(id => {
+    deleteType(id, data => {
       setShowDetailModal(false)
     })
-  }, [deleteGoal])
+  }, [deleteType])
 
   let content = (
     <TypeSummary
@@ -55,13 +55,13 @@ const Type = props => {
       <TypeAddModal
         color={props.color}
         closeModal={closeAddModalHandler}
-        onSubmit={addGoalHandler} />
+        onSubmit={addTypeHandler} />
     )
   } else if (showDetailModal) {
     content = (
       <TypeDetailModal
         color={props.color}
-        onDelete={() => deleteGoalHandler(currentItem.id)}
+        onDelete={() => deleteTypeHandler(currentItem.id)}
         closeModal={closeDetailModalHandler} />
     )
   }
@@ -76,10 +76,10 @@ const Type = props => {
 }
 
 Type.propTypes = {
-  content: PropTypes.arrayOf(PropTypes.string),
+  content: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.string,
-  addGoal: PropTypes.func,
-  deleteGoal: PropTypes.func
+  addType: PropTypes.func,
+  deleteType: PropTypes.func
 }
 
 export default Type
