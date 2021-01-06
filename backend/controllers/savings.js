@@ -67,11 +67,7 @@ exports.postTotalSavings = (req, res, next) => {
           })
           totalSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
           totalSavings.save(err => console.log(err))
-          return res.status(201).json({
-            id: totalSavings._id,
-            totalSavingsGoal: totalSavings.totalSavingsGoal,
-            totalSavingsProgress: totalSavings.totalSavingsProgress
-          })
+          return res.status(201).json({ id: totalSavings._id })
         })
         .catch(err => console.log(err))
     })
