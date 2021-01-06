@@ -40,38 +40,61 @@ const Profile = props => {
     }
   }, [])
 
-  const onAddIncomeType = useCallback(async (goal, cb) => {
+  const onAddIncomeType = useCallback(async (type, cb) => {
     try {
+      const isIncome = true
       const res = await api.patch('user/category', {
-        category: goal,
-        isIncome: true
+        category: type,
+        isIncome
       })
+      const id = res.data.id
+      const newIncome = { id, category: type, isIncome }
+      const updatedIncome = [...income, newIncome]
+      setIncome(updatedIncome)
       cb(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [income])
 
-  const onAddExpenseType = useCallback(async (goal, cb) => {
+  const onAddExpenseType = useCallback(async (type, cb) => {
     try {
+      const isIncome = false
       const res = await api.patch('user/category', {
-        category: goal,
-        isIncome: false
+        category: type,
+        isIncome
       })
+      const id = res.data.id
+      const newExpense = { id, category: type, isIncome }
+      const updatedExpenses = [...expenses, newExpense]
+      setExpenses(updatedExpenses)
       cb(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [expenses])
 
-  const onDeleteType = useCallback(async (id, cb) => {
+  const onDeleteIncomeType = useCallback(async (id, cb) => {
     try {
       const res = await api.delete(`user/category/${id}`)
+      const updatedIncome = income.filter(i => i.id !== id)
+      setIncome(updatedIncome)
       cb(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [income])
+
+  const onDeleteExpenseType = useCallback(async (id, cb) => {
+    try {
+      const res = await api.delete(`user/category/${id}`)
+      const updatedExpenses = expenses.filter(e => e.id !== id)
+      setExpenses(updatedExpenses)
+      cb(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [expenses])
 
   useEffect(onFetchProfile, [onFetchProfile])
 
@@ -91,12 +114,12 @@ const Profile = props => {
           content={income}
           color='primary'
           addType={onAddIncomeType}
-          deleteType={onDeleteType} />
+          deleteType={onDeleteIncomeType} />
         <Type
           content={expenses}
           color='danger'
           addType={onAddExpenseType}
-          deleteType={onDeleteType} />
+          deleteType={onDeleteExpenseType} />
       </div>
       <Navbar active='p' />
     </div>
