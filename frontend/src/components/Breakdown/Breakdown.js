@@ -62,8 +62,8 @@ const Breakdown = props => {
   }, [])
 
   const allocateHandler = useCallback((id, amount) => {
-    allocateSavings(id, amount, res => {
-      console.log(res.data)
+    allocateSavings(id, amount, data => {
+      setShowDetailModal(false)
     })
   }, [allocateSavings])
 
