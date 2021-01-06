@@ -84,7 +84,7 @@ const Graph = props => {
 
 Graph.propTypes = {
   isSavings: PropTypes.bool,
-  labels: PropTypes.arrayOf(PropTypes.string),
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
   data: PropTypes.object
 }
 
