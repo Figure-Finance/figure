@@ -54,6 +54,7 @@ const Savings = props => {
   const onGetGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`savings/goal/${id}`)
+      console.log(res.data)
       const data = { id, ...res.data }
       data.amount = +data.amount
       cb(data)
@@ -77,17 +78,21 @@ const Savings = props => {
 
   const onAllocateSavings = useCallback(async (id, allocateAmount, cb) => {
     try {
+      allocateAmount = +allocateAmount
       await api.patch('savings/goal/allocate', {
         id,
-        allocateAmount
+        allocateAmount: allocateAmount
       })
       const data = { id, allocateAmount }
-      console.log(data)
+      const updatedGoalIndex = goals.findIndex(goal => goal.id === id)
+      const updatedGoals = [...goals]
+      updatedGoals[updatedGoalIndex].progress += allocateAmount
+      setGoals(updatedGoals)
       cb(data)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goals])
 
   const onUpdateGoal = useCallback(async (id, body, cb) => {
     try {
@@ -102,6 +107,7 @@ const Savings = props => {
     try {
       const res = await api.delete(`savings/goal/${id}`)
       const updatedGoals = goals.filter(goal => goal.id !== id)
+      console.log(res.data)
       setGoals(updatedGoals)
       cb(res.data)
     } catch (err) {
