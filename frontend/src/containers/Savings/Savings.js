@@ -32,20 +32,22 @@ const Savings = props => {
       const res = await api.patch('savings/progress', {
         progressAmount: value
       })
-      cb(res)
-      setGoalProgress(res.data)
+      cb(res.data)
+      setGoalProgress(goalProgress + value)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [goalProgress])
 
   const onUpdateTotalGoal = useCallback(async (value, cb) => {
     try {
+      console.log(value)
       const res = api.patch('savings/total', {
         totalSavingsGoal: value
       })
-      cb(res)
-      setTotalGoal(res.data)
+      console.log(res.data)
+      cb(res.data)
+      setTotalGoal(value)
     } catch (err) {
       console.log(err)
     }
@@ -63,7 +65,6 @@ const Savings = props => {
   const onAddGoal = useCallback(async (goal, cb) => {
     try {
       const res = await api.post('savings/goal', goal)
-      console.log(res.data)
       setGoals([...goals, res.data])
       cb(res)
     } catch (err) {
@@ -71,11 +72,11 @@ const Savings = props => {
     }
   }, [goals])
 
-  const onAllocateSavings = useCallback(async (id, amount, cb) => {
+  const onAllocateSavings = useCallback(async (id, allocateAmount, cb) => {
     try {
       const res = await api.patch('savings/goal/allocate', {
         id,
-        amount
+        allocateAmount
       })
       console.log(res.data)
       cb(res)
@@ -115,7 +116,7 @@ const Savings = props => {
 
   useEffect(() => {
     onFetchSavings()
-    onFetchGraphData('month')
+    onFetchGraphData('year')
   }, [onFetchSavings, onFetchGraphData])
 
   const graphTimePeriodChangeHandler = event => {
