@@ -26,30 +26,52 @@ const Yearly = props => {
     [years]
   )
 
+  const months = useMemo(() => [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ], [])
+
   const [income, setIncome] = useState([])
   const [expenses, setExpenses] = useState([])
+  const [incomeByMonth, setIncomeByMonth] = useState([])
+  const [expensesByMonth, setExpensesByMonth] = useState([])
   const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
 
   const updateIncomeExpenses = updatedItems => {
     const updatedIncome = []
     const updatedExpenses = []
+    const totalIncomeByMonth = Array(12).fill(0)
+    const totalExpensesByMonth = Array(12).fill(0)
     for (const item of updatedItems) {
       if (item.isIncome) {
         updatedIncome.push(item)
+        totalIncomeByMonth[item.month - 1] += item.amount
       } else {
         updatedExpenses.push(item)
+        totalExpensesByMonth[item.month - 1] += item.amount
       }
     }
     setIncome(updatedIncome)
     setExpenses(updatedExpenses)
+    setIncomeByMonth(totalIncomeByMonth)
+    setExpensesByMonth(totalExpensesByMonth)
   }
 
   const onFetchYearly = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
     try {
-      const res = await api.get(`monthly/${startDate}/${endDate}`)
-      console.log(res.data)
+      const res = await api.get(`yearly/${startDate}/${endDate}`)
       updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
@@ -79,7 +101,11 @@ const Yearly = props => {
     <div className={classes.Yearly}>
       <div className={classes.Main}>
         <Graph
-          data={expenses}
+          data={{
+            income: incomeByMonth,
+            expenses: expensesByMonth
+          }}
+          labels={months}
           timePeriods={yearStringMap}
           previousTimePeriod={previousYear}
           nextTimePeriod={nextYear}
