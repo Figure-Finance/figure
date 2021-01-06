@@ -54,7 +54,6 @@ const Savings = props => {
   const onGetGoal = useCallback(async (id, cb) => {
     try {
       const res = await api.get(`savings/goal/${id}`)
-      console.log(res.data)
       const data = { id, ...res.data }
       data.amount = +data.amount
       cb(data)
