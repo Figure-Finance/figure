@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   format,
   startOfToday,
@@ -13,37 +13,50 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Yearly = props => {
-  const today = startOfToday()
-  const tenYearsAgo = subYears(today, 10)
-  const years = eachYearOfInterval({ start: tenYearsAgo, end: today })
-  const yearStringMap = years.map(day => format(day, 'yyy').toString())
+  const today = useMemo(() => startOfToday(), [])
+  const tenYearsAgo = useMemo(
+    () => subYears(today, 10), [today]
+  )
+  const years = useMemo(
+    () => eachYearOfInterval({ start: tenYearsAgo, end: today }),
+    [today, tenYearsAgo]
+  )
+  const yearStringMap = useMemo(
+    () => years.map(day => format(day, 'yyy').toString()),
+    [years]
+  )
 
-  const [yearlyItems, setYearlyItems] = useState([])
+  const [income, setIncome] = useState([])
+  const [expenses, setExpenses] = useState([])
   const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
+
+  const updateIncomeExpenses = updatedItems => {
+    const updatedIncome = []
+    const updatedExpenses = []
+    for (const item of updatedItems) {
+      if (item.isIncome) {
+        updatedIncome.push(item)
+      } else {
+        updatedExpenses.push(item)
+      }
+    }
+    setIncome(updatedIncome)
+    setExpenses(updatedExpenses)
+  }
 
   const onFetchYearly = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
     try {
       const res = await api.get(`monthly/${startDate}/${endDate}`)
-      setYearlyItems(res.data)
+      console.log(res.data)
+      updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [currentYearIndex])
+  }, [currentYearIndex, years])
 
-  useEffect(onFetchYearly, [onFetchYearly])
-
-  const income = []
-  const expenses = []
-
-  for (const item of yearlyItems) {
-    if (item.isIncome) {
-      income.push(item)
-    } else {
-      expenses.push(item)
-    }
-  }
+  useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
 
   const changeYear = event => {
     const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
