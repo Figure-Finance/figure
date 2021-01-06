@@ -29,7 +29,7 @@ const Breakdown = props => {
   }, [getItem])
 
   const addItemHandler = useCallback(item => {
-    addItem(item, res => {
+    addItem(item, data => {
       setShowAddModal(false)
     })
   }, [addItem])
@@ -39,7 +39,7 @@ const Breakdown = props => {
       id,
       ...updatedItem
     }
-    updateItem(body, res => {
+    updateItem(body, data => {
       setShowDetailModal(false)
     })
   }, [updateItem])
