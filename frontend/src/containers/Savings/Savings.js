@@ -66,7 +66,7 @@ const Savings = props => {
     try {
       const res = await api.post('savings/goal', goal)
       const id = res.data.id
-      const data = { id, ...goal }
+      const data = { id, progress: 0, ...goal }
       data.amount = +data.amount
       setGoals([...goals, data])
       cb(data)
