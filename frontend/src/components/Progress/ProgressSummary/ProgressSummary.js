@@ -17,26 +17,47 @@ const ProgressSummary = props => {
     rightPercent = 0
   }
 
-  return (
-    <div className={classes.ProgressSummary}>
+  let left = (
+    <h2 className={props.leftColor}>
+      ${props.leftAmount.toFixed(2)}
+    </h2>
+  )
+
+  let right = (
+    <h2 className={props.rightColor}>
+      ${props.rightAmount.toFixed(2)}
+    </h2>
+  )
+
+  if (props.showButtons) {
+    left = (
       <Button
         onClick={props.leftButtonClickHandler}
         color={props.leftColor}
         size='medium'>
         ${props.leftAmount.toFixed(2)}
       </Button>
-      <ProgressBar
-        leftColor={props.leftColor}
-        rightColor={props.rightColor}
-        leftPercent={leftPercent}
-        rightPercent={rightPercent}
-        single={props.single} />
+    )
+    right = (
       <Button
         onClick={props.rightButtonClickHandler}
         color={props.rightColor ? props.rightColor : props.leftColor}
         size='medium'>
         ${props.rightAmount.toFixed(2)}
       </Button>
+    )
+  }
+
+  return (
+    <div className={classes.ProgressSummary}>
+      {left}
+      <ProgressBar
+        leftColor={props.leftColor}
+        rightColor={props.rightColor}
+        leftPercent={leftPercent}
+        rightPercent={rightPercent}
+        single={props.single} />
+      {right}
     </div>
   )
 }
@@ -48,7 +69,8 @@ ProgressSummary.propTypes = {
   rightAmount: PropTypes.number,
   single: PropTypes.bool,
   leftButtonClickHandler: PropTypes.func,
-  rightButtonClickHandler: PropTypes.func
+  rightButtonClickHandler: PropTypes.func,
+  showButtons: PropTypes.bool
 }
 
 export default ProgressSummary
