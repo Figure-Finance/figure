@@ -7,6 +7,7 @@
   width: 100%;
 }
 
-.ProgressSummary button {
+.ProgressSummary button,
+.ProgressSummary h2 {
   margin: 0 15px;
 }
