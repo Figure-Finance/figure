@@ -16,22 +16,43 @@ const BreakdownSummary = props => {
     )
   }
 
-  let buttons = props.content.map(item => {
-    return (
-      <Button
-        key={item.id}
-        onClick={() => props.openDetailModal(item.id)}
-        color={props.color}
-        size='thin'
-        width='90%'
-        showProgress={props.isSavings}
-        progressPercent={item.progress / item.amount * 100}
-        secondary={`$${item.amount.toFixed(2)}`}
-        dual>
-        {item.name || item.category}
-      </Button>
-    )
-  })
+  let buttons
+
+  if (props.showButtons) {
+    buttons = props.content.map(item => {
+      return (
+        <Button
+          key={item.id}
+          onClick={() => props.openDetailModal(item.id)}
+          color={props.color}
+          size='thin'
+          width='90%'
+          showProgress={props.isSavings}
+          progressPercent={item.progress / item.amount * 100}
+          secondary={`$${item.amount.toFixed(2)}`}
+          dual>
+          {item.name || item.category}
+        </Button>
+      )
+    })
+  } else {
+    buttons = props.content.map(item => {
+      let colorClass = classes.Primary
+      if (props.color === 'danger') {
+        colorClass = classes.Danger
+      }
+      return (
+        <div key={item.id} className={`${classes.Item} ${colorClass}`}>
+          <h2 className={props.color}>
+            {item.category}
+          </h2>
+          <h2 className={props.color}>
+            ${item.amount.toFixed(2)}
+          </h2>
+        </div>
+      )
+    })
+  }
 
   if (props.content.length === 0) {
     buttons = (
@@ -63,7 +84,7 @@ BreakdownSummary.propTypes = {
   openAddModal: PropTypes.func,
   openDetailModal: PropTypes.func,
   isSavings: PropTypes.bool,
-  buttonProgressPercent: PropTypes.number
+  showButtons: PropTypes.bool
 }
 
 export default BreakdownSummary
