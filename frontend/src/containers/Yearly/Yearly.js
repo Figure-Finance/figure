@@ -115,12 +115,12 @@ const Yearly = props => {
           <Breakdown
             content={income}
             color='primary'
-            height='49%'
+            height='40%'
             width='100%' />
           <Breakdown
             content={expenses}
             color='danger'
-            height='49%'
+            height='40%'
             width='100%' />
         </div>
       </div>
