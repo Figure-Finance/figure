@@ -44,7 +44,7 @@ exports.addUserCategory = (req, res, next) => {
     .then(user => {
       user.categories.push({ category: category, isIncome: isIncome })
       user.save(err => console.log(err))
-      res.status(201).json({ msg: 'User categories created!' })
+      res.status(201).json({ id: user.categories[user.categories.length - 1]._id })
     })
     .catch(err => console.log(err))
 }
