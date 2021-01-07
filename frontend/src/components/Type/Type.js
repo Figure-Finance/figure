@@ -20,7 +20,7 @@ const Type = props => {
 
   const openDetailModalHandler = useCallback(id => {
     const selectedItem = props.content.filter(item => item.id === id)
-    setCurrentItem(selectedItem)
+    setCurrentItem(selectedItem[0])
     setShowDetailModal(true)
   }, [props.content])
 
@@ -30,8 +30,8 @@ const Type = props => {
 
   const { addType, deleteType } = props
 
-  const addTypeHandler = useCallback(goal => {
-    addType(goal, data => {
+  const addTypeHandler = useCallback(type => {
+    addType(type, data => {
       setShowAddModal(false)
     })
   }, [addType])
@@ -46,7 +46,7 @@ const Type = props => {
     <TypeSummary
       color={props.color}
       content={props.content}
-      openDetailModal={() => openDetailModalHandler(currentItem.id)}
+      openDetailModal={id => openDetailModalHandler(id)}
       openAddModal={openAddModalHandler} />
   )
 
@@ -60,6 +60,7 @@ const Type = props => {
   } else if (showDetailModal) {
     content = (
       <TypeDetailModal
+        type={currentItem}
         color={props.color}
         onDelete={() => deleteTypeHandler(currentItem.id)}
         closeModal={closeDetailModalHandler} />

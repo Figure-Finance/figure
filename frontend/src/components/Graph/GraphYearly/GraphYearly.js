@@ -18,6 +18,8 @@ const GraphYearly = props => {
   let content = (
     <GraphSummary
       showYearly
+      data={props.data}
+      labels={props.labels}
       openModal={openModalHandler}
       buttonContent={props.buttonContent}
       decrementNumber={props.leftArrowClick}
@@ -40,7 +42,9 @@ GraphYearly.propTypes = {
   buttonContent: PropTypes.string,
   onButtonClick: PropTypes.func,
   leftArrowClick: PropTypes.func,
-  rightArrowClick: PropTypes.func
+  rightArrowClick: PropTypes.func,
+  labels: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.object
 }
 
 export default GraphYearly

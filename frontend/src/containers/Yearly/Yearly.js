@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   format,
   startOfToday,
@@ -13,37 +13,72 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
 const Yearly = props => {
-  const today = startOfToday()
-  const tenYearsAgo = subYears(today, 10)
-  const years = eachYearOfInterval({ start: tenYearsAgo, end: today })
-  const yearStringMap = years.map(day => format(day, 'yyy').toString())
+  const today = useMemo(() => startOfToday(), [])
+  const tenYearsAgo = useMemo(
+    () => subYears(today, 10), [today]
+  )
+  const years = useMemo(
+    () => eachYearOfInterval({ start: tenYearsAgo, end: today }),
+    [today, tenYearsAgo]
+  )
+  const yearStringMap = useMemo(
+    () => years.map(day => format(day, 'yyy').toString()),
+    [years]
+  )
 
-  const [yearlyItems, setYearlyItems] = useState([])
+  const months = useMemo(() => [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ], [])
+
+  const [income, setIncome] = useState([])
+  const [expenses, setExpenses] = useState([])
+  const [incomeByMonth, setIncomeByMonth] = useState([])
+  const [expensesByMonth, setExpensesByMonth] = useState([])
   const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
+
+  const updateIncomeExpenses = updatedItems => {
+    const updatedIncome = []
+    const updatedExpenses = []
+    const totalIncomeByMonth = Array(12).fill(0)
+    const totalExpensesByMonth = Array(12).fill(0)
+    for (const item of updatedItems) {
+      if (item.isIncome) {
+        updatedIncome.push(item)
+        totalIncomeByMonth[item.month - 1] += item.amount
+      } else {
+        updatedExpenses.push(item)
+        totalExpensesByMonth[item.month - 1] += item.amount
+      }
+    }
+    setIncome(updatedIncome)
+    setExpenses(updatedExpenses)
+    setIncomeByMonth(totalIncomeByMonth)
+    setExpensesByMonth(totalExpensesByMonth)
+  }
 
   const onFetchYearly = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
     try {
-      const res = await api.get(`monthly/${startDate}/${endDate}`)
-      setYearlyItems(res.data)
+      const res = await api.get(`yearly/${startDate}/${endDate}`)
+      updateIncomeExpenses(res.data)
     } catch (err) {
       console.log(err)
     }
-  }, [currentYearIndex])
+  }, [currentYearIndex, years])
 
-  useEffect(onFetchYearly, [onFetchYearly])
-
-  const income = []
-  const expenses = []
-
-  for (const item of yearlyItems) {
-    if (item.isIncome) {
-      income.push(item)
-    } else {
-      expenses.push(item)
-    }
-  }
+  useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
 
   const changeYear = event => {
     const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
@@ -66,7 +101,11 @@ const Yearly = props => {
     <div className={classes.Yearly}>
       <div className={classes.Main}>
         <Graph
-          data={expenses}
+          data={{
+            income: incomeByMonth,
+            expenses: expensesByMonth
+          }}
+          labels={months}
           timePeriods={yearStringMap}
           previousTimePeriod={previousYear}
           nextTimePeriod={nextYear}

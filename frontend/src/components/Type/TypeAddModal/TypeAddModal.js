@@ -23,10 +23,7 @@ const TypeAddModal = props => {
   })
 
   const addItemHandler = () => {
-    props.onSubmit({
-      name: formElements.type.name
-    }, res => {
-      console.log(res.data)
+    props.onSubmit(formElements.name.value, res => {
       props.closeModal()
     })
   }

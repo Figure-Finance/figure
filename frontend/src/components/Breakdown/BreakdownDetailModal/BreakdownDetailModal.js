@@ -121,15 +121,7 @@ const BreakdownDetailModal = props => {
 
   useEffect(updateFormElementsArray, [updateFormElementsArray])
 
-  // for (const key in formElements) {
-  //   formElementsArray.push({
-  //     id: key,
-  //     config: formElements[key]
-  //   })
-  // }
-
   console.log(props.location)
-
   console.log(formElementsArray)
 
   return (
