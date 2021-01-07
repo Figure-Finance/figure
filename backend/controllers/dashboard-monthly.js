@@ -1,14 +1,31 @@
 const User = require('../models/user')
-const dashboardFunc = require('../util/dashboard')
+const Finance = require('../models/finances')
+// const dashboardFunc = require('../util/dashboard')
+const isWithinInterval = require('date-fns/isWithinInterval')
 
 exports.getUserMonthlyFinances = (req, res, next) => {
-  const startDate = req.params.startDate
-  const endDate = req.params.endDate
+  const startDate = new Date(req.params.startDate)
+  const endDate = new Date(req.params.endDate)
   let financeData
+  let finances
   User.findOne()
     .then(user => {
-      financeData = dashboardFunc(startDate, endDate, user, res)
-      return financeData
+      financeData = Finance.aggregate([
+        { $match: { userId: user._id } },
+        { $group: { _id: '$category', amount: { $sum: '$amount' }, isIncome: { $first: '$isIncome' } } }
+      ])
+        .exec((err, result) => {
+          if (err) {
+            console.log(err)
+          }
+          if (result) {
+            console.log(result)
+            finances = result.map(r => {
+              return { id: r._id, amount: r.amount, isIncome: r.isIncome }
+            })
+            return res.status(200).json(finances)
+          }
+        })
     })
     .catch(err => {
       console.log(err)

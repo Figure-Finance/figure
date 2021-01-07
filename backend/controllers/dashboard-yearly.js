@@ -28,7 +28,6 @@ exports.getUserYearlyFinances = (req, res, next) => {
             cursor = getMonth(new Date(i.date))
             return {
               month: cursor + 1,
-              id: i._id,
               category: i.category,
               amount: i.amount,
               isIncome: i.isIncome
