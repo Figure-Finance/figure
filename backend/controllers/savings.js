@@ -1,3 +1,5 @@
+const { validationResult } = require('express-validator')
+
 const User = require('../models/user')
 const Savings = require('../models/savings')
 const ItemGoal = require('../models/itemGoal')
@@ -55,6 +57,13 @@ exports.getSavings = (req, res, next) => {
 }
 
 exports.postTotalSavings = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const totalSavingsGoal = req.body.totalSavingsGoal
   // TODO: bankProgress will auto update and is just received through here for testing
   const totalSavingsProgress = req.body.totalSavingsProgress
@@ -77,6 +86,13 @@ exports.postTotalSavings = (req, res, next) => {
 }
 
 exports.editTotalSavings = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const newTotalSavingsGoal = req.body.totalSavingsGoal
   // TODO: find by user
   Savings.findOne()
@@ -89,6 +105,13 @@ exports.editTotalSavings = (req, res, next) => {
 }
 
 exports.updateTotalSavingsProgress = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   // TODO: get this by user
   Savings.findOne()
     .then(savingsItem => {
@@ -109,6 +132,9 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 }
 
 exports.getByTimeFrame = (req, res, next) => {
+  // TODO: Work on getting by past year, month, etc. rather than calendar
+  // libraries to help with the heavy lifting?
+  // mongo aggregate to clean some of this up?
   const timeFrame = req.params.timeFrame
   let interval
   let savings

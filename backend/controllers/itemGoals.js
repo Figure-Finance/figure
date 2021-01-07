@@ -1,8 +1,17 @@
+const { validationResult } = require('express-validator')
+
 const ItemGoal = require('../models/itemGoal')
 const Savings = require('../models/savings')
 const User = require('../models/user')
 
 exports.postItemGoals = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const name = req.body.name
   const amount = req.body.amount
   const description = req.body.description
@@ -57,7 +66,14 @@ exports.deleteItemGoal = (req, res, next) => {
 }
 
 exports.editItemGoal = (req, res, next) => {
-  const itemGoalId = req.params.id
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
+  const itemGoalId = req.body.id
   const newName = req.body.name
   const newAmount = req.body.amount
   const newDescription = req.body.description
