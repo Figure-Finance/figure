@@ -188,7 +188,8 @@ const Weekly = props => {
           updateItem={onUpdateIncome}
           deleteItem={onDeleteIncome}
           color='primary'
-          canAdd />
+          canAdd
+          showButtons />
         <Chart
           data={expenses}
           timePeriods={weekStringMap}
@@ -204,7 +205,8 @@ const Weekly = props => {
           updateItem={onUpdateExpense}
           deleteItem={onDeleteExpense}
           color='danger'
-          canAdd />
+          canAdd
+          showButtons />
       </div>
       <Navbar active='w' />
     </div>
