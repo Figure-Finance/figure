@@ -26,7 +26,7 @@ const Graph = props => {
   }
 
   return (
-    <Container height='100%' width='66%'>
+    <Container height='90%' width='66%'>
       {content}
     </Container>
   )

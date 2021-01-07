@@ -1,6 +1,28 @@
 .BreakdownSummary {
   height: 100%;
+  overflow: scroll;
   text-align: center;
+}
+
+.Item {
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 7px 10px;
+  padding: 7px;
+}
+
+.Item h2 {
+  margin: 0;
+}
+
+.Primary {
+  border: 1px solid var(--primary);
+}
+
+.Danger {
+  border: 1px solid var(--danger);
 }
 
 .Buttons {

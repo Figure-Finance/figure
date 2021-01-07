@@ -37,7 +37,8 @@ const Progress = props => {
       rightAmount={props.rightAmount}
       leftColor={props.leftColor}
       rightColor={props.rightColor}
-      single={props.single} />
+      single={props.single}
+      showButtons={props.showButtons} />
   )
 
   if (showLeftModal) {
@@ -78,7 +79,8 @@ Progress.propTypes = {
   leftAmount: PropTypes.number,
   rightAmount: PropTypes.number,
   single: PropTypes.bool,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  showButtons: PropTypes.bool
 }
 
 export default Progress
