@@ -151,6 +151,7 @@ const Savings = props => {
         leftAmount={goalProgress}
         rightAmount={totalGoal}
         single
+        showButtons
         loading={loading} />
       <div className={classes.Main}>
         <Graph
@@ -170,7 +171,7 @@ const Savings = props => {
           loading={loading}
           canAdd
           isSavings
-          buttonProgressPercent={30} />
+          showButtons />
       </div>
       <Navbar active='s' />
     </div>
