@@ -8,4 +8,6 @@ const router = express.Router()
 
 router.get('/:startDate/:endDate', dashYearlyController.getUserYearlyFinances)
 
+router.get('/graph/:startDate/:endDate', dashYearlyController.getUserYearlyGraph)
+
 module.exports = router

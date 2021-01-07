@@ -6,12 +6,19 @@ const isWithinInterval = require('date-fns/isWithinInterval')
 exports.getUserMonthlyFinances = (req, res, next) => {
   const startDate = new Date(req.params.startDate)
   const endDate = new Date(req.params.endDate)
-  let financeData
   let finances
   User.findOne()
     .then(user => {
-      financeData = Finance.aggregate([
-        { $match: { userId: user._id } },
+      Finance.aggregate([
+        {
+          $match: {
+            userId: user._id,
+            date: {
+              $gte: startDate,
+              $lte: endDate
+            }
+          }
+        },
         { $group: { _id: '$category', amount: { $sum: '$amount' }, isIncome: { $first: '$isIncome' } } }
       ])
         .exec((err, result) => {
