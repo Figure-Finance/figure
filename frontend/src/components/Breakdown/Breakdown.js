@@ -41,12 +41,17 @@ const Breakdown = ({
     })
   }, [getItem])
 
+  // TODO: a similar situation to Weekly is happening here
+  // The item is not rendering with the correct state
+  // Look at how ProfileSummary of Profile is fetched
   const openDetailModalHandler = useCallback(id => {
     const selectedItem = content.filter(item => item.id === id)
+    console.log('selectedItem', selectedItem)
     setCurrentItem(selectedItem[0])
     getItemHandler(id)
+    console.log('currentItem', currentItem)
     setShowDetailModal(true)
-  }, [getItemHandler, content])
+  }, [getItemHandler, content, currentItem])
 
   const closeDetailModalHandler = useCallback(() => {
     setShowDetailModal(false)
