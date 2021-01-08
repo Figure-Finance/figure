@@ -3,11 +3,26 @@ import PropTypes from 'prop-types'
 import Container from '../UI/Container/Container'
 import BreakdownSummary from './BreakdownSummary/BreakdownSummary'
 import BreakdownAddModal from './BreakdownAddModal/BreakdownAddModal'
-import BreakdownSavingsAddModal from './BreakdownAddSavingsModal/BreakdownAddSavingsModal'
+import BreakdownAddSavingsModal from './BreakdownAddSavingsModal/BreakdownAddSavingsModal'
 import BreakdownDetailModal from './BreakdownDetailModal/BreakdownDetailModal'
 import BreakdownDetailSavingsModal from './BreakdownDetailSavingsModal/BreakdownDetailSavingsModal'
 
-const Breakdown = props => {
+const Breakdown = ({
+  color,
+  isIncome,
+  height,
+  width,
+  title,
+  canAdd,
+  content,
+  getItem,
+  addItem,
+  updateItem,
+  deleteItem,
+  isSavings,
+  allocateSavings,
+  showButtons
+}) => {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [currentItem, setCurrentItem] = useState(null)
@@ -20,115 +35,77 @@ const Breakdown = props => {
     setShowAddModal(false)
   }, [])
 
-  const { getItem, addItem, updateItem, deleteItem, allocateSavings } = props
-
   const getItemHandler = useCallback(id => {
     getItem(id, data => {
       setCurrentItem(data)
     })
   }, [getItem])
 
-  const addItemHandler = useCallback(item => {
-    addItem(item, data => {
-      setShowAddModal(false)
-    })
-  }, [addItem])
-
-  const updateItemHandler = useCallback((id, updatedItem) => {
-    const body = {
-      id,
-      ...updatedItem
-    }
-    updateItem(body, data => {
-      setShowDetailModal(false)
-    })
-  }, [updateItem])
-
-  const deleteItemHandler = useCallback(id => {
-    deleteItem(id, data => {
-      setShowDetailModal(false)
-    })
-  }, [deleteItem])
-
   const openDetailModalHandler = useCallback(id => {
-    const selectedItem = props.content.filter(item => item.id === id)
+    const selectedItem = content.filter(item => item.id === id)
     setCurrentItem(selectedItem[0])
     getItemHandler(id)
     setShowDetailModal(true)
-  }, [getItemHandler, props.content])
+  }, [getItemHandler, content])
 
   const closeDetailModalHandler = useCallback(() => {
     setShowDetailModal(false)
   }, [])
 
-  const allocateHandler = useCallback((id, amount) => {
-    allocateSavings(id, amount, data => {
-      setShowDetailModal(false)
-    })
-  }, [allocateSavings])
-
-  let content = (
+  let modal = (
     <BreakdownSummary
-      title={props.title}
-      color={props.color}
-      content={props.content}
+      title={title}
+      color={color}
+      content={content}
       openDetailModal={id => openDetailModalHandler(id)}
       openAddModal={openAddModalHandler}
-      canAdd={props.canAdd}
-      showButtons={props.showButtons}
-      isSavings={props.isSavings} />
+      canAdd={canAdd}
+      showButtons={showButtons}
+      isSavings={isSavings} />
   )
 
-  if (showAddModal && props.isSavings) {
-    content = (
-      <BreakdownSavingsAddModal
-        title={props.title}
-        color={props.color}
-        closeModal={closeAddModalHandler}
-        onSubmit={addItemHandler}
-        isIncome={props.isIncome} />
+  if (showAddModal && isSavings) {
+    modal = (
+      <BreakdownAddSavingsModal
+        title={title}
+        color={color}
+        onClose={closeAddModalHandler}
+        onAdd={addItem} />
     )
   } else if (showAddModal) {
-    content = (
+    modal = (
       <BreakdownAddModal
-        title={props.title}
-        color={props.color}
-        closeModal={closeAddModalHandler}
-        onSubmit={addItemHandler}
-        isIncome={props.isIncome} />
+        title={title}
+        color={color}
+        onClose={closeAddModalHandler}
+        onAdd={addItem} />
     )
-  } else if (showDetailModal && props.isSavings) {
-    content = (
+  } else if (showDetailModal && isSavings) {
+    modal = (
       <BreakdownDetailSavingsModal
-        color={props.color}
-        onCancel={closeDetailModalHandler}
-        onAllocate={amount => allocateHandler(currentItem.id, amount)}
-        onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
-        onDelete={() => deleteItemHandler(currentItem.id)}
-        name={currentItem.name}
-        amount={currentItem.amount.toString()}
-        description={currentItem.description} />
+        color={color}
+        onClose={closeDetailModalHandler}
+        onAllocate={allocateSavings}
+        onSubmit={updateItem}
+        onDelete={deleteItem}
+        item={currentItem} />
     )
   } else if (showDetailModal) {
-    content = (
+    modal = (
       <BreakdownDetailModal
-        color={props.color}
-        onCancel={closeDetailModalHandler}
-        onSubmit={updatedItem => updateItemHandler(currentItem.id, updatedItem)}
-        onDelete={() => deleteItemHandler(currentItem.id)}
-        type={currentItem.category}
-        amount={currentItem.amount.toString()}
-        description={currentItem.description}
-        location={currentItem.location}
-        date={currentItem.date} />
+        color={color}
+        onUpdate={updateItem}
+        onDelete={deleteItem}
+        onClose={closeDetailModalHandler}
+        item={currentItem} />
     )
   }
 
   return (
     <Container
-      height={props.height || '100%'}
-      width={props.width ? props.width : '33%'}>
-      {content}
+      height={height || '100%'}
+      width={width || '33%'}>
+      {modal}
     </Container>
   )
 }
