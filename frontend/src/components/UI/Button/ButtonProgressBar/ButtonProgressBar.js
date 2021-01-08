@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import classes from './ButtonProgressBar.module.css'
 import ButtonProgress from './ButtonProgress/ButtonProgress'
 
-const ButtonProgressBar = props => {
+const ButtonProgressBar = ({ color, percent }) => {
   return (
     <div className={classes.ButtonProgressBar}>
       <ButtonProgress
-        color={props.color}
-        percent={props.percent} />
+        color={color}
+        percent={percent} />
     </div>
   )
 }
