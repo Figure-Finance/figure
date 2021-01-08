@@ -28,7 +28,7 @@ exports.getUserMonthlyFinances = (req, res, next) => {
           if (result) {
             console.log(result)
             finances = result.map(r => {
-              return { id: r._id, amount: r.amount, isIncome: r.isIncome }
+              return { category: r._id, amount: r.amount, isIncome: r.isIncome }
             })
             return res.status(200).json(finances)
           }

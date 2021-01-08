@@ -1,6 +1,8 @@
 const isWithinInterval = require('date-fns/isWithinInterval')
 const startOfToday = require('date-fns/startOfToday')
-const isAfter = require('date-fns/isAfter')
+
+const User = require('../models/user')
+const Savings = require('../models/savings')
 
 // TODO: Improve error handling
 
@@ -20,38 +22,37 @@ const filterByTimeFrame = (timeFrame, updatesList, startOfTimeFrameFunc, endOfTi
   })
 }
 
-const filterSavingsData = (savings, period, indeces, lastDayFunc, returnList, periodList, iterator) => {
-  // Create a helper cursor variable
-  let cursor
-  // Create helper i variable that begins at the index of iterator (parameter passed in initially as zero)
-  const i = [...savings][iterator]
-  // Use our indeces (number of periods) as a base case to end the loop
-  while (iterator <= indeces) {
-    if (periodList[iterator]) {
-      // If item.date.toString (to be able to truly check equality) = the last day in the given period, we want that date's total
-      // So we append it to our returnList
-      if (i.date.toString() === lastDayFunc(periodList[iterator]).toString()) {
-        returnList.push({ period: period + (iterator + 1), amount: i.curTotal })
-        return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
-      // If it isn't exactly the last day of the week, month, etc. we need to find out what the latest date in that period is
-      } else if (i.date.toString() !== lastDayFunc(periodList[iterator]).toString() && !cursor) {
-        // Set the cursor variable to the item's date
-        cursor = i
-        if (isAfter(new Date(i.date), new Date(cursor))) {
-          // If this re-executes and the new item's date is after the current cursor, we make that new date the cursor
-          cursor = i
-          return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
-        } else {
-          // Eventually, when we have the latest date we can, we append this date and total to the returnList
-          returnList.push({ period: period + (iterator + 1), amount: cursor.curTotal })
-          return filterSavingsData(savings, period, indeces, lastDayFunc, returnList, periodList, iterator + 1)
-        }
-      }
-    }
-    // Increment the iterator so we don't end up in an infinite loop
-    iterator++
-  }
-  return returnList
+// timeFrame is what we get from query params: month, week, year, quarter, or all.
+// returnList is the empty list we create in our middleware and return to FE once filled
+// interval relates to timeFrame. (ex: for year, we want data by month, so interval would be month.)
+
+const filterSavingsData = async (timeFrame) => {
+  // Show values by day
+  // {period:Date, amount:Number}
+  // TODO: Find by current user
+  let results
+  User.findOne()
+    .then(user => {
+      Savings.aggregate([
+        {
+          $match: {
+            userId: user._id
+          }
+        },
+        { $unwind: '$progressUpdates' },
+        { $group: { _id: '$progressUpdates.date', amount: { $sum: '$progressUpdates.curTotal' } } }
+      ])
+        .exec((err, result) => {
+          if (err) {
+            console.log(err)
+          }
+          if (result) {
+            results = result
+            console.log(results)
+          }
+        })
+      return results
+    })
 }
 
 module.exports.filterSavingsData = filterSavingsData

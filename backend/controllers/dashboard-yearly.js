@@ -30,7 +30,6 @@ exports.getUserYearlyGraph = (req, res, next) => {
             console.log(err)
           }
           if (result) {
-            console.log(result)
             dates = result.map(r => {
               return { month: r._id, amount: r.amount, isIncome: r.isIncome }
             })
@@ -66,9 +65,8 @@ exports.getUserYearlyFinances = (req, res, next) => {
             console.log(err)
           }
           if (result) {
-            console.log(result)
             finances = result.map(r => {
-              return { id: r._id, amount: r.amount, isIncome: r.isIncome }
+              return { category: r._id, amount: r.amount, isIncome: r.isIncome }
             })
             return res.status(200).json(finances)
           }
