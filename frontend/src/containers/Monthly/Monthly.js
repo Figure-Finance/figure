@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
+import { useQuery } from 'react-query'
 import {
   format,
   startOfToday,
@@ -12,6 +13,8 @@ import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
+import Loader from '../../components/Loader/Loader'
+import Error from '../../components/Error/Error'
 
 const Monthly = props => {
   const today = useMemo(() => startOfToday(), [])
@@ -23,47 +26,32 @@ const Monthly = props => {
     () => months.map(day => format(day, 'MMM. yyy').toString()), [months]
   )
 
-  const [income, setIncome] = useState([])
-  const [expenses, setExpenses] = useState([])
   const [currentMonthIndex, setCurrentMonthIndex] = useState(monthStringMap.length - 1)
 
+  let totalIncome = 0
+  let totalExpenses = 0
+
   const updateIncomeExpenses = updatedItems => {
-    const updatedIncome = []
-    const updatedExpenses = []
+    const income = []
+    const expenses = []
     for (const item of updatedItems) {
       if (item.isIncome) {
-        updatedIncome.push(item)
+        income.push(item)
+        totalIncome += item.amount
       } else {
-        updatedExpenses.push(item)
+        expenses.push(item)
+        totalExpenses += item.amount
       }
     }
-    setIncome(updatedIncome)
-    setExpenses(updatedExpenses)
+    return { income, expenses }
   }
 
   const onFetchMonthly = useCallback(async () => {
     const startDate = months[currentMonthIndex]
     const endDate = endOfMonth(startDate)
-    try {
-      const res = await api.get(`monthly/${startDate}/${endDate}`)
-      updateIncomeExpenses(res.data)
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await api.get(`monthly/${startDate}/${endDate}`)
+    return res.data
   }, [currentMonthIndex, months])
-
-  useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
-
-  let totalIncome = 0
-  let totalExpenses = 0
-
-  for (const entry of income) {
-    totalIncome += entry.amount
-  }
-
-  for (const entry of expenses) {
-    totalExpenses += entry.amount
-  }
 
   const changeMonth = event => {
     const index = monthStringMap.findIndex(el => el === event.target.innerHTML)
@@ -82,29 +70,62 @@ const Monthly = props => {
     }
   }
 
-  return (
-    <div className={classes.Monthly}>
+  const { data, isLoading, isError } = useQuery('monthly', onFetchMonthly)
+
+  let progress
+  let incomeBreakdown
+  let chart
+  let expensesBreakdown
+
+  if (isLoading) {
+    progress = <Loader />
+    incomeBreakdown = <Loader />
+    chart = <Loader />
+    expensesBreakdown = <Loader />
+  } else if (isError) {
+    progress = <Error />
+    incomeBreakdown = <Error />
+    chart = <Error />
+    expensesBreakdown = <Error />
+  } else {
+    const { income, expenses } = updateIncomeExpenses(data)
+    progress = (
       <Progress
         leftColor='primary'
         leftAmount={totalIncome}
         rightColor='danger'
         rightAmount={totalExpenses} />
+    )
+    incomeBreakdown = (
+      <Breakdown
+        title='Income'
+        content={income}
+        color='primary' />
+    )
+    chart = (
+      <Chart
+        data={expenses}
+        timePeriods={monthStringMap}
+        previousTimePeriod={previousMonth}
+        nextTimePeriod={nextMonth}
+        selectTimePeriod={changeMonth}
+        currentTimePeriod={monthStringMap[currentMonthIndex]} />
+    )
+    expensesBreakdown = (
+      <Breakdown
+        title='Expenses'
+        content={expenses}
+        color='danger' />
+    )
+  }
+
+  return (
+    <div className={classes.Monthly}>
+      {progress}
       <div className={classes.Main}>
-        <Breakdown
-          title='Income'
-          content={income}
-          color='primary' />
-        <Chart
-          data={expenses}
-          timePeriods={monthStringMap}
-          previousTimePeriod={previousMonth}
-          nextTimePeriod={nextMonth}
-          selectTimePeriod={changeMonth}
-          currentTimePeriod={monthStringMap[currentMonthIndex]} />
-        <Breakdown
-          title='Expenses'
-          content={expenses}
-          color='danger' />
+        {incomeBreakdown}
+        {chart}
+        {expensesBreakdown}
       </div>
       <Navbar active='m' />
     </div>
