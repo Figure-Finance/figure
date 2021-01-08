@@ -28,20 +28,6 @@ const Type = props => {
     setShowDetailModal(false)
   }, [])
 
-  const { addType, deleteType } = props
-
-  const addTypeHandler = useCallback(type => {
-    addType(type, data => {
-      setShowAddModal(false)
-    })
-  }, [addType])
-
-  const deleteTypeHandler = useCallback(id => {
-    deleteType(id, data => {
-      setShowDetailModal(false)
-    })
-  }, [deleteType])
-
   let content = (
     <TypeSummary
       color={props.color}
@@ -54,22 +40,22 @@ const Type = props => {
     content = (
       <TypeAddModal
         color={props.color}
-        closeModal={closeAddModalHandler}
-        onSubmit={addTypeHandler} />
+        onClose={closeAddModalHandler}
+        onAdd={props.addType} />
     )
   } else if (showDetailModal) {
     content = (
       <TypeDetailModal
         type={currentItem}
         color={props.color}
-        onDelete={() => deleteTypeHandler(currentItem.id)}
-        closeModal={closeDetailModalHandler} />
+        onClose={closeDetailModalHandler}
+        onDelete={props.deleteType} />
     )
   }
 
   return (
     <Container
-      height='100%'
+      height='90%'
       width='33%'>
       {content}
     </Container>
