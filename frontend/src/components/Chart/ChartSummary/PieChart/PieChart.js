@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Doughnut } from 'react-chartjs-2'
 
-const PieChart = props => (
+const PieChart = ({ names, amounts }) => (
   <Doughnut
     data={{
-      labels: [...props.names],
+      labels: [...names],
       datasets: [{
-        data: [...props.amounts],
+        data: [...amounts],
         backgroundColor: [
           '#F28505',
           '#05F21D',
