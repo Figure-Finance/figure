@@ -12,9 +12,11 @@ const BreakdownSummary = ({
 
   if (canAdd) {
     addButton = (
-      <AddButton
-        color={color}
-        onClick={openAddModal} />
+      <div className={classes.Add}>
+        <AddButton
+          color={color}
+          onClick={openAddModal} />
+      </div>
     )
   }
 
@@ -28,7 +30,7 @@ const BreakdownSummary = ({
           onClick={() => openDetailModal(item.id)}
           color={color}
           size='thin'
-          width='90%'
+          width='100%'
           showProgress={isSavings}
           progressPercent={item.progress / item.amount * 100}
           secondary={`$${item.amount.toFixed(2)}`}
@@ -67,7 +69,7 @@ const BreakdownSummary = ({
       <BreakdownSummaryHeading color={color}>
         {title}
       </BreakdownSummaryHeading>
-      <div className={canAdd ? classes.Buttons : classes.FullButtons}>
+      <div className={classes.Buttons}>
         {buttons}
       </div>
       {addButton}
