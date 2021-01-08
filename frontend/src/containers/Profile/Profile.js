@@ -1,125 +1,110 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
+import { useQuery } from 'react-query'
 import api from '../../api'
 import classes from './Profile.module.css'
 import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
 import Type from '../../components/Type/Type'
 import Navbar from '../../components/Navbar/Navbar'
 import Logo from '../../components/Logo/Logo'
+import Error from '../../components/Error/Error'
+import Loader from '../../components/Loader/Loader'
 
 const Profile = props => {
-  const [income, setIncome] = useState([])
-  const [expenses, setExpenses] = useState([])
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-
   const updateIncomeExpenses = updatedItems => {
-    const updatedIncome = []
-    const updatedExpenses = []
+    const income = []
+    const expenses = []
     for (const item of updatedItems) {
       if (item.isIncome) {
-        updatedIncome.push(item)
+        income.push(item)
       } else {
-        updatedExpenses.push(item)
+        expenses.push(item)
       }
     }
-    setIncome(updatedIncome)
-    setExpenses(updatedExpenses)
+    return { income, expenses }
   }
 
   const onFetchProfile = useCallback(async () => {
-    try {
-      const res = await api.get('user')
-      updateIncomeExpenses(res.data.categories)
-      const { firstName, lastName, email } = res.data
-      setFirstName(firstName)
-      setLastName(lastName)
-      setEmail(email)
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await api.get('user')
+    return res.data
   }, [])
 
-  const onAddIncomeType = useCallback(async (type, cb) => {
-    try {
-      const isIncome = true
-      const res = await api.patch('user/category', {
-        category: type,
-        isIncome
-      })
-      const id = res.data.id
-      const newIncome = { id, category: type, isIncome }
-      const updatedIncome = [...income, newIncome]
-      setIncome(updatedIncome)
-      cb(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [income])
+  const onAddIncomeType = useCallback(async type => {
+    const isIncome = true
+    const res = await api.patch('user/category', {
+      category: type,
+      isIncome
+    })
+    return res.data
+  }, [])
 
-  const onAddExpenseType = useCallback(async (type, cb) => {
-    try {
-      const isIncome = false
-      const res = await api.patch('user/category', {
-        category: type,
-        isIncome
-      })
-      const id = res.data.id
-      const newExpense = { id, category: type, isIncome }
-      const updatedExpenses = [...expenses, newExpense]
-      setExpenses(updatedExpenses)
-      cb(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [expenses])
+  const onAddExpenseType = useCallback(async type => {
+    const isIncome = false
+    const res = await api.patch('user/category', {
+      category: type,
+      isIncome
+    })
+    return res.data
+  }, [])
 
-  const onDeleteIncomeType = useCallback(async (id, cb) => {
-    try {
-      const res = await api.delete(`user/category/${id}`)
-      const updatedIncome = income.filter(i => i.id !== id)
-      setIncome(updatedIncome)
-      cb(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [income])
+  const onDeleteIncomeType = useCallback(async id => {
+    const res = await api.delete(`user/category/${id}`)
+    return res.data
+  }, [])
 
-  const onDeleteExpenseType = useCallback(async (id, cb) => {
-    try {
-      const res = await api.delete(`user/category/${id}`)
-      const updatedExpenses = expenses.filter(e => e.id !== id)
-      setExpenses(updatedExpenses)
-      cb(res.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [expenses])
+  const onDeleteExpenseType = useCallback(async id => {
+    const res = await api.delete(`user/category/${id}`)
+    return res.data
+  }, [])
 
   useEffect(onFetchProfile, [onFetchProfile])
 
-  // console.log(firstName)
+  const { data, isLoading, isError } = useQuery('profile', onFetchProfile)
+
+  let profileSummary
+  let incomeType
+  let expensesType
+
+  if (isLoading) {
+    profileSummary = <Loader />
+    incomeType = <Loader />
+    expensesType = <Loader />
+  } else if (isError) {
+    profileSummary = <Error />
+    incomeType = <Error />
+    expensesType = <Error />
+  } else {
+    const { income, expenses } = updateIncomeExpenses(data.categories)
+    profileSummary = (
+      <ProfileSummary
+        firstName={data.firstName}
+        lastName={data.lastName}
+        email={data.email} />
+    )
+    incomeType = (
+      <Type
+        content={income}
+        color='primary'
+        addType={onAddIncomeType}
+        deleteType={onDeleteIncomeType} />
+    )
+    expensesType = (
+      <Type
+        content={expenses}
+        color='danger'
+        addType={onAddExpenseType}
+        deleteType={onDeleteExpenseType} />
+    )
+  }
 
   return (
     <div className={classes.Profile}>
       <div className={classes.Main}>
         <div className={classes.Column}>
-          <ProfileSummary
-            firstName={firstName}
-            lastName={lastName}
-            email={email} />
+          {profileSummary}
           <Logo />
         </div>
-        <Type
-          content={income}
-          color='primary'
-          addType={onAddIncomeType}
-          deleteType={onDeleteIncomeType} />
-        <Type
-          content={expenses}
-          color='danger'
-          addType={onAddExpenseType}
-          deleteType={onDeleteExpenseType} />
+        {incomeType}
+        {expensesType}
       </div>
       <Navbar active='p' />
     </div>
