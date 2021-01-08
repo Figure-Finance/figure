@@ -4,7 +4,9 @@ import classes from './ProgressModal.module.css'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 
-const ProgressModal = props => {
+const ProgressModal = ({
+  closeModal, color, title, onSubmit, amount
+}) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElement, setFormElement] = useState({
     id: '0',
@@ -13,7 +15,7 @@ const ProgressModal = props => {
       type: 'number',
       placeholder: 'Amount'
     },
-    value: props.amount || '',
+    value: amount || '',
     validation: {
       required: true
     },
@@ -22,7 +24,7 @@ const ProgressModal = props => {
   })
 
   const submitHandler = () => {
-    props.onSubmit(+formElement.value)
+    onSubmit(+formElement.value)
   }
 
   const inputChangedHandler = (event) => {
@@ -40,13 +42,13 @@ const ProgressModal = props => {
   return (
     <div className={classes.ProgressModal}>
       <Button
-        onClick={props.closeModal}
+        onClick={closeModal}
         size='square'
-        color={props.color}>
+        color={color}>
         X
       </Button>
       <div className={classes.Main}>
-        <h1 className={props.color}>{props.title}</h1>
+        <h1 className={color}>{title}</h1>
         <Input
           key={formElement.id}
           type={formElement.type}
@@ -61,7 +63,7 @@ const ProgressModal = props => {
       <Button
         onClick={submitHandler}
         size='square'
-        color={props.color}
+        color={color}
         disabled={!formIsValid}>
         √
       </Button>

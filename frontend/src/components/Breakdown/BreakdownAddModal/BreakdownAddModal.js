@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import classes from './BreakdownAddModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownAddModal = props => {
+const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     type: {
@@ -13,7 +14,7 @@ const BreakdownAddModal = props => {
         type: 'text',
         label: 'Type'
       },
-      value: props.type || '',
+      value: '',
       validation: {
         required: true
       },
@@ -28,7 +29,7 @@ const BreakdownAddModal = props => {
         min: '0',
         step: '0.01'
       },
-      value: props.amount || '',
+      value: '',
       validation: {
         required: true
       },
@@ -41,7 +42,7 @@ const BreakdownAddModal = props => {
         type: 'text',
         label: 'Location'
       },
-      value: props.location || '',
+      value: '',
       validation: {
         required: true
       },
@@ -54,7 +55,7 @@ const BreakdownAddModal = props => {
         type: 'text',
         label: 'Description'
       },
-      value: props.description || '',
+      value: '',
       validation: {
         required: true
       },
@@ -67,7 +68,7 @@ const BreakdownAddModal = props => {
         type: 'date',
         label: 'Date'
       },
-      value: props.date || '',
+      value: '',
       validation: {
         required: true
       },
@@ -76,16 +77,19 @@ const BreakdownAddModal = props => {
     }
   })
 
+  const queryClient = useQueryClient()
+  const mutateAdd = useMutation(newItem => onAdd(newItem), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
   const addItemHandler = () => {
-    props.onSubmit({
+    onClose()
+    mutateAdd.mutate({
       category: formElements.type.value,
       amount: formElements.amount.value,
       location: formElements.location.value,
       description: formElements.description.value,
       date: formElements.date.value
-    }, res => {
-      console.log(res.data)
-      props.closeModal()
     })
   }
 
@@ -124,7 +128,7 @@ const BreakdownAddModal = props => {
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
-            color={props.color}
+            color={color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={formElement.config.value}
@@ -137,13 +141,13 @@ const BreakdownAddModal = props => {
       <div className={classes.Buttons}>
         <Button
           size='medium'
-          color={props.color}
-          onClick={props.closeModal}
+          color={color}
+          onClick={onClose}
           width='48%'>
           Cancel
         </Button>
         <Button
-          color={props.color}
+          color={color}
           size='medium'
           onClick={addItemHandler}
           disabled={!formIsValid}
@@ -157,16 +161,9 @@ const BreakdownAddModal = props => {
 
 BreakdownAddModal.propTypes = {
   title: PropTypes.string,
-  type: PropTypes.string,
-  name: PropTypes.string,
-  amount: PropTypes.number,
-  location: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  closeModal: PropTypes.func,
-  onSubmit: PropTypes.func,
-  color: PropTypes.string,
-  isIncome: PropTypes.bool
+  onClose: PropTypes.func,
+  onAdd: PropTypes.func,
+  color: PropTypes.string
 }
 
 export default BreakdownAddModal

@@ -9,7 +9,7 @@ import Logo from '../../components/Logo/Logo'
 import Error from '../../components/Error/Error'
 import Loader from '../../components/Loader/Loader'
 
-const Profile = props => {
+const Profile = () => {
   const updateIncomeExpenses = updatedItems => {
     const income = []
     const expenses = []

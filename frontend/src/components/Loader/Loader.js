@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Loader = props => (
+const Loader = () => (
   <h1 className='primary'>
     Loading...
   </h1>

@@ -2,16 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classes from './Container.module.css'
 
-const Container = props => {
+const Container = ({ children, height, width, borderRadius }) => {
   return (
     <div
       className={classes.Container}
       style={{
-        width: props.width,
-        height: props.height,
-        borderRadius: props.borderRadius || '30px'
+        width: width,
+        height: height,
+        borderRadius: borderRadius || '30px'
       }}>
-      {props.children}
+      {children}
     </div>
   )
 }

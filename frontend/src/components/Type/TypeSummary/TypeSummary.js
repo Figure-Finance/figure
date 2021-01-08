@@ -4,13 +4,13 @@ import classes from './TypeSummary.module.css'
 import Button from '../../UI/Button/Button'
 import AddButton from '../../UI/AddButton/AddButton'
 
-const TypeSummary = props => {
-  const buttons = props.content.map(item => {
+const TypeSummary = ({ content, color, openDetailModal, openAddModal }) => {
+  const buttons = content.map(item => {
     return (
       <Button
         key={item.id}
-        onClick={() => props.openDetailModal(item.id)}
-        color={props.color}
+        onClick={() => openDetailModal(item.id)}
+        color={color}
         size='thin'
         width='100%'>
         {item.category}
@@ -25,8 +25,8 @@ const TypeSummary = props => {
       </div>
       <div className={classes.Add}>
         <AddButton
-          color={props.color}
-          onClick={props.openAddModal} />
+          color={color}
+          onClick={openAddModal} />
       </div>
     </div>
   )

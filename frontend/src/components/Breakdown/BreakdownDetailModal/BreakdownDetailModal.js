@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import classes from './BreakdownDetailModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownDetailModal = props => {
+const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
   const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
     type: {
@@ -13,7 +14,7 @@ const BreakdownDetailModal = props => {
         type: 'text',
         label: 'Type'
       },
-      value: props.type,
+      value: item.type,
       validation: {
         required: true
       },
@@ -28,7 +29,7 @@ const BreakdownDetailModal = props => {
         min: '0',
         step: '0.01'
       },
-      value: props.amount,
+      value: item.amount,
       validation: {
         required: true
       },
@@ -41,7 +42,7 @@ const BreakdownDetailModal = props => {
         type: 'text',
         label: 'Location'
       },
-      value: props.location,
+      value: item.location,
       validation: {
         required: true
       },
@@ -54,7 +55,7 @@ const BreakdownDetailModal = props => {
         type: 'text',
         label: 'Description'
       },
-      value: props.description,
+      value: item.description,
       validation: {
         required: true
       },
@@ -67,7 +68,7 @@ const BreakdownDetailModal = props => {
         type: 'date',
         label: 'Date'
       },
-      value: props.date,
+      value: item.date,
       validation: {
         required: true
       },
@@ -76,14 +77,28 @@ const BreakdownDetailModal = props => {
     }
   })
 
+  const queryClient = useQueryClient()
+  const mutateUpdate = useMutation(newItem => onUpdate(newItem), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+  const mutateDelete = useMutation(() => onDelete(item.id), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
   const updateHandler = () => {
-    props.onSubmit({
+    onClose()
+    mutateUpdate.mutate({
       category: formElements.type.value,
       amount: formElements.amount.value,
       location: formElements.location.value,
       description: formElements.description.value,
       date: formElements.date.value
     })
+  }
+
+  const deleteHandler = () => {
+    onClose()
+    mutateDelete.mutate()
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
@@ -121,16 +136,13 @@ const BreakdownDetailModal = props => {
 
   useEffect(updateFormElementsArray, [updateFormElementsArray])
 
-  console.log(props.location)
-  console.log(formElementsArray)
-
   return (
     <div className={classes.BreakdownDetailModal}>
       <div className={classes.Inputs}>
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
-            color={props.color}
+            color={color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={
@@ -147,14 +159,14 @@ const BreakdownDetailModal = props => {
       <div className={classes.Buttons}>
         <Button
           size='medium'
-          color={props.color}
+          color={color}
           width='48%'
-          onClick={props.onDelete}>
+          onClick={deleteHandler}>
           Delete
         </Button>
         <Button
           size='medium'
-          color={props.color}
+          color={color}
           width='48%'
           onClick={updateHandler}
           disabled={!formIsValid}>
@@ -167,14 +179,10 @@ const BreakdownDetailModal = props => {
 
 BreakdownDetailModal.propTypes = {
   color: PropTypes.string,
-  type: PropTypes.string,
-  amount: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  location: PropTypes.string,
-  onCancel: PropTypes.func,
-  onSubmit: PropTypes.func,
-  onDelete: PropTypes.func
+  item: PropTypes.object,
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
+  onClose: PropTypes.func
 }
 
 export default BreakdownDetailModal

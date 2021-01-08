@@ -4,7 +4,14 @@ import Container from '../UI/Container/Container'
 import ChartSummary from './ChartSummary/ChartSummary'
 import ChartModal from './ChartModal/ChartModal'
 
-const Chart = props => {
+const Chart = ({
+  timePeriods,
+  currentTimePeriod,
+  data,
+  previousTimePeriod,
+  nextTimePeriod,
+  selectTimePeriod
+}) => {
   const [showModal, setShowModal] = useState(false)
 
   const openModalHandler = () => {
@@ -12,27 +19,27 @@ const Chart = props => {
   }
 
   const closeModalHandler = event => {
-    props.selectTimePeriod(event)
+    selectTimePeriod(event)
     setShowModal(false)
   }
 
-  const names = props.data.map(item => item.name || item.category)
-  const amounts = props.data.map(item => item.amount)
+  const names = data.map(item => item.name || item.category)
+  const amounts = data.map(item => item.amount)
 
   let content = (
     <ChartSummary
-      buttonContent={props.currentTimePeriod}
+      buttonContent={currentTimePeriod}
       names={names}
       amounts={amounts}
       openModal={openModalHandler}
-      leftArrowClick={props.previousTimePeriod}
-      rightArrowClick={props.nextTimePeriod} />
+      leftArrowClick={previousTimePeriod}
+      rightArrowClick={nextTimePeriod} />
   )
 
   if (showModal) {
     content = (
       <ChartModal
-        timePeriods={props.timePeriods}
+        timePeriods={timePeriods}
         onClick={closeModalHandler} />
     )
   }

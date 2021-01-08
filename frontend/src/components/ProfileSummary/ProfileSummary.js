@@ -5,7 +5,9 @@ import Container from '../UI/Container/Container'
 import Button from '../UI/Button/Button'
 import Input from '../UI/Input/Input'
 
-const ProfileSummary = props => {
+const ProfileSummary = ({
+  height, firstName, lastName, email
+}) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     firstName: {
@@ -14,7 +16,7 @@ const ProfileSummary = props => {
         type: 'text',
         label: 'First Name'
       },
-      value: props.firstName,
+      value: firstName,
       validation: {
         required: true
       },
@@ -27,7 +29,7 @@ const ProfileSummary = props => {
         type: 'text',
         label: 'Last Name'
       },
-      value: props.lastName,
+      value: lastName,
       validation: {
         required: true
       },
@@ -40,7 +42,7 @@ const ProfileSummary = props => {
         type: 'email',
         label: 'Email'
       },
-      value: props.email,
+      value: email,
       validation: {
         required: true
       },

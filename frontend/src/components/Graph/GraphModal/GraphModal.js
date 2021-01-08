@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import classes from './GraphModal.module.css'
 import Button from '../../UI/Button/Button'
 
-const GraphModal = props => {
+const GraphModal = ({ years, onClick }) => {
   const content = (
-    props.years.map((item, index) => (
+    years.map((item, index) => (
       <Button
         key={index}
         size='large'
         color='danger'
-        onClick={props.onClick}>
+        onClick={onClick}>
         {item}
       </Button>
     ))

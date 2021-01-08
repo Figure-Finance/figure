@@ -3,24 +3,24 @@ import PropTypes from 'prop-types'
 import Button from '../Button/Button'
 import Add from '../../Icons/Add/Add'
 
-const AddButton = props => {
+const AddButton = ({ color, onClick, size, width, disabled }) => {
   let fill = 'black'
 
-  if (props.color === 'primary') {
+  if (color === 'primary') {
     fill = '#05F29B'
-  } else if (props.color === 'neutral') {
+  } else if (color === 'neutral') {
     fill = '#65C8FF'
-  } else if (props.color === 'danger') {
+  } else if (color === 'danger') {
     fill = '#FF6565'
   }
 
   return (
     <Button
-      width={props.width}
-      color={props.color}
-      size={props.size || 'square'}
-      onClick={props.onClick}
-      disabled={props.disabled}>
+      width={width}
+      color={color}
+      size={size || 'square'}
+      onClick={onClick}
+      disabled={disabled}>
       <Add fill={fill} />
     </Button>
   )

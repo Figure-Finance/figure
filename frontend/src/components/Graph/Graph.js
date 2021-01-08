@@ -4,24 +4,35 @@ import Container from '../UI/Container/Container'
 import GraphYearly from './GraphYearly/GraphYearly'
 import GraphSavings from './GraphSavings/GraphSavings'
 
-const Graph = props => {
+const Graph = ({
+  onNavSavingsChange,
+  isSavings,
+  active,
+  timePeriods,
+  currentTimePeriod,
+  previousTimePeriod,
+  nextTimePeriod,
+  selectTimePeriod,
+  labels,
+  data
+}) => {
   let content = (
     <GraphYearly
-      data={props.data}
-      labels={props.labels}
-      timePeriods={props.timePeriods}
-      buttonContent={props.currentTimePeriod}
-      onButtonClick={props.selectTimePeriod}
-      leftArrowClick={props.previousTimePeriod}
-      rightArrowClick={props.nextTimePeriod} />
+      data={data}
+      labels={labels}
+      timePeriods={timePeriods}
+      buttonContent={currentTimePeriod}
+      onButtonClick={selectTimePeriod}
+      leftArrowClick={previousTimePeriod}
+      rightArrowClick={nextTimePeriod} />
   )
 
-  if (props.isSavings) {
+  if (isSavings) {
     content = (
       <GraphSavings
-        active={props.active}
-        labels={props.labels}
-        onChange={props.onNavSavingsChange} />
+        active={active}
+        labels={labels}
+        onChange={onNavSavingsChange} />
     )
   }
 

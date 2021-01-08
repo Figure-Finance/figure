@@ -4,15 +4,15 @@ import { NavLink } from 'react-router-dom'
 import classes from './NavItem.module.css'
 import Button from '../../UI/Button/Button'
 
-const NavItem = props => (
+const NavItem = ({ children, color, active, link, size }) => (
   <div
     className={classes.NavItem}>
-    <NavLink to={props.link}>
+    <NavLink to={link}>
       <Button
-        color={props.color}
-        size={props.size}
-        active={props.active}>
-        {props.children}
+        color={color}
+        size={size}
+        active={active}>
+        {children}
       </Button>
     </NavLink>
   </div>

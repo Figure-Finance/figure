@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import Button from '../Button/Button'
 import LeftArrow from '../../Icons/LeftArrow/LeftArrow'
 
-const LeftArrowButton = props => {
+const LeftArrowButton = ({ color, onClick }) => {
   return (
-    <Button color={props.color} size='square' onClick={props.onClick}>
-      <LeftArrow fill={props.color} />
+    <Button color={color} size='square' onClick={onClick}>
+      <LeftArrow fill={color} />
     </Button>
   )
 }

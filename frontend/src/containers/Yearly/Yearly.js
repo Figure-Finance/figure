@@ -12,7 +12,7 @@ import Graph from '../../components/Graph/Graph'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
-const Yearly = props => {
+const Yearly = () => {
   const today = useMemo(() => startOfToday(), [])
   const tenYearsAgo = useMemo(
     () => subYears(today, 10), [today]

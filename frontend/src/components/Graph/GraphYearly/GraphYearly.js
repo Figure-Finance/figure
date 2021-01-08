@@ -3,7 +3,15 @@ import PropTypes from 'prop-types'
 import GraphSummary from '../GraphSummary/GraphSummary'
 import GraphModal from '../GraphModal/GraphModal'
 
-const GraphYearly = props => {
+const GraphYearly = ({
+  timePeriods,
+  buttonContent,
+  onButtonClick,
+  leftArrowClick,
+  rightArrowClick,
+  labels,
+  data
+}) => {
   const [showModal, setShowModal] = useState(false)
 
   const openModalHandler = () => {
@@ -11,25 +19,25 @@ const GraphYearly = props => {
   }
 
   const closeModalHandler = event => {
-    props.onButtonClick(event)
+    onButtonClick(event)
     setShowModal(false)
   }
 
   let content = (
     <GraphSummary
       showYearly
-      data={props.data}
-      labels={props.labels}
+      data={data}
+      labels={labels}
       openModal={openModalHandler}
-      buttonContent={props.buttonContent}
-      decrementNumber={props.leftArrowClick}
-      incrementNumber={props.rightArrowClick} />
+      buttonContent={buttonContent}
+      decrementNumber={leftArrowClick}
+      incrementNumber={rightArrowClick} />
   )
 
   if (showModal) {
     content = (
       <GraphModal
-        years={props.timePeriods}
+        years={timePeriods}
         onClick={closeModalHandler} />
     )
   }
