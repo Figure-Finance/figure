@@ -2,14 +2,14 @@ import React from 'react'
 import { Line } from 'react-chartjs-2'
 import PropTypes from 'prop-types'
 
-const Graph = props => {
+const Graph = ({ isSavings, labels, data }) => {
   let graph
 
-  if (props.isSavings) {
+  if (isSavings) {
     graph = (
       <Line
         data={{
-          labels: props.labels,
+          labels: labels,
           datasets: [
             {
               label: 'Savings',
@@ -37,11 +37,11 @@ const Graph = props => {
     graph = (
       <Line
         data={{
-          labels: props.labels,
+          labels: labels,
           datasets: [
             {
               label: 'Income',
-              data: props.data.income,
+              data: data.income,
               backgroundColor: [
                 'rgba(5, 242, 155, 0.2)'
               ],
@@ -57,7 +57,7 @@ const Graph = props => {
             },
             {
               label: 'Expenses',
-              data: props.data.expenses,
+              data: data.expenses,
               backgroundColor: [
                 'rgba(255, 101, 101, 0.2)'
               ],
