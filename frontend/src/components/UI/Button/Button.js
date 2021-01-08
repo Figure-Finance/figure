@@ -3,76 +3,88 @@ import PropTypes from 'prop-types'
 import classes from './Button.module.css'
 import ButtonProgressBar from './ButtonProgressBar/ButtonProgressBar'
 
-const Button = props => {
+const Button = ({
+  children,
+  color,
+  size,
+  active,
+  onClick,
+  dual,
+  secondary,
+  width,
+  disabled,
+  showProgress,
+  progressPercent
+}) => {
   const classNames = [classes.Button]
-  let content = props.children
+  let content = children
 
-  if (props.color === 'primary') {
+  if (color === 'primary') {
     classNames.push(classes.Primary)
-  } else if (props.color === 'neutral') {
+  } else if (color === 'neutral') {
     classNames.push(classes.Neutral)
-  } else if (props.color === 'danger') {
+  } else if (color === 'danger') {
     classNames.push(classes.Danger)
   } else {
     classNames.push(classes.Default)
   }
 
-  if (props.size === 'large') {
+  if (size === 'large') {
     classNames.push(classes.Large)
-  } else if (props.size === 'medium') {
+  } else if (size === 'medium') {
     classNames.push(classes.Medium)
-  } else if (props.size === 'small') {
+  } else if (size === 'small') {
     classNames.push(classes.Small)
-  } else if (props.size === 'square') {
+  } else if (size === 'square') {
     classNames.push(classes.Square)
-  } else if (props.size === 'smallSquare') {
+  } else if (size === 'smallSquare') {
     classNames.push(classes.SquareSmall)
-  } else if (props.size === 'thin') {
+  } else if (size === 'thin') {
     classNames.push(classes.Thin)
   }
 
-  if (props.active) {
+  if (active) {
     classNames.push(classes.Active)
   }
 
-  if (props.showProgress) {
+  if (showProgress) {
     classNames.push(classes.ShowProgress)
-  } else if (props.dual) {
+  } else if (dual) {
     classNames.push(classes.Dual)
   }
 
-  if (props.secondary) {
+  if (secondary) {
     content = (
       <div className={classes.ButtonInfo}>
         <span>
-          {props.children}
+          {children}
         </span>
         <span className={classes.Split}></span>
         <span>
-          {props.secondary}
+          {secondary}
         </span>
       </div>
     )
   }
 
-  if (props.showProgress) {
+  if (showProgress) {
     content = (
       <>
         <div className={classes.TopRow}>
           <div className={classes.ButtonInfo}>
             <span>
-              {props.children}
+              {children}
             </span>
             <span className={classes.Split}></span>
             <span>
-              {props.secondary}
+              {secondary}
             </span>
           </div>
         </div>
         <div className={classes.BottomRow}>
           <ButtonProgressBar
-            percent={props.progressPercent}
-            color={props.color} />
+            percent={progressPercent}
+            color={color} />
         </div>
       </>
     )
@@ -81,9 +93,9 @@ const Button = props => {
   return (
     <button
       className={classNames.join(' ')}
-      onClick={props.onClick}
-      style={{ width: props.width }}
-      disabled={props.disabled}>
+      onClick={onClick}
+      style={{ width: width }}
+      disabled={disabled}>
       {content}
     </button>
   )
