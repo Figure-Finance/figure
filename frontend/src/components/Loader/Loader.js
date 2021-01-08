@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Loader = props => {
-  return (
-    <h1>Loading</h1>
-  )
-}
+const Loader = props => (
+  <h1 className='primary'>
+    Loading...
+  </h1>
+)
 
 export default Loader
