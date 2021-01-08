@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import classes from './BreakdownAddSavingsModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownAddSavingsModal = props => {
+const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     name: {
@@ -13,7 +14,7 @@ const BreakdownAddSavingsModal = props => {
         type: 'text',
         label: 'Name'
       },
-      value: props.name || '',
+      value: '',
       validation: {
         required: true
       },
@@ -26,7 +27,7 @@ const BreakdownAddSavingsModal = props => {
         type: 'number',
         label: 'Amount'
       },
-      value: props.amount || '',
+      value: '',
       validation: {
         required: true
       },
@@ -39,7 +40,7 @@ const BreakdownAddSavingsModal = props => {
         type: 'text',
         label: 'Description'
       },
-      value: props.description || '',
+      value: '',
       validation: {
         required: true
       },
@@ -48,14 +49,17 @@ const BreakdownAddSavingsModal = props => {
     }
   })
 
+  const queryClient = useQueryClient()
+  const mutateAdd = useMutation(newItem => onAdd(newItem), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
   const addItemHandler = () => {
-    props.onSubmit({
-      name: formElements.name.value,
+    onClose()
+    mutateAdd.mutate({
+      name: formElements.type.value,
       amount: formElements.amount.value,
       description: formElements.description.value
-    }, res => {
-      console.log(res.data)
-      props.closeModal()
     })
   }
 
@@ -94,7 +98,7 @@ const BreakdownAddSavingsModal = props => {
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
-            color={props.color}
+            color={color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={formElement.config.value}
@@ -107,12 +111,12 @@ const BreakdownAddSavingsModal = props => {
       <div className={classes.Buttons}>
         <Button
           size='large'
-          color={props.color}
-          onClick={props.closeModal}>
+          color={color}
+          onClick={onClose}>
           Cancel
         </Button>
         <Button
-          color={props.color}
+          color={color}
           size='large'
           onClick={addItemHandler}
           disabled={!formIsValid}>
@@ -125,16 +129,9 @@ const BreakdownAddSavingsModal = props => {
 
 BreakdownAddSavingsModal.propTypes = {
   title: PropTypes.string,
-  type: PropTypes.string,
-  name: PropTypes.string,
-  amount: PropTypes.number,
-  location: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  closeModal: PropTypes.func,
-  onSubmit: PropTypes.func,
-  color: PropTypes.string,
-  isIncome: PropTypes.bool
+  onClose: PropTypes.func,
+  onAdd: PropTypes.func,
+  color: PropTypes.string
 }
 
 export default BreakdownAddSavingsModal
