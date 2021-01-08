@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   format,
   startOfToday,
@@ -112,6 +112,22 @@ const Weekly = props => {
   }, [currentWeekIndex, weekStringMap.length])
 
   const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly)
+  const queryClient = useQueryClient()
+  const mutateLeftClick = useMutation(previousWeek, {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+  const mutateRightClick = useMutation(nextWeek, {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
+  const previousWeekHandler = () => {
+    console.log(currentWeekIndex)
+    mutateLeftClick.mutate()
+  }
+
+  const nextWeekHandler = () => {
+    mutateRightClick.mutate()
+  }
 
   let progress
   let incomeBreakdown
@@ -153,8 +169,8 @@ const Weekly = props => {
       <Chart
         data={expenses}
         timePeriods={weekStringMap}
-        previousTimePeriod={previousWeek}
-        nextTimePeriod={nextWeek}
+        previousTimePeriod={previousWeekHandler}
+        nextTimePeriod={nextWeekHandler}
         selectTimePeriod={changeWeek}
         currentTimePeriod={weekStringMap[currentWeekIndex]} />
     )
