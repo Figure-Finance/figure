@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const BreakdownSummaryHeading = props => (
-  <h1 className={props.color}>
-    {props.children}
+const BreakdownSummaryHeading = ({ color, children }) => (
+  <h1 className={color}>
+    {children}
   </h1>
 )
 
