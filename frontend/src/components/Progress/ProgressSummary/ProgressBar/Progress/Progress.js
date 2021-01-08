@@ -2,31 +2,31 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classes from './Progress.module.css'
 
-const Progress = props => {
+const Progress = ({ color, percent, position, single }) => {
   const classNames = [classes.Progress]
 
-  if (props.position === 'left') {
+  if (position === 'left') {
     classNames.push(classes.Left)
-  } else if (props.position === 'right') {
+  } else if (position === 'right') {
     classNames.push(classes.Right)
   }
 
-  if (props.single || props.percent === 100) {
+  if (single || percent === 100) {
     classNames.push(classes.Single)
   }
 
-  if (props.color === 'primary') {
+  if (color === 'primary') {
     classNames.push(classes.Primary)
-  } else if (props.color === 'neutral') {
+  } else if (color === 'neutral') {
     classNames.push(classes.Neutral)
-  } else if (props.color === 'danger') {
+  } else if (color === 'danger') {
     classNames.push(classes.Danger)
   }
 
   return (
     <div
       className={classNames.join(' ')}
-      style={{ width: `${props.percent}%` }} />
+      style={{ width: `${percent}%` }} />
   )
 }
 
