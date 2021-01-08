@@ -6,12 +6,19 @@ import LeftArrowButton from '../../UI/LeftArrowButton/LeftArrowButton'
 import RightArrowButton from '../../UI/RightArrowButton/RightArrowButton'
 import PieChart from './PieChart/PieChart'
 
-const ChartSummary = props => {
+const ChartSummary = ({
+  leftArrowClick,
+  rightArrowClick,
+  names,
+  amounts,
+  openModal,
+  buttonContent
+}) => {
   let content = (
-    <PieChart names={props.names} amounts={props.amounts} />
+    <PieChart names={names} amounts={amounts} />
   )
 
-  if (props.amounts.length === 0) {
+  if (amounts.length === 0) {
     content = (
       <h2 className='danger'>No Data</h2>
     )
@@ -20,15 +27,15 @@ const ChartSummary = props => {
   return (
     <div className={classes.ChartSummary}>
       <div className={classes.Buttons}>
-        <LeftArrowButton onClick={props.leftArrowClick} color='danger' />
+        <LeftArrowButton onClick={leftArrowClick} color='danger' />
         <Button
           size='medium'
           width='60%'
           color='danger'
-          onClick={props.openModal}>
-          {props.buttonContent}
+          onClick={openModal}>
+          {buttonContent}
         </Button>
-        <RightArrowButton onClick={props.rightArrowClick} color='danger' />
+        <RightArrowButton onClick={rightArrowClick} color='danger' />
       </div>
       {content}
     </div>
