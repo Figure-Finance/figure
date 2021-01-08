@@ -16,7 +16,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
 import Error from '../../components/Error/Error'
 
-const Monthly = props => {
+const Monthly = () => {
   const today = useMemo(() => startOfToday(), [])
   const lastYear = useMemo(() => subYears(today, 1), [today])
   const months = useMemo(
