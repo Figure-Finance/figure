@@ -4,21 +4,21 @@
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
+  margin: 0 auto;
   width: 90%;
-  margin: auto;
+}
+
+.Inputs, .Buttons {
+  width: 100%;
+}
+
+.Inputs {
+  margin-top: 10px;
 }
 
 .Buttons {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
-
-.Inputs, .Buttons {
-  margin: auto;
-  width: 100%;
-}
-
-.Inputs > input, .Buttons > button {
   margin-bottom: 10px;
 }

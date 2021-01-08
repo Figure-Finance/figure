@@ -1,24 +1,23 @@
-.Type {
+.TypeSummary {
   align-items: center;
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: space-between;
-  padding: 10px;
-}
-
-.Buttons {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  margin: 0 auto;
+  overflow: scroll;
   width: 100%;
 }
 
+.Buttons {
+  margin-top: 10px;
+  width: 90%;
+}
+
 .Buttons button {
-  margin: 10px 0;
+  margin: 10px auto;
 }
 
 .Add {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
