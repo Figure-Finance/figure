@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import classes from './BreakdownDetailSavingsModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownDetailSavingsModal = props => {
+const BreakdownDetailSavingsModal = ({
+  color, item, onClose, onUpdate, onDelete, onAllocate
+}) => {
   const [allocateAmount, setAllocateAmount] = useState('0')
   const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
@@ -14,7 +17,7 @@ const BreakdownDetailSavingsModal = props => {
         type: 'text',
         label: 'Type'
       },
-      value: props.name,
+      value: item.name,
       validation: {
         required: true
       },
@@ -29,7 +32,7 @@ const BreakdownDetailSavingsModal = props => {
         min: '0',
         step: '0.01'
       },
-      value: props.amount,
+      value: item.amount,
       validation: {
         required: true
       },
@@ -42,7 +45,7 @@ const BreakdownDetailSavingsModal = props => {
         type: 'text',
         label: 'Description'
       },
-      value: props.description,
+      value: item.description,
       validation: {
         required: true
       },
@@ -51,16 +54,34 @@ const BreakdownDetailSavingsModal = props => {
     }
   })
 
+  const queryClient = useQueryClient()
+  const mutateAllocate = useMutation(() => onAllocate(allocateAmount), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+  const mutateUpdate = useMutation(newItem => onUpdate(newItem), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+  const mutateDelete = useMutation(() => onDelete(item.id), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
   const allocateHandler = () => {
-    props.onAllocate(allocateAmount)
+    onClose()
+    mutateAllocate.mutate()
   }
 
   const updateHandler = () => {
-    props.onSubmit({
+    onClose()
+    mutateUpdate.mutate({
       name: formElements.type.value,
       amount: formElements.amount.value,
       description: formElements.description.value
     })
+  }
+
+  const deleteHandler = () => {
+    onClose()
+    mutateDelete.mutate()
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
@@ -102,7 +123,7 @@ const BreakdownDetailSavingsModal = props => {
     <div className={classes.BreakdownDetailSavingsModal}>
       <Input
         key='allocate'
-        color={props.color}
+        color={color}
         type='input'
         config={{
           type: 'number',
@@ -114,7 +135,7 @@ const BreakdownDetailSavingsModal = props => {
         onChange={e => setAllocateAmount(e.target.value)} />
       <Button
         size='medium'
-        color={props.color}
+        color={color}
         width='100%'
         onClick={allocateHandler}>
         Allocate
@@ -125,7 +146,7 @@ const BreakdownDetailSavingsModal = props => {
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
-            color={props.color}
+            color={color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={
@@ -142,14 +163,14 @@ const BreakdownDetailSavingsModal = props => {
       <div className={classes.Buttons}>
         <Button
           size='medium'
-          color={props.color}
+          color={color}
           width='48%'
-          onClick={props.onDelete}>
+          onClick={deleteHandler}>
           Delete
         </Button>
         <Button
           size='medium'
-          color={props.color}
+          color={color}
           width='48%'
           onClick={updateHandler}
           disabled={!formIsValid}>
@@ -162,13 +183,9 @@ const BreakdownDetailSavingsModal = props => {
 
 BreakdownDetailSavingsModal.propTypes = {
   color: PropTypes.string,
-  name: PropTypes.string,
-  amount: PropTypes.string,
-  description: PropTypes.string,
-  date: PropTypes.string,
-  location: PropTypes.string,
-  onCancel: PropTypes.func,
-  onSubmit: PropTypes.func,
+  item: PropTypes.object,
+  onClose: PropTypes.func,
+  onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   onAllocate: PropTypes.func
 }
