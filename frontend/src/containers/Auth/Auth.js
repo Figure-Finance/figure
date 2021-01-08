@@ -7,7 +7,7 @@ import Input from '../../components/UI/Input/Input'
 import Button from '../../components/UI/Button/Button'
 import Logo from '../../components/Logo/Logo'
 
-const Auth = props => {
+const Auth = ({ history }) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -18,7 +18,7 @@ const Auth = props => {
     try {
       const res = await api.post('user/signup', userData)
       console.log(res.data)
-      props.history.push('/auth/questions')
+      history.push('/auth/questions')
     } catch (err) {
       console.log(err)
     }
