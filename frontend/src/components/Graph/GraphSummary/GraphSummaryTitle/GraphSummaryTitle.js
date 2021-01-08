@@ -5,18 +5,23 @@ import Button from '../../../UI/Button/Button'
 import LeftArrowButton from '../../../UI/LeftArrowButton/LeftArrowButton'
 import RightArrowButton from '../../../UI/RightArrowButton/RightArrowButton'
 
-const GraphSummaryTitle = props => {
+const GraphSummaryTitle = ({
+  openModal,
+  buttonContent,
+  decrementNumber,
+  incrementNumber
+}) => {
   return (
     <div className={classes.Buttons}>
-      <LeftArrowButton color='danger' onClick={props.decrementNumber} />
+      <LeftArrowButton color='danger' onClick={decrementNumber} />
       <Button
-        onClick={props.openModal}
+        onClick={openModal}
         color='danger'
         size='large'
         width='300px'>
-        {props.buttonContent}
+        {buttonContent}
       </Button>
-      <RightArrowButton color='danger' onClick={props.incrementNumber} />
+      <RightArrowButton color='danger' onClick={incrementNumber} />
     </div>
   )
 }
