@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import classes from './TypeAddModal.module.css'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 
-const TypeAddModal = props => {
+const TypeAddModal = ({ color, onClose, onAdd }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     name: {
@@ -13,7 +14,7 @@ const TypeAddModal = props => {
         type: 'text',
         label: 'Name'
       },
-      value: props.name || '',
+      value: '',
       validation: {
         required: true
       },
@@ -22,10 +23,21 @@ const TypeAddModal = props => {
     }
   })
 
+  const queryClient = useQueryClient()
+  // const mutateAdd = useMutation(newType => onAdd(newType), {
+  //   onSuccess: data => queryClient.setQueryData(
+  //     ['profile', { id: data.id, category: formElements.name.value, isIncome: true }],
+  //     data
+  //   )
+  // })
+  // TODO: instead of invalidating the query set the query data. This allows us to save a call to the backend
+  const mutateAdd = useMutation(newType => onAdd(newType), {
+    onSuccess: data => queryClient.invalidateQueries()
+  })
+
   const addItemHandler = () => {
-    props.onSubmit(formElements.name.value, res => {
-      props.closeModal()
-    })
+    onClose()
+    mutateAdd.mutate(formElements.name.value)
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
@@ -63,7 +75,7 @@ const TypeAddModal = props => {
         {formElementsArray.map(formElement => (
           <Input
             key={formElement.id}
-            color={props.color}
+            color={color}
             type={formElement.config.type}
             config={formElement.config.config}
             value={formElement.config.value}
@@ -76,13 +88,13 @@ const TypeAddModal = props => {
       <div className={classes.Buttons}>
         <Button
           size='medium'
-          color={props.color}
-          onClick={props.closeModal}
+          color={color}
+          onClick={onClose}
           width='48%'>
           Cancel
         </Button>
         <Button
-          color={props.color}
+          color={color}
           size='medium'
           onClick={addItemHandler}
           disabled={!formIsValid}
@@ -96,9 +108,8 @@ const TypeAddModal = props => {
 
 TypeAddModal.propTypes = {
   color: PropTypes.string,
-  name: PropTypes.string,
-  closeModal: PropTypes.func,
-  onSubmit: PropTypes.func
+  onClose: PropTypes.func,
+  onAdd: PropTypes.func
 }
 
 export default TypeAddModal
