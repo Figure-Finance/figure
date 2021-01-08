@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GraphSummary from '../GraphSummary/GraphSummary'
 
-const GraphSavings = props => (
+const GraphSavings = ({ onChange, active, labels }) => (
   <GraphSummary
-    onNavSavingsChange={props.onChange}
-    active={props.active}
-    labels={props.labels}
+    onNavSavingsChange={onChange}
+    active={active}
+    labels={labels}
     isSavings />
 )
 
