@@ -2,21 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classes from './ButtonProgress.module.css'
 
-const ButtonProgress = props => {
+const ButtonProgress = ({ color, percent }) => {
   const classNames = [classes.ButtonProgress]
 
-  if (props.color === 'primary') {
+  if (color === 'primary') {
     classNames.push(classes.Primary)
-  } else if (props.color === 'neutral') {
+  } else if (color === 'neutral') {
     classNames.push(classes.Neutral)
-  } else if (props.color === 'danger') {
+  } else if (color === 'danger') {
     classNames.push(classes.Danger)
   }
 
   return (
     <div
       className={classNames.join(' ')}
-      style={{ width: `${props.percent}%` }} />
+      style={{ width: `${percent}%` }} />
   )
 }
 
