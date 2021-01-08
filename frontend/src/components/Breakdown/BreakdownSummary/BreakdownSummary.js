@@ -5,29 +5,31 @@ import BreakdownSummaryHeading from './BreakdownSummaryHeading/BreakdownSummaryH
 import AddButton from '../../UI/AddButton/AddButton'
 import Button from '../../UI/Button/Button'
 
-const BreakdownSummary = props => {
+const BreakdownSummary = ({
+  title, color, canAdd, content, openAddModal, openDetailModal, isSavings, showButtons
+}) => {
   let addButton = null
 
-  if (props.canAdd) {
+  if (canAdd) {
     addButton = (
       <AddButton
-        color={props.color}
-        onClick={props.openAddModal} />
+        color={color}
+        onClick={openAddModal} />
     )
   }
 
   let buttons
 
-  if (props.showButtons) {
-    buttons = props.content.map(item => {
+  if (showButtons) {
+    buttons = content.map(item => {
       return (
         <Button
           key={item.id}
-          onClick={() => props.openDetailModal(item.id)}
-          color={props.color}
+          onClick={() => openDetailModal(item.id)}
+          color={color}
           size='thin'
           width='90%'
-          showProgress={props.isSavings}
+          showProgress={isSavings}
           progressPercent={item.progress / item.amount * 100}
           secondary={`$${item.amount.toFixed(2)}`}
           dual>
@@ -36,17 +38,17 @@ const BreakdownSummary = props => {
       )
     })
   } else {
-    buttons = props.content.map(item => {
+    buttons = content.map(item => {
       let colorClass = classes.Primary
-      if (props.color === 'danger') {
+      if (color === 'danger') {
         colorClass = classes.Danger
       }
       return (
         <div key={item.id} className={`${classes.Item} ${colorClass}`}>
-          <h2 className={props.color}>
+          <h2 className={color}>
             {item.category}
           </h2>
-          <h2 className={props.color}>
+          <h2 className={color}>
             ${item.amount.toFixed(2)}
           </h2>
         </div>
@@ -54,18 +56,18 @@ const BreakdownSummary = props => {
     })
   }
 
-  if (props.content.length === 0) {
+  if (content.length === 0) {
     buttons = (
-      <h2 className={props.color}>No Data</h2>
+      <h2 className={color}>No Data</h2>
     )
   }
 
   return (
     <div className={classes.BreakdownSummary}>
-      <BreakdownSummaryHeading color={props.color}>
-        {props.title}
+      <BreakdownSummaryHeading color={color}>
+        {title}
       </BreakdownSummaryHeading>
-      <div className={props.canAdd ? classes.Buttons : classes.FullButtons}>
+      <div className={canAdd ? classes.Buttons : classes.FullButtons}>
         {buttons}
       </div>
       {addButton}
@@ -74,11 +76,8 @@ const BreakdownSummary = props => {
 }
 
 BreakdownSummary.propTypes = {
-  color: PropTypes.string,
-  isIncome: PropTypes.bool,
-  height: PropTypes.string,
-  width: PropTypes.string,
   title: PropTypes.string,
+  color: PropTypes.string,
   canAdd: PropTypes.bool,
   content: PropTypes.arrayOf(PropTypes.object),
   openAddModal: PropTypes.func,
