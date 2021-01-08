@@ -2,21 +2,21 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ReactComponent as Right } from '../../../assets/right.svg'
 
-const RightArrow = props => {
-  let fill
+const RightArrow = ({ fill }) => {
+  let fillHex
 
-  if (props.fill === 'primary') {
-    fill = '#05F29B'
-  } else if (props.fill === 'neutral') {
-    fill = '#65C8FF'
-  } else if (props.fill === 'danger') {
-    fill = '#FF6565'
+  if (fill === 'primary') {
+    fillHex = '#05F29B'
+  } else if (fill === 'neutral') {
+    fillHex = '#65C8FF'
+  } else if (fill === 'danger') {
+    fillHex = '#FF6565'
   } else {
-    fill = '#CF79F7'
+    fillHex = '#CF79F7'
   }
 
   return (
-    <Right style={{ width: '30px', fill: fill, marginTop: '6px' }} />
+    <Right style={{ width: '30px', fill: fillHex, marginTop: '6px' }} />
   )
 }
 
