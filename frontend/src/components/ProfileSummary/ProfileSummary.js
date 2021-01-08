@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classes from './ProfileSummary.module.css'
 import Container from '../UI/Container/Container'
@@ -70,19 +70,28 @@ const ProfileSummary = props => {
     setFormIsValid(formIsValid)
   }
 
-  const formElementsArray = useMemo(() => [], [])
+  // const formElementsArray = useMemo(() => [], [])
+  //
+  // const updateFormElementsArray = useCallback(() => {
+  //   formElementsArray.length = 0
+  //   for (const key in formElements) {
+  //     formElementsArray.push({
+  //       id: key,
+  //       config: formElements[key]
+  //     })
+  //   }
+  // }, [formElements, formElementsArray])
+  //
+  // useEffect(updateFormElementsArray, [updateFormElementsArray])
 
-  const updateFormElementsArray = useCallback(() => {
-    formElementsArray.length = 0
-    for (const key in formElements) {
-      formElementsArray.push({
-        id: key,
-        config: formElements[key]
-      })
-    }
-  }, [formElements, formElementsArray])
+  const formElementsArray = []
 
-  useEffect(updateFormElementsArray, [updateFormElementsArray])
+  for (const key in formElements) {
+    formElementsArray.push({
+      id: key,
+      config: formElements[key]
+    })
+  }
 
   return (
     <Container
