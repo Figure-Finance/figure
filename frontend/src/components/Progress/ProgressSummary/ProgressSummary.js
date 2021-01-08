@@ -4,46 +4,55 @@ import classes from './ProgressSummary.module.css'
 import ProgressBar from './ProgressBar/ProgressBar'
 import Button from '../../UI/Button/Button'
 
-const ProgressSummary = props => {
+const ProgressSummary = ({
+  leftColor,
+  rightColor,
+  leftAmount,
+  rightAmount,
+  single,
+  leftButtonClickHandler,
+  rightButtonClickHandler,
+  showButtons
+}) => {
   let leftPercent = (
-    (100 / (props.leftAmount + props.rightAmount)) * props.leftAmount
+    (100 / (leftAmount + rightAmount)) * leftAmount
   )
   let rightPercent = (
-    (100 / (props.leftAmount + props.rightAmount)) * props.rightAmount
+    (100 / (leftAmount + rightAmount)) * rightAmount
   )
 
-  if (props.single) {
-    leftPercent = props.leftAmount / props.rightAmount * 100
+  if (single) {
+    leftPercent = leftAmount / rightAmount * 100
     rightPercent = 0
   }
 
   let left = (
-    <h2 className={props.leftColor}>
-      ${props.leftAmount.toFixed(2)}
+    <h2 className={leftColor}>
+      ${leftAmount.toFixed(2)}
     </h2>
   )
 
   let right = (
-    <h2 className={props.rightColor}>
-      ${props.rightAmount.toFixed(2)}
+    <h2 className={rightColor}>
+      ${rightAmount.toFixed(2)}
     </h2>
   )
 
-  if (props.showButtons) {
+  if (showButtons) {
     left = (
       <Button
-        onClick={props.leftButtonClickHandler}
-        color={props.leftColor}
+        onClick={leftButtonClickHandler}
+        color={leftColor}
         size='medium'>
-        ${props.leftAmount.toFixed(2)}
+        ${leftAmount.toFixed(2)}
       </Button>
     )
     right = (
       <Button
-        onClick={props.rightButtonClickHandler}
-        color={props.rightColor ? props.rightColor : props.leftColor}
+        onClick={rightButtonClickHandler}
+        color={rightColor || leftColor}
         size='medium'>
-        ${props.rightAmount.toFixed(2)}
+        ${rightAmount.toFixed(2)}
       </Button>
     )
   }
@@ -52,11 +61,11 @@ const ProgressSummary = props => {
     <div className={classes.ProgressSummary}>
       {left}
       <ProgressBar
-        leftColor={props.leftColor}
-        rightColor={props.rightColor}
+        leftColor={leftColor}
+        rightColor={rightColor}
         leftPercent={leftPercent}
         rightPercent={rightPercent}
-        single={props.single} />
+        single={single} />
       {right}
     </div>
   )
