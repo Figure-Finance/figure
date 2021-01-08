@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import classes from './ChartModal.module.css'
 import Button from '../../UI/Button/Button'
 
-const ChartModal = props => {
+const ChartModal = ({ onClick, timePeriods }) => {
   const content = (
-    props.timePeriods.map((item, index) => (
+    timePeriods.map((item, index) => (
       <Button
         key={index}
         size='large'
         color='danger'
-        onClick={props.onClick}>
+        onClick={onClick}>
         {item}
       </Button>
     ))
