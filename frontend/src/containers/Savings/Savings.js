@@ -6,7 +6,7 @@ import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 
-const Savings = props => {
+const Savings = () => {
   const [loading, setLoading] = useState(false)
   const [goals, setGoals] = useState([])
   const [goalProgress, setGoalProgress] = useState(0)
