@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import classes from './ProgressBar.module.css'
 import Progress from './Progress/Progress.js'
 
-const ProgressBar = props => (
+const ProgressBar = ({
+  leftPercent, rightPercent, leftColor, rightColor, single
+}) => (
   <div className={classes.ProgressBar}>
     <Progress
-      color={props.leftColor}
-      percent={props.leftPercent || 0}
+      color={leftColor}
+      percent={leftPercent || 0}
       position='left'
-      single={props.single} />
+      single={single} />
     <Progress
-      color={props.rightColor}
-      percent={props.rightPercent || 0}
+      color={rightColor}
+      percent={rightPercent || 0}
       position='right' />
   </div>
 )
