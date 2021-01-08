@@ -5,25 +5,36 @@ import Graph from './Graph/Graph'
 import GraphSummaryTitle from './GraphSummaryTitle/GraphSummaryTitle'
 import Navbar from '../../Navbar/Navbar'
 
-const GraphSummary = props => {
+const GraphSummary = ({
+  showYearly,
+  isSavings,
+  openModal,
+  buttonContent,
+  decrementNumber,
+  incrementNumber,
+  onNavSavingsChange,
+  active,
+  labels,
+  data
+}) => {
   let title = null
   let nav = null
 
-  if (props.showYearly) {
+  if (showYearly) {
     title = (
       <GraphSummaryTitle
-        openModal={props.openModal}
-        buttonContent={props.buttonContent}
-        decrementNumber={props.decrementNumber}
-        incrementNumber={props.incrementNumber} />
+        openModal={openModal}
+        buttonContent={buttonContent}
+        decrementNumber={decrementNumber}
+        incrementNumber={incrementNumber} />
     )
   }
 
-  if (!props.showYearly) {
+  if (!showYearly) {
     nav = (
       <Navbar
-        onNavSavingsChange={props.onNavSavingsChange}
-        active={props.active}
+        onNavSavingsChange={onNavSavingsChange}
+        active={active}
         isSavings />
     )
   }
@@ -32,10 +43,10 @@ const GraphSummary = props => {
     <div className={classes.GraphSummary}>
       {title}
       <Graph
-        active={props.active}
-        isSavings={props.isSavings}
-        labels={props.labels}
-        data={props.data} />
+        active={active}
+        isSavings={isSavings}
+        labels={labels}
+        data={data} />
       {nav}
     </div>
   )
