@@ -1,3 +1,26 @@
+/* .Profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.Column {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+} */
+
 .Profile {
   display: flex;
   flex-direction: column;
