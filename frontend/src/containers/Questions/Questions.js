@@ -5,7 +5,7 @@ import Container from '../../components/UI/Container/Container'
 import Question from '../../components/Question/Question'
 import Button from '../../components/UI/Button/Button'
 
-const Questions = props => {
+const Questions = ({ history }) => {
   const [questionNumber, setQuestionNumber] = useState(0)
   const [payHousing, setPayHousing] = useState('')
   const [transportation, setTransportation] = useState('')
@@ -87,21 +87,21 @@ const Questions = props => {
     if (questionList.length - 1 > questionNumber) {
       setQuestionNumber(questionNumber + 1)
     } else {
-      props.history.push('/')
+      history.push('/')
     }
   }
 
   const pastAnswers = questionList.map((question, index) => (
     questionNumber > index
       ? (
-          <Button
-            key={question.shortPrompt}
-            size='thin'
-            color='primary'
-            secondary={question.answer}
-            dual>
-            {question.shortPrompt}
-          </Button>
+        <Button
+          key={question.shortPrompt}
+          size='thin'
+          color='primary'
+          secondary={question.answer}
+          dual>
+          {question.shortPrompt}
+        </Button>
         )
       : null
   ))
