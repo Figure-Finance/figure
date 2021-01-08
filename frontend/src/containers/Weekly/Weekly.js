@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   format,
@@ -16,7 +16,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
 import Error from '../../components/Error/Error'
 
-const Weekly = props => {
+const Weekly = () => {
   const today = useMemo(() => startOfToday(), [])
   const lastYear = useMemo(() => subYears(today, 1), [today])
   const weeks = useMemo(
@@ -46,10 +46,15 @@ const Weekly = props => {
     return { income, expenses }
   }
 
+  // TODO
+  // onFetchWeekly is being called twice unnecessarily. The first call has an outdated state
+  // while the second call has the correct state. Only the first call is rendered to the DOM
   const onFetchWeekly = useCallback(async () => {
+    console.log('currentWeekIndex BEFORE', currentWeekIndex)
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
     const res = await api.get(`weekly/${startDate}/${endDate}`)
+    console.log('currentWeekIndex AFTER', currentWeekIndex)
     return res.data
   }, [currentWeekIndex, weeks])
 
@@ -111,7 +116,11 @@ const Weekly = props => {
     }
   }, [currentWeekIndex, weekStringMap.length])
 
-  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly)
+  useEffect(onFetchWeekly, [onFetchWeekly, currentWeekIndex, weeks])
+
+  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly, {
+    staleTime: 300000
+  })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousWeek, {
     onSuccess: data => queryClient.invalidateQueries()
@@ -121,7 +130,6 @@ const Weekly = props => {
   })
 
   const previousWeekHandler = () => {
-    console.log(currentWeekIndex)
     mutateLeftClick.mutate()
   }
 
@@ -145,6 +153,7 @@ const Weekly = props => {
     chart = <Error />
     expensesBreakdown = <Error />
   } else {
+    console.log(data)
     const { income, expenses } = updateIncomeExpenses(data)
     progress = (
       <Progress
