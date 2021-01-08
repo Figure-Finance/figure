@@ -12,14 +12,14 @@ const TypeSummary = props => {
         onClick={() => props.openDetailModal(item.id)}
         color={props.color}
         size='thin'
-        width='90%'>
+        width='100%'>
         {item.category}
       </Button>
     )
   })
 
   return (
-    <div className={classes.Type}>
+    <div className={classes.TypeSummary}>
       <div className={classes.Buttons}>
         {buttons}
       </div>
