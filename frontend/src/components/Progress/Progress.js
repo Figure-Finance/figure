@@ -5,7 +5,17 @@ import ProgressSummary from './ProgressSummary/ProgressSummary'
 import ProgressModal from './ProgressModal/ProgressModal'
 import Loader from '../Loader/Loader'
 
-const Progress = props => {
+const Progress = ({
+  updateProgress,
+  updateGoal,
+  leftColor,
+  rightColor,
+  leftAmount,
+  rightAmount,
+  single,
+  loading,
+  showButtons
+}) => {
   const [showLeftModal, setShowLeftModal] = useState(false)
   const [showRightModal, setShowRightModal] = useState(false)
 
@@ -14,7 +24,7 @@ const Progress = props => {
   }
 
   const leftModalSubmitHandler = value => {
-    props.updateProgress(value, res => {
+    updateProgress(value, res => {
       leftModalCloseHandler()
     })
   }
@@ -24,7 +34,7 @@ const Progress = props => {
   }
 
   const rightModalSubmitHandler = value => {
-    props.updateGoal(value, data => {
+    updateGoal(value, data => {
       rightModalCloseHandler()
     })
   }
@@ -33,12 +43,12 @@ const Progress = props => {
     <ProgressSummary
       leftButtonClickHandler={() => setShowLeftModal(true)}
       rightButtonClickHandler={() => setShowRightModal(true)}
-      leftAmount={props.leftAmount}
-      rightAmount={props.rightAmount}
-      leftColor={props.leftColor}
-      rightColor={props.rightColor}
-      single={props.single}
-      showButtons={props.showButtons} />
+      leftAmount={leftAmount}
+      rightAmount={rightAmount}
+      leftColor={leftColor}
+      rightColor={rightColor}
+      single={single}
+      showButtons={showButtons} />
   )
 
   if (showLeftModal) {
@@ -47,20 +57,20 @@ const Progress = props => {
         title='Deposit'
         closeModal={leftModalCloseHandler}
         onSubmit={leftModalSubmitHandler}
-        color={props.leftColor} />
+        color={leftColor} />
     )
   } else if (showRightModal) {
     content = (
       <ProgressModal
         title='Update Goal'
-        amount={props.rightAmount.toString()}
+        amount={rightAmount.toString()}
         closeModal={rightModalCloseHandler}
         onSubmit={rightModalSubmitHandler}
-        color={props.rightColor || props.leftColor} />
+        color={rightColor || leftColor} />
     )
   }
 
-  if (props.loading) {
+  if (loading) {
     content = <Loader />
   }
 
