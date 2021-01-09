@@ -11,21 +11,27 @@ exports.getUserFinances = (req, res, next) => {
   User.findOne()
     .then(user => {
       Finance.find({ userId: user._id })
-        .then(finances => {
-          const weeklyFinances = finances.filter(i => {
-            return isWithinInterval(new Date(i.date), {
-              start: new Date(startDate),
-              end: new Date(endDate)
-            })
-          })
-          const financeData = weeklyFinances.map(entry => {
-            return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
-          })
-          return res.status(200).json(financeData)
+    })
+    .then(finances => {
+      if (!finances) {
+        throw new Error('This user has no finances yet!')
+      }
+      const weeklyFinances = finances.filter(i => {
+        return isWithinInterval(new Date(i.date), {
+          start: new Date(startDate),
+          end: new Date(endDate)
         })
-        .catch(err => {
-          console.log(err)
-        })
+      })
+      const financeData = weeklyFinances.map(entry => {
+        return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
+      })
+      return res.status(200).json(financeData)
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
     })
 }
 
@@ -37,7 +43,6 @@ exports.postUserFinances = (req, res, next) => {
     error.data = errors.array()
     throw error
   }
-  console.log(errors)
   const category = req.body.category
   const amount = req.body.amount
   const location = req.body.location
@@ -62,7 +67,12 @@ exports.postUserFinances = (req, res, next) => {
         id: finances._id
       })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.getFinanceDetailsById = (req, res, next) => {
@@ -85,13 +95,21 @@ exports.getFinanceDetailsById = (req, res, next) => {
         data: finance.date
       })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.deleteFinanceEntryById = (req, res, next) => {
   const financeId = req.params.id
   Finance.findByIdAndDelete(financeId, err => {
-    console.log(err)
+    if (!err.statusCode) {
+      err.statusCode = 500
+      next(err)
+    }
   })
   return res.status(200).json({ msg: 'Finance entry deleted successfully!' })
 }
@@ -110,8 +128,15 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.description = newDescription
       financeEntry.location = newLocation
       financeEntry.date = newDate
-      financeEntry.save(err => console.log(err))
+      return financeEntry.save()
+    })
+    .then(result => {
       return res.status(200).json({ message: 'Finance entry successfully updated.' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }

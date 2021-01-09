@@ -15,29 +15,37 @@ exports.postItemGoals = (req, res, next) => {
   const name = req.body.name
   const amount = req.body.amount
   const description = req.body.description
-  const user = User.findOne()
+  let newGoal
+  let loadedUser
+  User.findOne()
     .then(user => {
-      console.log(`User from post route: ${user.firstName}`)
-      ItemGoal.find()
-        .then(itemGoals => {
-          const newGoal = new ItemGoal({
-            name: name,
-            amount: amount,
-            description: description,
-            userId: user._id
-          })
-          newGoal.save(err => console.log(err))
-          return res.status(201).json({ id: newGoal._id })
-        })
+      loadedUser = user
+      return ItemGoal.find()
     })
-    .catch(err => console.log(err))
+    .then(itemGoals => {
+      newGoal = new ItemGoal({
+        name: name,
+        amount: amount,
+        description: description,
+        userId: loadedUser._id
+      })
+      return newGoal.save()
+    })
+    .then(result => {
+      return res.status(201).json({ id: newGoal._id })
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.getItemGoalDetails = (req, res, next) => {
   const itemGoalId = req.params.id
   ItemGoal.findOne({ _id: itemGoalId })
     .then(itemGoal => {
-      console.log(`Item goal: ${itemGoal}`)
       res.status(200).json({
         name: itemGoal.name,
         amount: itemGoal.amount,
@@ -45,23 +53,35 @@ exports.getItemGoalDetails = (req, res, next) => {
         progress: itemGoal.progress
       })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.deleteItemGoal = (req, res, next) => {
   const itemGoalId = req.params.id
   ItemGoal.findOne({ _id: itemGoalId })
     .then(itemGoal => {
-      Savings.findOne({ userId: itemGoal.userId })
+      return Savings.findOne({ userId: itemGoal.userId })
         .then(savings => {
           savings.totalSavingsProgress = savings.totalSavingsProgress + itemGoal.progress
-          savings.save(err => console.log(err))
+          return savings.save()
         })
-        .catch(err => console.log(err))
-      ItemGoal.findByIdAndDelete(itemGoalId, err => {
-        console.log(err)
-      })
-      return res.status(200).json({ message: 'Goal successfully deleted.' })
+        .then(result => {
+          ItemGoal.findByIdAndDelete(itemGoalId, err => {
+            console.log(err)
+          })
+          return res.status(200).json({ message: 'Goal successfully deleted.' })
+        })
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
     })
 }
 
@@ -79,13 +99,23 @@ exports.editItemGoal = (req, res, next) => {
   const newDescription = req.body.description
   ItemGoal.findOne({ _id: itemGoalId })
     .then(itemGoal => {
+      if (!itemGoal) {
+        const error = new Error('Goal not found.')
+        error.statusCode = 500
+        throw error
+      }
       itemGoal.name = newName
       itemGoal.amount = newAmount
       itemGoal.description = newDescription
       itemGoal.save()
       return res.status(200).json({ message: 'Item goal successfully updated!' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.allocateGoalFunds = (req, res, next) => {
@@ -98,22 +128,30 @@ exports.allocateGoalFunds = (req, res, next) => {
         throw new Error("You don't have enough saved yet to allocate that much to this goal!")
       }
       totalSavings.totalSavingsProgress -= allocateAmount
-      totalSavings.save(err => console.log(err))
-      ItemGoal.findOne({ _id: itemGoalId })
-        .then(itemGoal => {
-          console.log(itemGoal)
-          if (itemGoal.progress >= itemGoal.amount) {
-            throw new Error('This goal has been reached.')
-          } else if (itemGoal.progress + allocateAmount > itemGoal.amount) {
-            throw new Error('This allocation will put you over goal.')
-          } else {
-            itemGoal.progress += allocateAmount
-            itemGoal.save(err => console.log(err))
-            console.log(itemGoal)
-          }
-        })
-        .catch(err => console.log(err))
+      return totalSavings.save()
+    })
+    .then(result => {
+      return ItemGoal.findOne({ _id: itemGoalId })
+    })
+    .then(itemGoal => {
+      console.log(itemGoal)
+      if (itemGoal.progress >= itemGoal.amount) {
+        throw new Error('This goal has been reached.')
+      } else if (itemGoal.progress + allocateAmount > itemGoal.amount) {
+        throw new Error('This allocation will put you over goal.')
+      } else {
+        itemGoal.progress += allocateAmount
+        return itemGoal.save()
+        console.log(itemGoal)
+      }
+    })
+    .then(result => {
       return res.status(200).json({ message: 'Funds successfully allocated!' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }

@@ -33,7 +33,12 @@ exports.getSavings = (req, res, next) => {
       }
       next()
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
   ItemGoal.find()
     .then(itemGoalArray => {
       itemGoals = itemGoalArray.map(i => {
@@ -41,7 +46,12 @@ exports.getSavings = (req, res, next) => {
       })
       return res.status(200).json({ ...savings, itemGoals })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.postTotalSavings = (req, res, next) => {
@@ -55,22 +65,27 @@ exports.postTotalSavings = (req, res, next) => {
   const totalSavingsGoal = req.body.totalSavingsGoal
   // TODO: bankProgress will auto update and is just received through here for testing
   const totalSavingsProgress = req.body.totalSavingsProgress
-  const user = User.findOne()
+  let newSavings
+  // TODO: find user by current authorized user id
+  User.findOne()
     .then(user => {
-      Savings.find()
-        .then(savings => {
-          const totalSavings = new Savings({
-            totalSavingsGoal: totalSavingsGoal, // { name: 'New Bike', amount: 450 }
-            totalSavingsProgress: totalSavingsProgress,
-            userId: user._id
-          })
-          totalSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
-          totalSavings.save(err => console.log(err))
-          return res.status(201).json({ id: totalSavings._id })
-        })
-        .catch(err => console.log(err))
+      newSavings = new Savings({
+        totalSavingsGoal: totalSavingsGoal, // { name: 'New Bike', amount: 450 }
+        totalSavingsProgress: totalSavingsProgress,
+        userId: user._id
+      })
+      newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
+      return newSavings.save()
     })
-    .catch(err => console.log(err))
+    .then(result => {
+      return res.status(201).json({ id: newSavings._id })
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.editTotalSavings = (req, res, next) => {
@@ -86,10 +101,17 @@ exports.editTotalSavings = (req, res, next) => {
   Savings.findOne()
     .then(savingsItem => {
       savingsItem.totalSavingsGoal = newTotalSavingsGoal
-      savingsItem.save(err => console.log(err))
+      return savingsItem.save()
+    })
+    .then(result => {
       return res.status(200).json({ message: 'Savings goal successfully updated.' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.updateTotalSavingsProgress = (req, res, next) => {
@@ -113,10 +135,17 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: curTotal })
       }
       savingsItem.totalSavingsProgress += req.body.progressAmount
-      savingsItem.save(err => console.log(err))
+      return savingsItem.save()
+    })
+    .then(result => {
       return res.status(200).json({ message: 'Total savings progress successfully updated.' })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.getByTimeFrame = (req, res, next) => {
@@ -267,5 +296,10 @@ exports.getByTimeFrame = (req, res, next) => {
           })
       }
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }

@@ -70,6 +70,12 @@ exports.signin = (req, res, next) => {
       })
       res.status(200).json({ token: token, id: loadedUser._id.toString() })
     })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.getUserProfile = (req, res, next) => {
@@ -86,7 +92,10 @@ exports.getUserProfile = (req, res, next) => {
       return res.status(200).json(returnUser)
     })
     .catch(err => {
-      console.log(err)
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
     })
 }
 
@@ -107,7 +116,10 @@ exports.updateUserProfile = (req, res, next) => {
       return res.status(200).json({ message: 'User updated successfully!' })
     })
     .catch(err => {
-      console.log(err)
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
     })
 }
 
@@ -120,7 +132,12 @@ exports.addUserCategory = (req, res, next) => {
       user.save(err => console.log(err))
       res.status(201).json({ id: user.categories[user.categories.length - 1]._id })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
 }
 
 exports.deleteUserCategory = (req, res, next) => {
@@ -135,6 +152,9 @@ exports.deleteUserCategory = (req, res, next) => {
       return res.status(200).json({ message: 'Category successfully deleted.' })
     })
     .catch(err => {
-      console.log(err)
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
     })
 }
