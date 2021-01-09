@@ -8,6 +8,8 @@ const router = express.Router()
 
 router.get('/', userController.getUserProfile)
 
+router.patch('/', userController.updateUserProfile)
+
 router.post('/signup', userController.postUser)
 
 router.patch('/category', userController.addUserCategory)

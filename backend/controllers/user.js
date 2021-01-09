@@ -37,6 +37,28 @@ exports.postUser = (req, res, next) => {
   res.status(201).json({ msg: 'User successfully created!', user: user })
 }
 
+exports.updateUserProfile = (req, res, next) => {
+  const newFirstName = req.body.firstName
+  const newLastName = req.body.lastName
+  const newEmail = req.body.email
+
+  // TODO: get this by auth token
+  User.findOne()
+    .then(user => {
+      user.firstName = newFirstName
+      user.lastName = newLastName
+      user.email = newEmail
+      return user.save()
+    })
+    .then(result => {
+      console.log(result)
+      return res.status(200).json({ message: 'User updated successfully!' })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
 exports.addUserCategory = (req, res, next) => {
   const category = req.body.category
   const isIncome = req.body.isIncome
