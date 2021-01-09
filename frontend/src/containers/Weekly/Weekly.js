@@ -106,20 +106,20 @@ const Weekly = () => {
 
   const previousWeek = useCallback(() => {
     if (currentWeekIndex > 0) {
-      setCurrentWeekIndex(currentWeekIndex - 1)
+      return setCurrentWeekIndex(currentWeekIndex - 1)
     }
   }, [currentWeekIndex])
 
   const nextWeek = useCallback(() => {
     if (currentWeekIndex < weekStringMap.length - 1) {
-      setCurrentWeekIndex(currentWeekIndex + 1)
+      return setCurrentWeekIndex(currentWeekIndex + 1)
     }
   }, [currentWeekIndex, weekStringMap.length])
 
-  useEffect(onFetchWeekly, [onFetchWeekly, currentWeekIndex, weeks])
+  useEffect(onFetchWeekly, [onFetchWeekly])
 
   const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly, {
-    staleTime: 300000
+    staleTime: 0
   })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousWeek, {

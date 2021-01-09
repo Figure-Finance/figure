@@ -1,7 +1,18 @@
 .BreakdownSummary {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  justify-content: flex-start;
+  margin: 0 auto;
   overflow: scroll;
+  position: relative;
   text-align: center;
+  width: 100%;
+}
+
+h1 {
+  margin: 10px 0;
 }
 
 .Item {
@@ -26,18 +37,16 @@
 }
 
 .Buttons {
-  height: calc(100% - 38px - 60px - 43px - 15px);
+  margin: 10px 0;
+  width: 90%;
 }
 
-.FullButtons {
-  height: calc(100% - 38px -43px)
+.Buttons button {
+  margin: 10px auto;
 }
 
-.BreakdownSummary > button {
-  margin: 0 auto;
-}
-
-.Buttons > button,
-.FullButtons > button {
-  margin: 15px auto;
+.Add {
+  bottom: 10px;
+  position: absolute;
+  width: 90%;
 }

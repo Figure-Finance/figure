@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Button from '../Button/Button'
 import Add from '../../Icons/Add/Add'
 
-const AddButton = ({ color, onClick, size, width, disabled }) => {
+const AddButton = ({ color, onClick, disabled }) => {
   let fill = 'black'
 
   if (color === 'primary') {
@@ -16,9 +16,9 @@ const AddButton = ({ color, onClick, size, width, disabled }) => {
 
   return (
     <Button
-      width={width}
+      width='100%'
       color={color}
-      size={size || 'square'}
+      size='medium'
       onClick={onClick}
       disabled={disabled}>
       <Add fill={fill} />
@@ -29,8 +29,6 @@ const AddButton = ({ color, onClick, size, width, disabled }) => {
 AddButton.propTypes = {
   color: PropTypes.string,
   onClick: PropTypes.func,
-  size: PropTypes.string,
-  width: PropTypes.string,
   disabled: PropTypes.bool
 }
 
