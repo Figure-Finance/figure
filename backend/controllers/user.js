@@ -32,7 +32,7 @@ exports.signup = (req, res, next) => {
       }, process.env.SECRET_KEY, {
         expiresIn: '1h'
       })
-      res.status(201).json({ msg: 'User successfully created!', user: user, token: token })
+      res.status(201).json({ token: token })
     })
     .catch(err => {
       if (!err.statusCode) {
@@ -68,7 +68,7 @@ exports.signin = (req, res, next) => {
       }, process.env.SECRET_KEY, {
         expiresIn: '1h'
       })
-      res.status(200).json({ token: token, id: loadedUser._id.toString() })
+      res.status(200).json({ token: token })
     })
     .catch(err => {
       if (!err.statusCode) {
@@ -79,8 +79,11 @@ exports.signin = (req, res, next) => {
 }
 
 exports.getUserProfile = (req, res, next) => {
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
+      if (!user) {
+        throw new Error('User not found.')
+      }
       returnUser = {
         firstName: user.firstName,
         lastName: user.lastName,
