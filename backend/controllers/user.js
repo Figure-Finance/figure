@@ -63,8 +63,8 @@ exports.signin = (req, res, next) => {
         throw error
       }
       const token = jwt.sign({
-        email: user.email,
-        userId: user._id.toString()
+        email: loadedUser.email,
+        userId: loadedUser._id.toString()
       }, process.env.SECRET_KEY, {
         expiresIn: '1h'
       })
