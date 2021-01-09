@@ -28,6 +28,11 @@ const Profile = () => {
     return res.data
   }, [])
 
+  const onUpdateProfile = useCallback(async updatedUser => {
+    const res = await api.patch('user', updatedUser)
+    return res.data
+  }, [])
+
   const onAddIncomeType = useCallback(async type => {
     const isIncome = true
     const res = await api.patch('user/category', {
@@ -78,7 +83,8 @@ const Profile = () => {
       <ProfileSummary
         firstName={data.firstName}
         lastName={data.lastName}
-        email={data.email} />
+        email={data.email}
+        onUpdate={onUpdateProfile} />
     )
     incomeType = (
       <Type
