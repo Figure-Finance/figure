@@ -16,14 +16,26 @@ const Auth = ({ history }) => {
 
   const onUserSignUp = async () => {
     const userData = { firstName, lastName, email, password }
-    const res = await api.post('user/signup', userData)
-    console.log(res.data)
+    try {
+      const res = await api.post('user/signup', userData)
+      console.log(res.data)
+      localStorage.setItem('token', res.data.token)
+      history.push('/')
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const onUserSignIn = async () => {
     const userData = { email, password }
-    const res = await api.post('user/signin', userData)
-    console.log(res.data)
+    try {
+      const res = await api.post('user/signin', userData)
+      console.log(res.data)
+      localStorage.setItem('token', res.data.token)
+      history.push('/')
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   let content
