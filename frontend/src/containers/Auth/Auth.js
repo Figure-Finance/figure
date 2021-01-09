@@ -12,10 +12,17 @@ const Auth = ({ history }) => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isSignUp, setIsSignUp] = useState(true)
 
   const onUserSignUp = async () => {
     const userData = { firstName, lastName, email, password }
     const res = await api.post('user/signup', userData)
+    console.log(res.data)
+  }
+
+  const onUserSignIn = async () => {
+    const userData = { firstName, lastName, email, password }
+    const res = await api.post('user/signin', userData)
     console.log(res.data)
   }
 
@@ -60,10 +67,16 @@ const Auth = ({ history }) => {
             value={password}
             onChange={event => setPassword(event.target.value)} />
           <Button
-            onClick={onUserSignUp}
+            onClick={isSignUp ? onUserSignUp : onUserSignIn}
             color='primary'
             size='large'>
-            Sign Up
+            {isSignUp ? 'Sign Up' : 'Sign In'}
+          </Button>
+          <Button
+            onClick={() => setIsSignUp(!isSignUp)}
+            color='primary'
+            size='small'>
+            Change
           </Button>
         </div>
       </Container>
