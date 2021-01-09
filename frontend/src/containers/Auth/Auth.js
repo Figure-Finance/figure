@@ -21,63 +21,106 @@ const Auth = ({ history }) => {
   }
 
   const onUserSignIn = async () => {
-    const userData = { firstName, lastName, email, password }
+    const userData = { email, password }
     const res = await api.post('user/signin', userData)
     console.log(res.data)
   }
+
+  let content
+
+  isSignUp
+    ? content = (
+      <>
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'text',
+            placeholder: 'First Name'
+          }}
+          value={firstName}
+          onChange={event => setFirstName(event.target.value)} />
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'text',
+            placeholder: 'Last Name'
+          }}
+          value={lastName}
+          onChange={event => setLastName(event.target.value)} />
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'email',
+            placeholder: 'Email'
+          }}
+          value={email}
+          onChange={event => setEmail(event.target.value)} />
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'password',
+            placeholder: 'Password'
+          }}
+          value={password}
+          onChange={event => setPassword(event.target.value)} />
+        <Button
+          onClick={onUserSignUp}
+          color='primary'
+          size='large'>
+          Sign Up
+        </Button>
+        <Button
+          onClick={() => setIsSignUp(false)}
+          color='primary'
+          size='small'>
+          Change
+        </Button>
+      </>
+      )
+    : content = (
+      <>
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'email',
+            placeholder: 'Email'
+          }}
+          value={email}
+          onChange={event => setEmail(event.target.value)} />
+        <Input
+          color='primary'
+          type='input'
+          config={{
+            type: 'password',
+            placeholder: 'Password'
+          }}
+          value={password}
+          onChange={event => setPassword(event.target.value)} />
+        <Button
+          onClick={onUserSignIn}
+          color='primary'
+          size='large'>
+          Sign In
+        </Button>
+        <Button
+          onClick={() => setIsSignUp(true)}
+          color='primary'
+          size='small'>
+          Change
+      </Button>
+      </>
+    )
 
   return (
     <div className={classes.Auth}>
       <Container height='98%' width='50%'>
         <div className={classes.Main}>
-          <Input
-            color='primary'
-            type='input'
-            config={{
-              type: 'text',
-              placeholder: 'First Name'
-            }}
-            value={firstName}
-            onChange={event => setFirstName(event.target.value)} />
-          <Input
-            color='primary'
-            type='input'
-            config={{
-              type: 'text',
-              placeholder: 'Last Name'
-            }}
-            value={lastName}
-            onChange={event => setLastName(event.target.value)} />
-          <Input
-            color='primary'
-            type='input'
-            config={{
-              type: 'email',
-              placeholder: 'Email'
-            }}
-            value={email}
-            onChange={event => setEmail(event.target.value)} />
-          <Input
-            color='primary'
-            type='input'
-            config={{
-              type: 'password',
-              placeholder: 'Password'
-            }}
-            value={password}
-            onChange={event => setPassword(event.target.value)} />
-          <Button
-            onClick={isSignUp ? onUserSignUp : onUserSignIn}
-            color='primary'
-            size='large'>
-            {isSignUp ? 'Sign Up' : 'Sign In'}
-          </Button>
-          <Button
-            onClick={() => setIsSignUp(!isSignUp)}
-            color='primary'
-            size='small'>
-            Change
-          </Button>
+          {content}
         </div>
       </Container>
       <div>
