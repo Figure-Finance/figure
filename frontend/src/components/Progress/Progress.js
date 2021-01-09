@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import classes from './Progress.module.css'
 import Container from '../UI/Container/Container'
 import ProgressSummary from './ProgressSummary/ProgressSummary'
 import ProgressModal from './ProgressModal/ProgressModal'
@@ -69,9 +70,11 @@ const Progress = ({
   }
 
   return (
-    <Container height='100px'>
-      {content}
-    </Container>
+    <div className={classes.Progress}>
+      <Container height='100px'>
+        {content}
+      </Container>
+    </div>
   )
 }
 

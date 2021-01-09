@@ -7,9 +7,12 @@
 
 .Main {
   align-items: center;
+  bottom: 100px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  height: 100%;
-  margin: 10px 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 130px;
 }

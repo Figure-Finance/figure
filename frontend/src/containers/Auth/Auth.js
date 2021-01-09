@@ -15,13 +15,8 @@ const Auth = ({ history }) => {
 
   const onUserSignUp = async () => {
     const userData = { firstName, lastName, email, password }
-    try {
-      const res = await api.post('user/signup', userData)
-      console.log(res.data)
-      history.push('/auth/questions')
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await api.post('user/signup', userData)
+    console.log(res.data)
   }
 
   return (

@@ -46,7 +46,9 @@ const BreakdownSummary = ({
         colorClass = classes.Danger
       }
       return (
-        <div key={item.id} className={`${classes.Item} ${colorClass}`}>
+        <div
+          key={item.category}
+          className={`${classes.Item} ${colorClass}`}>
           <h2 className={color}>
             {item.category}
           </h2>

@@ -30,11 +30,14 @@
 
 .Main {
   align-items: center;
+  bottom: 100px;
   display: flex;
   flex-direction: row;
-  height: 100%;
   justify-content: space-around;
-  margin: 10px 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .Column {
