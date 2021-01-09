@@ -57,7 +57,7 @@ const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
   const addItemHandler = () => {
     onClose()
     mutateAdd.mutate({
-      name: formElements.type.value,
+      name: formElements.name.value,
       amount: formElements.amount.value,
       description: formElements.description.value
     })
