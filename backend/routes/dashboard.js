@@ -33,13 +33,13 @@ router.post('/', [
     .not()
     .isEmpty(),
   body('description')
-    .isLength({ min: 10, max: 100 })
-    .withMessage('Please ensure description is between 10 and 100 characters.')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Please ensure description is between 1 and 100 characters.')
     .not()
     .isEmpty(),
   body('location')
-    .isLength({ min: 4, max: 25 })
-    .withMessage('Please ensure location is between 4 and 25 characters.')
+    .isLength({ min: 1, max: 25 })
+    .withMessage('Please ensure location is between 1 and 25 characters.')
     .not()
     .isEmpty(),
   body('isIncome')
@@ -69,13 +69,13 @@ router.patch('/', [
     .not()
     .isEmpty(),
   body('description')
-    .isLength({ min: 10, max: 100 })
-    .withMessage('Please ensure description is between 10 and 100 characters.')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Please ensure description is between 1 and 100 characters.')
     .not()
     .isEmpty(),
   body('location')
-    .isLength({ min: 4, max: 25 })
-    .withMessage('Please ensure location is between 4 and 25 characters.')
+    .isLength({ min: 1, max: 25 })
+    .withMessage('Please ensure location is between 1 and 25 characters.')
     .not()
     .isEmpty()
 ],

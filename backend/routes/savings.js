@@ -49,16 +49,16 @@ router.get('/progress/:timeFrame', savingsController.getByTimeFrame)
 
 router.post('/goal', [
   body('name')
-    .isLength({ min: 5, max: 25 })
-    .withMessage('Name must be between 5 and 25 characters'),
+    .isLength({ min: 1, max: 25 })
+    .withMessage('Name must be between 1 and 25 characters'),
   body('amount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
     .not()
     .isEmpty(),
   body('description')
-    .isLength({ min: 10, max: 100 })
-    .withMessage('Description must be between 10 and 100 characters.')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Description must be between 1 and 100 characters.')
 ],
 itemGoalController.postItemGoals
 )
@@ -74,16 +74,16 @@ router.patch('/goal', [
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),
   body('name')
-    .isLength({ min: 5, max: 25 })
-    .withMessage('Name must be between 5 and 25 characters'),
+    .isLength({ min: 1, max: 25 })
+    .withMessage('Name must be between 1 and 25 characters'),
   body('amount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
     .not()
     .isEmpty(),
   body('description')
-    .isLength({ min: 10, max: 100 })
-    .withMessage('Description must be between 10 and 100 characters.')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Description must be between 1 and 100 characters.')
 ],
 itemGoalController.editItemGoal
 )

@@ -259,7 +259,7 @@ exports.getByTimeFrame = (req, res, next) => {
                   start: user.createdAt,
                   end: startOfToday()
                 })) {
-                  return savings.push({ period: startOfQuarter(r.date), amount: r.amount })
+                  return savings.push({ period: startOfMonth(r.date), amount: r.amount })
                 }
               })
               return res.status(200).json(savings)
