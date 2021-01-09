@@ -7,9 +7,11 @@ const ItemGoal = require('../models/itemGoal')
 const timeFrameUtils = require('../util/savingsByTimeFrame')
 
 const startOfToday = require('date-fns/startOfToday')
+const startOfWeek = require('date-fns/startOfWeek')
+const startOfMonth = require('date-fns/startOfMonth')
+const startOfQuarter = require('date-fns/startOfQuarter')
 const sub = require('date-fns/sub')
 
-// May not need the rest of these
 const isWithinInterval = require('date-fns/isWithinInterval')
 
 const { filterByTimeFrame, filterSavingsData } = timeFrameUtils
@@ -118,9 +120,6 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 }
 
 exports.getByTimeFrame = (req, res, next) => {
-  // TODO: Work on getting by past year, month, etc. rather than calendar
-  // libraries to help with the heavy lifting?
-  // mongo aggregate to clean some of this up?
   const timeFrame = req.params.timeFrame
   const savings = []
   User.findOne()
@@ -132,7 +131,7 @@ exports.getByTimeFrame = (req, res, next) => {
               userId: user._id
             }
           },
-          { $unwind: '$progressUpdates' },
+          { $unwind: { path: '$progressUpdates' } },
           { $group: { _id: '$progressUpdates.date', amount: { $sum: '$progressUpdates.curTotal' } } }
         ])
           .exec((err, result) => {
@@ -141,82 +140,132 @@ exports.getByTimeFrame = (req, res, next) => {
             }
             if (result) {
               console.log(result)
-              return result.map(r => {
-                if (isWithinInterval(r._id, {
+              result.map(r => {
+                if (isWithinInterval(new Date(r._id), {
                   start: sub(startOfToday(), {
                     days: 7
                   }),
                   end: startOfToday()
                 })) {
-                  savings.push({ period: r._id, amount: r.amount })
-                  console.log(`Savings after push: ${savings}`)
+                  return savings.push({ period: r._id, amount: r.amount })
                 }
               })
+              return res.status(200).json(savings)
+            }
+          })
+      } else if (timeFrame === 'month') {
+        Savings.aggregate([
+          {
+            $match: {
+              userId: user._id
+            }
+          },
+          { $unwind: { path: '$progressUpdates' } },
+          { $group: { _id: '$progressUpdates.date', amount: { $sum: '$progressUpdates.curTotal' } } }
+        ])
+          .exec((err, result) => {
+            if (err) {
+              console.log(err)
+            }
+            if (result) {
+              console.log(result)
+              result.map(r => {
+                if (isWithinInterval(new Date(r._id), {
+                  start: sub(startOfToday(), {
+                    months: 1
+                  }),
+                  end: startOfToday()
+                })) {
+                  return savings.push({ period: r._id, amount: r.amount })
+                }
+              })
+              return res.status(200).json(savings)
+            }
+          })
+      } else if (timeFrame === 'quarter') {
+        Savings.aggregate([
+          {
+            $match: {
+              userId: user._id
+            }
+          },
+          { $unwind: { path: '$progressUpdates' } },
+          { $group: { _id: { $dateToString: { format: '%U', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
+        ])
+          .exec((err, result) => {
+            if (err) {
+              console.log(err)
+            }
+            if (result) {
+              console.log(result)
+              result.map(r => {
+                if (isWithinInterval(new Date(r.date), {
+                  start: sub(startOfToday(), {
+                    days: 120
+                  }),
+                  end: startOfToday()
+                })) {
+                  return savings.push({ period: startOfWeek(r.date), amount: r.amount })
+                }
+              })
+              return res.status(200).json(savings)
+            }
+          })
+      } else if (timeFrame === 'year') {
+        Savings.aggregate([
+          {
+            $match: {
+              userId: user._id
+            }
+          },
+          { $unwind: { path: '$progressUpdates' } },
+          { $group: { _id: { $dateToString: { format: '%m', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
+        ])
+          .exec((err, result) => {
+            if (err) {
+              console.log(err)
+            }
+            if (result) {
+              result.map(r => {
+                if (isWithinInterval(new Date(r.date), {
+                  start: sub(startOfToday(), {
+                    days: 365
+                  }),
+                  end: startOfToday()
+                })) {
+                  return savings.push({ period: startOfMonth(r.date), amount: r.amount })
+                }
+              })
+              return res.status(200).json(savings)
+            }
+          })
+      } else if (timeFrame === 'all') {
+        Savings.aggregate([
+          {
+            $match: {
+              userId: user._id
+            }
+          },
+          { $unwind: { path: '$progressUpdates' } },
+          { $group: { _id: { $dateToString: { format: '%m', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
+        ])
+          .exec((err, result) => {
+            if (err) {
+              console.log(err)
+            }
+            if (result) {
+              result.map(r => {
+                if (isWithinInterval(new Date(r.date), {
+                  start: user.createdAt,
+                  end: startOfToday()
+                })) {
+                  return savings.push({ period: startOfQuarter(r.date), amount: r.amount })
+                }
+              })
+              return res.status(200).json(savings)
             }
           })
       }
-      // } else if (timeFrame === 'month') {
-      //   const result = filterSavingsData('month')
-      //   result.map(r => {
-      //     if (isWithinInterval(r._id, {
-      //       start: sub(startOfToday(), {
-      //         months: 1
-      //       }),
-      //       end: startOfToday()
-      //     })) {
-      //       savings.push({ period: r._id, amount: r.amount })
-      //     }
-      //   })
-      // } else if (timeFrame === 'quarter') {
-      //   const result = filterSavingsData('quarter')
-      //   result.map(r => {
-      //     if (isWithinInterval(r._id, {
-      //       start: sub(startOfToday(), {
-      //         months: 3
-      //       }),
-      //       end: startOfToday()
-      //     })) {
-      //       savings.push({ period: r._id, amount: r.amount })
-      //     }
-      //   })
-      // } else if (timeFrame === 'year') {
-      //   const result = filterSavingsData('year')
-      //   result.map(r => {
-      //     if (isWithinInterval(r._id, {
-      //       start: sub(startOfToday(), {
-      //         years: 1
-      //       }),
-      //       end: startOfToday()
-      //     })) {
-      //       savings.push({ period: r._id, amount: r.amount })
-      //     }
-      //   })
-      // } else if (timeFrame === 'all') {
-      //   // TODO: Update interval based on user's "life" on the app
-      //   const result = filterSavingsData('year')
-      //   result.map(r => {
-      //     if (isWithinInterval(r._id, {
-      //       start: sub(startOfToday(), {
-      //         years: 1
-      //       }),
-      //       end: startOfToday()
-      //     })) {
-      //       savings.push({ period: r._id, amount: r.amount })
-      //     }
-      //   })
-      // }
-      console.log(`savings before return: ${savings}`)
-      return res.status(200).json(savings)
     })
     .catch(err => console.log(err))
 }
-
-// } else if (timeFrame === 'month') {
-//   // Show values by day
-// } else if (timeFrame === 'year') {
-//   // Show values by month (full months)
-// } else if (timeFrame === 'quarter') {
-//   // Show values by week
-// } else if (timeFrame === 'all') {
-//   // Show values by quarter
-// }
