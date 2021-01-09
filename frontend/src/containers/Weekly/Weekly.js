@@ -61,7 +61,6 @@ const Weekly = () => {
   const onAddIncome = useCallback(async newIncome => {
     newIncome.amount = +newIncome.amount
     newIncome.date = new Date(newIncome.date)
-    console.log(newIncome)
     const res = await api.post('weekly', {
       ...newIncome,
       isIncome: true
@@ -70,6 +69,8 @@ const Weekly = () => {
   }, [])
 
   const onAddExpense = useCallback(async newExpense => {
+    newExpense.amount = +newExpense.amount
+    newExpense.date = new Date(newExpense.date)
     const res = await api.post('weekly', {
       ...newExpense,
       isIncome: false
