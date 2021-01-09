@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Container from '../UI/Container/Container'
 import ProgressSummary from './ProgressSummary/ProgressSummary'
 import ProgressModal from './ProgressModal/ProgressModal'
-import Loader from '../Loader/Loader'
 
 const Progress = ({
   updateProgress,
@@ -13,7 +12,6 @@ const Progress = ({
   leftAmount,
   rightAmount,
   single,
-  loading,
   showButtons
 }) => {
   const [showLeftModal, setShowLeftModal] = useState(false)
@@ -70,10 +68,6 @@ const Progress = ({
     )
   }
 
-  if (loading) {
-    content = <Loader />
-  }
-
   return (
     <Container height='100px'>
       {content}
@@ -89,7 +83,6 @@ Progress.propTypes = {
   leftAmount: PropTypes.number,
   rightAmount: PropTypes.number,
   single: PropTypes.bool,
-  loading: PropTypes.bool,
   showButtons: PropTypes.bool
 }
 
