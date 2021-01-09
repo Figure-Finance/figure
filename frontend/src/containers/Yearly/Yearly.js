@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   format,
   startOfToday,
@@ -11,6 +12,8 @@ import classes from './Yearly.module.css'
 import Graph from '../../components/Graph/Graph'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
+import Loader from '../../components/Loader/Loader'
+import Error from '../../components/Error/Error'
 
 const Yearly = () => {
   const today = useMemo(() => startOfToday(), [])
@@ -41,44 +44,31 @@ const Yearly = () => {
     'December'
   ], [])
 
-  const [income, setIncome] = useState([])
-  const [expenses, setExpenses] = useState([])
-  const [incomeByMonth, setIncomeByMonth] = useState([])
-  const [expensesByMonth, setExpensesByMonth] = useState([])
   const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
 
   const updateIncomeExpenses = updatedItems => {
-    const updatedIncome = []
-    const updatedExpenses = []
-    const totalIncomeByMonth = Array(12).fill(0)
-    const totalExpensesByMonth = Array(12).fill(0)
+    const income = []
+    const expenses = []
+    const incomeByMonth = Array(12).fill(0)
+    const expensesByMonth = Array(12).fill(0)
     for (const item of updatedItems) {
       if (item.isIncome) {
-        updatedIncome.push(item)
-        totalIncomeByMonth[item.month - 1] += item.amount
+        income.push(item)
+        incomeByMonth[item.month - 1] += item.amount
       } else {
-        updatedExpenses.push(item)
-        totalExpensesByMonth[item.month - 1] += item.amount
+        expenses.push(item)
+        expensesByMonth[item.month - 1] += item.amount
       }
     }
-    setIncome(updatedIncome)
-    setExpenses(updatedExpenses)
-    setIncomeByMonth(totalIncomeByMonth)
-    setExpensesByMonth(totalExpensesByMonth)
+    return { income, expenses, incomeByMonth, expensesByMonth }
   }
 
   const onFetchYearly = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
-    try {
-      const res = await api.get(`yearly/${startDate}/${endDate}`)
-      updateIncomeExpenses(res.data)
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await api.get(`yearly/${startDate}/${endDate}`)
+    return res.data
   }, [currentYearIndex, years])
-
-  useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
 
   const changeYear = event => {
     const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
@@ -97,31 +87,75 @@ const Yearly = () => {
     }
   }
 
+  useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
+
+  const { data, isLoading, isError } = useQuery('monthly', onFetchYearly)
+  const queryClient = useQueryClient()
+  const mutateLeftClick = useMutation(previousYear, {
+    onSuccess: data => queryClient.clear()
+  })
+  const mutateRightClick = useMutation(nextYear, {
+    onSuccess: data => queryClient.clear()
+  })
+
+  const previousYearHandler = () => {
+    mutateLeftClick.mutate()
+  }
+
+  const nextYearHandler = () => {
+    mutateRightClick.mutate()
+  }
+
+  let graph
+  let incomeBreakdown
+  let expensesBreakdown
+
+  if (isLoading) {
+    graph = <Loader />
+    incomeBreakdown = <Loader />
+    expensesBreakdown = <Loader />
+  } else if (isError) {
+    graph = <Error />
+    incomeBreakdown = <Error />
+    expensesBreakdown = <Error />
+  } else {
+    const { income, expenses, incomeByMonth, expensesByMonth } = updateIncomeExpenses(data)
+    graph = (
+      <Graph
+        data={{
+          income: incomeByMonth,
+          expenses: expensesByMonth
+        }}
+        labels={months}
+        timePeriods={yearStringMap}
+        previousTimePeriod={previousYearHandler}
+        nextTimePeriod={nextYearHandler}
+        selectTimePeriod={changeYear}
+        currentTimePeriod={yearStringMap[currentYearIndex]} />
+    )
+    incomeBreakdown = (
+      <Breakdown
+        content={income}
+        color='primary'
+        height='40%'
+        width='100%' />
+    )
+    expensesBreakdown = (
+      <Breakdown
+        content={expenses}
+        color='danger'
+        height='40%'
+        width='100%' />
+    )
+  }
+
   return (
     <div className={classes.Yearly}>
       <div className={classes.Main}>
-        <Graph
-          data={{
-            income: incomeByMonth,
-            expenses: expensesByMonth
-          }}
-          labels={months}
-          timePeriods={yearStringMap}
-          previousTimePeriod={previousYear}
-          nextTimePeriod={nextYear}
-          selectTimePeriod={changeYear}
-          currentTimePeriod={yearStringMap[currentYearIndex]} />
+        {graph}
         <div className={classes.Summaries}>
-          <Breakdown
-            content={income}
-            color='primary'
-            height='40%'
-            width='100%' />
-          <Breakdown
-            content={expenses}
-            color='danger'
-            height='40%'
-            width='100%' />
+          {incomeBreakdown}
+          {expensesBreakdown}
         </div>
       </div>
       <Navbar active='y' />
