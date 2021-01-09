@@ -5,7 +5,7 @@ import classes from './Profile.module.css'
 import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
 import Type from '../../components/Type/Type'
 import Navbar from '../../components/Navbar/Navbar'
-import Logo from '../../components/Logo/Logo'
+import Button from '../../components/UI/Button/Button'
 import Error from '../../components/Error/Error'
 import Loader from '../../components/Loader/Loader'
 
@@ -61,6 +61,12 @@ const Profile = () => {
     return res.data
   }, [])
 
+  const onSignOut = useCallback(async () => {
+    // const res = await api
+    // return res.data
+    console.log('SIGN OUT')
+  }, [])
+
   useEffect(onFetchProfile, [onFetchProfile])
 
   const { data, isLoading, isError } = useQuery('profile', onFetchProfile)
@@ -107,7 +113,12 @@ const Profile = () => {
       <div className={classes.Main}>
         <div className={classes.Column}>
           {profileSummary}
-          <Logo />
+          <Button
+            color='primary'
+            size='medium'
+            onClick={onSignOut}>
+            Sign Out
+          </Button>
         </div>
         {incomeType}
         {expensesType}
