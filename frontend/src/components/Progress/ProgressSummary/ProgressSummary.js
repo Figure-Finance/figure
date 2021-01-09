@@ -28,13 +28,13 @@ const ProgressSummary = ({
 
   let left = (
     <h2 className={leftColor}>
-      ${leftAmount.toFixed(2)}
+      ${leftAmount ? leftAmount.toFixed(2) : (+'0').toFixed(2)}
     </h2>
   )
 
   let right = (
     <h2 className={rightColor}>
-      ${rightAmount.toFixed(2)}
+      ${rightAmount ? rightAmount.toFixed(2) : (+'0').toFixed(2)}
     </h2>
   )
 
@@ -44,7 +44,7 @@ const ProgressSummary = ({
         onClick={leftButtonClickHandler}
         color={leftColor}
         size='medium'>
-        ${leftAmount.toFixed(2)}
+        ${leftAmount ? leftAmount.toFixed(2) : (+'0').toFixed(2)}
       </Button>
     )
     right = (
@@ -52,7 +52,7 @@ const ProgressSummary = ({
         onClick={rightButtonClickHandler}
         color={rightColor || leftColor}
         size='medium'>
-        ${rightAmount.toFixed(2)}
+        ${rightAmount ? rightAmount.toFixed(2) : (+'0').toFixed(2)}
       </Button>
     )
   }

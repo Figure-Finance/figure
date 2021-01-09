@@ -46,15 +46,10 @@ const Weekly = () => {
     return { income, expenses }
   }
 
-  // TODO
-  // onFetchWeekly is being called twice unnecessarily. The first call has an outdated state
-  // while the second call has the correct state. Only the first call is rendered to the DOM
   const onFetchWeekly = useCallback(async () => {
-    console.log('currentWeekIndex BEFORE', currentWeekIndex)
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
     const res = await api.get(`weekly/${startDate}/${endDate}`)
-    console.log('currentWeekIndex AFTER', currentWeekIndex)
     return res.data
   }, [currentWeekIndex, weeks])
 
@@ -64,6 +59,9 @@ const Weekly = () => {
   }, [])
 
   const onAddIncome = useCallback(async newIncome => {
+    newIncome.amount = +newIncome.amount
+    newIncome.date = new Date(newIncome.date)
+    console.log(newIncome)
     const res = await api.post('weekly', {
       ...newIncome,
       isIncome: true
@@ -118,15 +116,13 @@ const Weekly = () => {
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
-  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly, {
-    staleTime: 0
-  })
+  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly)
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousWeek, {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: data => queryClient.clear()
   })
   const mutateRightClick = useMutation(nextWeek, {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: data => queryClient.clear()
   })
 
   const previousWeekHandler = () => {
@@ -153,7 +149,6 @@ const Weekly = () => {
     chart = <Error />
     expensesBreakdown = <Error />
   } else {
-    console.log(data)
     const { income, expenses } = updateIncomeExpenses(data)
     progress = (
       <Progress

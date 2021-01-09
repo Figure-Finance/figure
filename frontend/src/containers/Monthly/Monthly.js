@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react'
-import { useQuery } from 'react-query'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import {
   format,
   startOfToday,
@@ -60,17 +60,34 @@ const Monthly = () => {
 
   const previousMonth = () => {
     if (currentMonthIndex > 0) {
-      setCurrentMonthIndex(currentMonthIndex - 1)
+      return setCurrentMonthIndex(currentMonthIndex - 1)
     }
   }
 
   const nextMonth = () => {
     if (currentMonthIndex < monthStringMap.length - 1) {
-      setCurrentMonthIndex(currentMonthIndex + 1)
+      return setCurrentMonthIndex(currentMonthIndex + 1)
     }
   }
 
+  useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
+
   const { data, isLoading, isError } = useQuery('monthly', onFetchMonthly)
+  const queryClient = useQueryClient()
+  const mutateLeftClick = useMutation(previousMonth, {
+    onSuccess: data => queryClient.clear()
+  })
+  const mutateRightClick = useMutation(nextMonth, {
+    onSuccess: data => queryClient.clear()
+  })
+
+  const previousMonthHandler = () => {
+    mutateLeftClick.mutate()
+  }
+
+  const nextMonthHandler = () => {
+    mutateRightClick.mutate()
+  }
 
   let progress
   let incomeBreakdown
@@ -106,8 +123,8 @@ const Monthly = () => {
       <Chart
         data={expenses}
         timePeriods={monthStringMap}
-        previousTimePeriod={previousMonth}
-        nextTimePeriod={nextMonth}
+        previousTimePeriod={previousMonthHandler}
+        nextTimePeriod={nextMonthHandler}
         selectTimePeriod={changeMonth}
         currentTimePeriod={monthStringMap[currentMonthIndex]} />
     )
