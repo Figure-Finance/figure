@@ -6,9 +6,9 @@ import Button from '../UI/Button/Button'
 import Input from '../UI/Input/Input'
 
 const ProfileSummary = ({
-  height, firstName, lastName, email
+  firstName, lastName, email, onUpdate
 }) => {
-  const [formIsValid, setFormIsValid] = useState(false)
+  const [formIsValid, setFormIsValid] = useState(true)
   const [formElements, setFormElements] = useState({
     firstName: {
       type: 'input',
@@ -20,8 +20,8 @@ const ProfileSummary = ({
       validation: {
         required: true
       },
-      valid: false,
-      touched: false
+      valid: true,
+      touched: true
     },
     lastName: {
       type: 'input',
@@ -33,8 +33,8 @@ const ProfileSummary = ({
       validation: {
         required: true
       },
-      valid: false,
-      touched: false
+      valid: true,
+      touched: true
     },
     email: {
       type: 'input',
@@ -46,10 +46,18 @@ const ProfileSummary = ({
       validation: {
         required: true
       },
-      valid: false,
-      touched: false
+      valid: true,
+      touched: true
     }
   })
+
+  const updateHandler = () => {
+    onUpdate({
+      firstName: formElements.firstName.value,
+      lastName: formElements.lastName.value,
+      email: formElements.email.value
+    })
+  }
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
@@ -119,7 +127,8 @@ const ProfileSummary = ({
           size='medium'
           color='primary'
           width='100%'
-          disabled={!formIsValid}>
+          disabled={!formIsValid}
+          onClick={updateHandler}>
           Update
         </Button>
       </div>
@@ -128,10 +137,10 @@ const ProfileSummary = ({
 }
 
 ProfileSummary.propTypes = {
-  height: PropTypes.string,
   firstName: PropTypes.string,
   lastName: PropTypes.string,
-  email: PropTypes.string
+  email: PropTypes.string,
+  onUpdate: PropTypes.func
 }
 
 export default ProfileSummary
