@@ -38,7 +38,6 @@ const Savings = () => {
 
   const onAddGoal = useCallback(async newGoal => {
     newGoal.amount = +newGoal.amount
-    console.log(newGoal)
     const res = await api.post('savings/goal', newGoal)
     return res.data
   }, [])
@@ -104,7 +103,6 @@ const Savings = () => {
     const goals = data.itemGoals
     const goalProgress = data.totalSavingsProgress
     const totalGoal = data.totalSavingsGoal
-    console.log('goalsProgress', goalProgress)
     progress = (
       <Progress
         updateGoal={onUpdateTotalGoal}
