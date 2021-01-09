@@ -1,6 +1,76 @@
 const User = require('../models/user')
+const process = require('process')
 
-// TODO: GET user, DELETE categories, PATCH user, POST sign in user
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+// Going to need this soon
+const { validationResult } = require('express-validator')
+
+exports.signup = (req, res, next) => {
+  let user
+  const email = req.body.email
+  const firstName = req.body.firstName
+  const lastName = req.body.lastName
+  const categories = [{ category: 'Groceries', isIncome: false }]
+  const password = req.body.password
+  bcrypt.hash(password, 12)
+    .then(hashedPassword => {
+      user = new User({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: hashedPassword,
+        categories: categories
+      })
+      return user.save()
+    })
+    .then(result => {
+      const token = jwt.sign({
+        email: user.email,
+        userId: user._id.toString()
+      }, process.env.SECRET_KEY, {
+        expiresIn: '1h'
+      })
+      res.status(201).json({ msg: 'User successfully created!', user: user, token: token })
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500
+      }
+      next(err)
+    })
+}
+
+exports.signin = (req, res, next) => {
+  const email = req.body.email
+  const password = req.body.password
+  let loadedUser
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) {
+        const error = new Error('We could not find a user with that email address.')
+        error.statusCode = 401
+        throw error
+      }
+      loadedUser = user
+      return bcrypt.compare(password, user.password)
+    })
+    .then(isEqual => {
+      if (!isEqual) {
+        const error = new Error('Incorrect password')
+        error.statusCode = 401
+        throw error
+      }
+      const token = jwt.sign({
+        email: user.email,
+        userId: user._id.toString()
+      }, process.env.SECRET_KEY, {
+        expiresIn: '1h'
+      })
+      res.status(200).json({ token: token, id: loadedUser._id.toString() })
+    })
+}
 
 exports.getUserProfile = (req, res, next) => {
   User.findOne()
@@ -20,23 +90,6 @@ exports.getUserProfile = (req, res, next) => {
     })
 }
 
-exports.postUser = (req, res, next) => {
-  const email = req.body.email
-  const firstName = req.body.firstName
-  const lastName = req.body.lastName
-  const password = req.body.password
-  const categories = [{ category: 'Groceries', isIncome: false }]
-  const user = new User({
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    password: password,
-    categories: categories
-  })
-  user.save(err => console.log(err))
-  res.status(201).json({ msg: 'User successfully created!', user: user })
-}
-
 exports.updateUserProfile = (req, res, next) => {
   const newFirstName = req.body.firstName
   const newLastName = req.body.lastName
@@ -51,7 +104,6 @@ exports.updateUserProfile = (req, res, next) => {
       return user.save()
     })
     .then(result => {
-      console.log(result)
       return res.status(200).json({ message: 'User updated successfully!' })
     })
     .catch(err => {

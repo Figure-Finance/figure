@@ -10,7 +10,9 @@ router.get('/', userController.getUserProfile)
 
 router.patch('/', userController.updateUserProfile)
 
-router.post('/signup', userController.postUser)
+router.post('/signup', userController.signup)
+
+router.post('/signin', userController.signin)
 
 router.patch('/category', userController.addUserCategory)
 
