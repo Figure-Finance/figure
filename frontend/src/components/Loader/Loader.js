@@ -1,9 +1,15 @@
 import React from 'react'
+import classes from './Loader.module.css'
+import Container from '../UI/Container/Container'
 
 const Loader = () => (
-  <h1 className='primary'>
-    Loading...
-  </h1>
+  <Container
+    height='100%'
+    width='33%'>
+    <div className={classes.Loader}>
+      <div /><div /><div />
+    </div>
+  </Container>
 )
 
 export default Loader
