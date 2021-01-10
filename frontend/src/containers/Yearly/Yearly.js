@@ -137,14 +137,14 @@ const Yearly = () => {
       <Breakdown
         content={income}
         color='primary'
-        height='40%'
+        height='50%'
         width='100%' />
     )
     expensesBreakdown = (
       <Breakdown
         content={expenses}
         color='danger'
-        height='40%'
+        height='50%'
         width='100%' />
     )
   }
