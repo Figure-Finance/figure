@@ -1,6 +1,7 @@
 import React from 'react'
 import { Line } from 'react-chartjs-2'
 import PropTypes from 'prop-types'
+import classes from './Graph.module.css'
 
 const Graph = ({ isSavings, labels, data }) => {
   let graph
@@ -29,7 +30,7 @@ const Graph = ({ isSavings, labels, data }) => {
             }
           ]
         }}
-        height={370}
+        height={300}
         width={600}
         options={{ maintainAspctRatio: false }} />
     )
@@ -79,7 +80,11 @@ const Graph = ({ isSavings, labels, data }) => {
     )
   }
 
-  return graph
+  return (
+    <div className={classes.Graph}>
+      {graph}
+    </div>
+  )
 }
 
 Graph.propTypes = {
