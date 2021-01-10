@@ -14,7 +14,7 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
-import Error from '../../components/Error/Error'
+// import Error from '../../components/Error/Error'
 
 const Weekly = () => {
   const today = useMemo(() => startOfToday(), [])
@@ -117,13 +117,15 @@ const Weekly = () => {
 
   useEffect(onFetchWeekly, [onFetchWeekly])
 
-  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly)
+  const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly, {
+    retry: false
+  })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousWeek, {
-    onSuccess: data => queryClient.clear()
+    onSuccess: () => queryClient.clear()
   })
   const mutateRightClick = useMutation(nextWeek, {
-    onSuccess: data => queryClient.clear()
+    onSuccess: () => queryClient.clear()
   })
 
   const previousWeekHandler = () => {
@@ -145,10 +147,46 @@ const Weekly = () => {
     chart = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
-    progress = <Error />
-    incomeBreakdown = <Error />
-    chart = <Error />
-    expensesBreakdown = <Error />
+    progress = (
+      <Progress
+        leftColor='primary'
+        leftAmount={totalIncome}
+        rightColor='danger'
+        rightAmount={totalExpenses} />
+    )
+    incomeBreakdown = (
+      <Breakdown
+        title='Income'
+        content={[]}
+        getItem={onFetchWeeklyItem}
+        addItem={onAddIncome}
+        updateItem={onUpdateIncome}
+        deleteItem={onDeleteIncome}
+        color='primary'
+        canAdd
+        showButtons />
+    )
+    chart = (
+      <Chart
+        data={[]}
+        timePeriods={weekStringMap}
+        previousTimePeriod={previousWeekHandler}
+        nextTimePeriod={nextWeekHandler}
+        selectTimePeriod={changeWeek}
+        currentTimePeriod={weekStringMap[currentWeekIndex]} />
+    )
+    expensesBreakdown = (
+      <Breakdown
+        title='Expenses'
+        content={[]}
+        getItem={onFetchWeeklyItem}
+        addItem={onAddExpense}
+        updateItem={onUpdateExpense}
+        deleteItem={onDeleteExpense}
+        color='danger'
+        canAdd
+        showButtons />
+    )
   } else {
     const { income, expenses } = updateIncomeExpenses(data)
     progress = (
