@@ -26,6 +26,7 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  position: relative;
 }
 
 .Main {
@@ -37,7 +38,7 @@
   left: 0;
   position: absolute;
   right: 0;
-  top: 0;
+  top: 10px;
 }
 
 .Column {
@@ -46,5 +47,19 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  margin-left: 10px;
+  position: relative;
   width: 33%;
+}
+
+.Column > div {
+  position: absolute;
+  top: -10px;
+}
+
+.Column > button {
+  bottom: 10px;
+  left: 0;
+  position: absolute;
+  right: 0;
 }

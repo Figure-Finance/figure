@@ -105,7 +105,7 @@ const ProfileSummary = ({
 
   return (
     <Container
-      height='auto'
+      height='80%'
       width='100%'>
       <div className={classes.ProfileSummary}>
         <h1 className='primary'>Profile</h1>
@@ -126,7 +126,7 @@ const ProfileSummary = ({
         <Button
           size='medium'
           color='primary'
-          width='100%'
+          width='90%'
           disabled={!formIsValid}
           onClick={updateHandler}>
           Update

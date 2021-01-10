@@ -118,6 +118,7 @@ const Profile = ({ history }) => {
           <Button
             color='primary'
             size='medium'
+            width='100%'
             onClick={onSignOut}>
             Sign Out
           </Button>
