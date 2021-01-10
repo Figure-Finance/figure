@@ -4,13 +4,13 @@ const { body } = require('express-validator')
 const express = require('express')
 
 const dashWeeklyController = require('../controllers/dashboard-weekly')
-const dashMonthlyController = require('../controllers/dashboard-monthly')
+const isAuth = require('../middleware/is-auth')
 
 const router = express.Router()
 
-router.get('/:startDate/:endDate', dashWeeklyController.getUserFinances)
+router.get('/:startDate/:endDate', isAuth, dashWeeklyController.getUserFinances)
 
-router.post('/', [
+router.post('/', isAuth, [
   // body('category')
   // TODO: set up custom validator to ensure category is one of the user's categories
   // .custom((value, { req }) => {
@@ -48,7 +48,7 @@ router.post('/', [
 dashWeeklyController.postUserFinances
 )
 
-router.patch('/', [
+router.patch('/', isAuth, [
   body('id')
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),
@@ -82,8 +82,8 @@ router.patch('/', [
 dashWeeklyController.editFinanceEntryById
 )
 
-router.get('/:id', dashWeeklyController.getFinanceDetailsById)
+router.get('/:id', isAuth, dashWeeklyController.getFinanceDetailsById)
 
-router.delete('/:id', dashWeeklyController.deleteFinanceEntryById)
+router.delete('/:id', isAuth, dashWeeklyController.deleteFinanceEntryById)
 
 module.exports = router

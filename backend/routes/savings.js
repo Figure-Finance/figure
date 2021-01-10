@@ -5,12 +5,13 @@ const express = require('express')
 
 const savingsController = require('../controllers/savings')
 const itemGoalController = require('../controllers/itemGoals')
+const isAuth = require('../middleware/is-auth')
 
 const router = express.Router()
 
 router.get('/', savingsController.getSavings)
 
-router.post('/', [
+router.post('/', isAuth, [
   body('totalSavingsGoal')
     .isDecimal()
     .withMessage('Please enter a valid number.')
@@ -25,7 +26,7 @@ router.post('/', [
 savingsController.postTotalSavings
 )
 
-router.patch('/total', [
+router.patch('/total', isAuth, [
   body('totalSavingsGoal')
     .isDecimal()
     .withMessage('Please enter a valid number.')
@@ -35,7 +36,7 @@ router.patch('/total', [
 savingsController.editTotalSavings
 )
 
-router.patch('/progress', [
+router.patch('/progress', isAuth, [
   body('progressAmount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
@@ -45,9 +46,9 @@ router.patch('/progress', [
 savingsController.updateTotalSavingsProgress
 )
 
-router.get('/progress/:timeFrame', savingsController.getByTimeFrame)
+router.get('/progress/:timeFrame', isAuth, savingsController.getByTimeFrame)
 
-router.post('/goal', [
+router.post('/goal', isAuth, [
   body('name')
     .isLength({ min: 1, max: 25 })
     .withMessage('Name must be between 1 and 25 characters'),
@@ -63,13 +64,13 @@ router.post('/goal', [
 itemGoalController.postItemGoals
 )
 
-router.get('/goal/:id', itemGoalController.getItemGoalDetails)
+router.get('/goal/:id', isAuth, itemGoalController.getItemGoalDetails)
 
-router.delete('/goal/:id', itemGoalController.deleteItemGoal)
+router.delete('/goal/:id', isAuth, itemGoalController.deleteItemGoal)
 
-router.patch('/goal/allocate', itemGoalController.allocateGoalFunds)
+router.patch('/goal/allocate', isAuth, itemGoalController.allocateGoalFunds)
 
-router.patch('/goal', [
+router.patch('/goal', isAuth, [
   body('id')
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),

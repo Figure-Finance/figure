@@ -9,14 +9,14 @@ const router = express.Router()
 
 router.get('/', isAuth, userController.getUserProfile)
 
-router.patch('/', userController.updateUserProfile)
+router.patch('/', isAuth, userController.updateUserProfile)
 
 router.post('/signup', userController.signup)
 
 router.post('/signin', userController.signin)
 
-router.patch('/category', userController.addUserCategory)
+router.patch('/category', isAuth, userController.addUserCategory)
 
-router.delete('/category/:id', userController.deleteUserCategory)
+router.delete('/category/:id', isAuth, userController.deleteUserCategory)
 
 module.exports = router

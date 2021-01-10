@@ -13,6 +13,7 @@ const dashMonthlyRoutes = require('./routes/dashboard-monthly')
 const dashYearlyRoutes = require('./routes/dashboard-yearly')
 const savingsRoutes = require('./routes/savings')
 const userRoutes = require('./routes/user')
+const isAuth = require('./middleware/is-auth')
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')
