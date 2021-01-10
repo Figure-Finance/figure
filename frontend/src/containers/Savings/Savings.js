@@ -71,7 +71,9 @@ const Savings = () => {
     onFetchGraphData('year')
   }, [onFetchSavings, onFetchGraphData])
 
-  const { data, isLoading, isError } = useQuery('savings', onFetchSavings)
+  const { data, isLoading, isError } = useQuery('savings', onFetchSavings, {
+    retry: false
+  })
 
   const graphTimePeriodChangeHandler = event => {
     setGraphTimePeriod(event.target.innerHTML)
