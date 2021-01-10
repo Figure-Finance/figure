@@ -14,11 +14,10 @@ const Navbar = ({ active, isSavings, onNavSavingsChange }) => {
 
   if (isSavings) {
     nav = (
-      <Container borderRadius='20px'>
+      <Container borderRadius='25px' width='370px'>
         <NavSavings
           navSavingsChange={onNavSavingsChange}
-          active={active}
-          style={{ width: '400px' }} />
+          active={active} />
       </Container>
     )
   }
