@@ -72,7 +72,9 @@ const Monthly = () => {
 
   useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
 
-  const { data, isLoading, isError } = useQuery('monthly', onFetchMonthly)
+  const { data, isLoading, isError } = useQuery('monthly', onFetchMonthly, {
+    retry: false
+  })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousMonth, {
     onSuccess: data => queryClient.clear()
