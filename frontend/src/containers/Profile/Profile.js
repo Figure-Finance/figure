@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 import { useQuery } from 'react-query'
+import PropTypes from 'prop-types'
 import api from '../../api'
 import classes from './Profile.module.css'
 import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
@@ -9,7 +10,7 @@ import Button from '../../components/UI/Button/Button'
 import Error from '../../components/Error/Error'
 import Loader from '../../components/Loader/Loader'
 
-const Profile = () => {
+const Profile = ({ history }) => {
   const updateIncomeExpenses = updatedItems => {
     const income = []
     const expenses = []
@@ -62,14 +63,15 @@ const Profile = () => {
   }, [])
 
   const onSignOut = useCallback(async () => {
-    // const res = await api
-    // return res.data
-    console.log('SIGN OUT')
-  }, [])
+    localStorage.removeItem('token')
+    history.push('/auth')
+  }, [history])
 
   useEffect(onFetchProfile, [onFetchProfile])
 
-  const { data, isLoading, isError } = useQuery('profile', onFetchProfile)
+  const { data, isLoading, isError } = useQuery('profile', onFetchProfile, {
+    retry: false
+  })
 
   let profileSummary
   let incomeType
@@ -126,6 +128,10 @@ const Profile = () => {
       <Navbar active='p' />
     </div>
   )
+}
+
+Profile.propTypes = {
+  history: PropTypes.object
 }
 
 export default Profile
