@@ -55,7 +55,7 @@ const Type = ({ color, content, addType, deleteType }) => {
 
   return (
     <Container
-      height='90%'
+      height='100%'
       width='33%'>
       {modal}
     </Container>
