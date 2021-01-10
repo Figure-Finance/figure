@@ -14,7 +14,6 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
-// import Error from '../../components/Error/Error'
 
 const Weekly = () => {
   const today = useMemo(() => startOfToday(), [])
