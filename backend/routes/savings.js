@@ -12,9 +12,9 @@ const router = express.Router()
 router.get('/', isAuth, savingsController.getSavings)
 
 router.post('/', isAuth, [
-  body('totalSavingsGoal')
+  body('totalSavingsGoal', 'Please enter a valid number greater than 0.')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
   body('totalSavingsProgress')
@@ -27,9 +27,9 @@ savingsController.postTotalSavings
 )
 
 router.patch('/total', isAuth, [
-  body('totalSavingsGoal')
+  body('totalSavingsGoal', 'Please enter a valid number.')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty()
 ],
@@ -37,9 +37,9 @@ savingsController.editTotalSavings
 )
 
 router.patch('/progress', isAuth, [
-  body('progressAmount')
+  body('progressAmount', 'Please enter a valid number.')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty()
 ],
@@ -54,7 +54,7 @@ router.post('/goal', isAuth, [
     .withMessage('Name must be between 1 and 25 characters'),
   body('amount')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
   body('description')
@@ -79,7 +79,7 @@ router.patch('/goal', isAuth, [
     .withMessage('Name must be between 1 and 25 characters'),
   body('amount')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
   body('description')

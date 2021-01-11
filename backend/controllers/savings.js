@@ -18,8 +18,6 @@ const { filterByTimeFrame, filterSavingsData } = timeFrameUtils
 
 // TOTAL SAVINGS ROUTES
 
-// TODO: Figure out why we're getting header errors here
-
 exports.getSavings = (req, res, next) => {
   let savings
   let itemGoals
@@ -56,6 +54,7 @@ exports.getSavings = (req, res, next) => {
 
 exports.postTotalSavings = (req, res, next) => {
   // Create a new Savings document in savings collection
+  // TODO: totalSavingsProgress will auto update and is just received through here for testing
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
@@ -64,7 +63,6 @@ exports.postTotalSavings = (req, res, next) => {
     throw error
   }
   const totalSavingsGoal = req.body.totalSavingsGoal
-  // TODO: bankProgress will auto update and is just received through here for testing
   const totalSavingsProgress = req.body.totalSavingsProgress
   let newSavings
   User.findById(req.userId)
@@ -149,6 +147,8 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 }
 
 exports.getByTimeFrame = (req, res, next) => {
+  // Get savings documents by specified time frame for graphs
+  // TODO: clean up & break into utility function
   const timeFrame = req.params.timeFrame
   const savings = []
   User.findById(req.userId)

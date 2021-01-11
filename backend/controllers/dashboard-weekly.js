@@ -105,12 +105,16 @@ exports.getFinanceDetailsById = (req, res, next) => {
 }
 
 exports.deleteFinanceEntryById = (req, res, next) => {
+  // TODO: Make sure users can only delete their on finance entries
   const financeId = req.params.id
-  Finance.findByIdAndDelete(financeId, err => {
-    if (!err.statusCode) {
-      err.statusCode = 500
-      next(err)
+  Finance.findByIdAndDelete(financeId, (err, result) => {
+    if (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500
+        next(err)
+      }
     }
+    console.log('Entry deleted successfully!')
   })
   return res.status(200).json({ msg: 'Finance entry deleted successfully!' })
 }

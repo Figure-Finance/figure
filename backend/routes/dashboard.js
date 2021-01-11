@@ -11,23 +11,7 @@ const router = express.Router()
 router.get('/:startDate/:endDate', isAuth, dashWeeklyController.getUserFinances)
 
 router.post('/', isAuth, [
-  // body('category')
-  //   .custom((value, { req }) => {
-  //     console.log(`value: ${value}`)
-  //     User.findOne({ id: req.userId })
-  //       .then(user => {
-  //         if (!user) {
-  //           console.log('We made it into the if statement')
-  //           return Promise.reject('You do not have this category.')
-  //         }
-  //       })
-  //       .catch(err => {
-  //         if (!err.statusCode) {
-  //           err.statusCode = 500
-  //         }
-  //         next(err)
-  //       })
-  //   }),
+  // TODO: set up custom validator to ensure category is one of user's categories
   body('amount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
@@ -57,16 +41,6 @@ router.patch('/', isAuth, [
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),
   // TODO: set up custom validator to ensure category is one of user's categories
-  // body('category')
-  //   .custom((value, { req }) => {
-  //     // TODO find this by current user
-  //     return User.findOne()
-  //       .then(user => {
-  //         if (!user.categories.category.indexOf(value)) {
-  //           return Promise.reject('Please add a category for this item first.')
-  //         }
-  //       })
-  //   }),
   body('amount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
