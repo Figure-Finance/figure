@@ -14,7 +14,8 @@ const Button = ({
   width,
   disabled,
   showProgress,
-  progressPercent
+  progressPercent,
+  type
 }) => {
   const classNames = [classes.Button]
   let content = children
@@ -95,6 +96,7 @@ const Button = ({
       className={classNames.join(' ')}
       onClick={onClick}
       style={{ width: width }}
+      type={type || 'button'}
       disabled={disabled}>
       {content}
     </button>
@@ -112,7 +114,8 @@ Button.propTypes = {
   width: PropTypes.string,
   disabled: PropTypes.bool,
   showProgress: PropTypes.bool,
-  progressPercent: PropTypes.number
+  progressPercent: PropTypes.number,
+  type: PropTypes.string
 }
 
 export default Button
