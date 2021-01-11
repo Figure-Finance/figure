@@ -7,7 +7,6 @@ import Progress from '../../components/Progress/Progress'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
-import Error from '../../components/Error/Error'
 
 const Savings = () => {
   const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
@@ -72,7 +71,8 @@ const Savings = () => {
   }, [onFetchSavings, onFetchGraphData])
 
   const { data, isLoading, isError } = useQuery('savings', onFetchSavings, {
-    retry: false
+    retry: false,
+    staleTime: Infinity
   })
 
   const graphTimePeriodChangeHandler = event => {
@@ -98,9 +98,37 @@ const Savings = () => {
     graph = <Loader />
     breakdown = <Loader />
   } else if (isError) {
-    progress = <Error />
-    graph = <Error />
-    breakdown = <Error />
+    progress = (
+      <Progress
+        updateGoal={onUpdateTotalGoal}
+        updateProgress={onDeposit}
+        leftColor='neutral'
+        leftAmount={0}
+        rightAmount={0}
+        single
+        showButtons />
+    )
+    graph = (
+      <Graph
+        onNavSavingsChange={graphTimePeriodChangeHandler}
+        active={graphTimePeriod}
+        labels={labels}
+        isSavings />
+    )
+    breakdown = (
+      <Breakdown
+        allocateSavings={onAllocateSavings}
+        getItem={onGetGoal}
+        addItem={onAddGoal}
+        updateItem={onUpdateGoal}
+        deleteItem={onDeleteGoal}
+        color='neutral'
+        title='Goals'
+        content={[]}
+        canAdd
+        isSavings
+        showButtons />
+    )
   } else {
     const goals = data.itemGoals
     const goalProgress = data.totalSavingsProgress

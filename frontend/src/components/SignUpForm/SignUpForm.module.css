@@ -1,0 +1,17 @@
+.Form {
+  width: 90%;
+}
+
+.Form fieldset {
+  border: none;
+  margin: 0;
+  margin-bottom: 30px;
+  padding: 0;
+  width: 100%;
+}
+
+.Form p {
+  height: 18px;
+  margin: 0;
+  text-align: center;
+}

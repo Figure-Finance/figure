@@ -7,7 +7,6 @@ import ProfileSummary from '../../components/ProfileSummary/ProfileSummary'
 import Type from '../../components/Type/Type'
 import Navbar from '../../components/Navbar/Navbar'
 import Button from '../../components/UI/Button/Button'
-import Error from '../../components/Error/Error'
 import Loader from '../../components/Loader/Loader'
 
 const Profile = ({ history }) => {
@@ -70,7 +69,8 @@ const Profile = ({ history }) => {
   useEffect(onFetchProfile, [onFetchProfile])
 
   const { data, isLoading, isError } = useQuery('profile', onFetchProfile, {
-    retry: false
+    retry: false,
+    staleTime: Infinity
   })
 
   let profileSummary
@@ -82,9 +82,27 @@ const Profile = ({ history }) => {
     incomeType = <Loader />
     expensesType = <Loader />
   } else if (isError) {
-    profileSummary = <Error />
-    incomeType = <Error />
-    expensesType = <Error />
+    profileSummary = (
+      <ProfileSummary
+        firstName={data.firstName}
+        lastName={data.lastName}
+        email={data.email}
+        onUpdate={onUpdateProfile} />
+    )
+    incomeType = (
+      <Type
+        content={[]}
+        color='primary'
+        addType={onAddIncomeType}
+        deleteType={onDeleteIncomeType} />
+    )
+    expensesType = (
+      <Type
+        content={[]}
+        color='danger'
+        addType={onAddExpenseType}
+        deleteType={onDeleteExpenseType} />
+    )
   } else {
     const { income, expenses } = updateIncomeExpenses(data.categories)
     profileSummary = (

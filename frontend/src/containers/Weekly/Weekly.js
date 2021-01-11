@@ -117,7 +117,8 @@ const Weekly = () => {
   useEffect(onFetchWeekly, [onFetchWeekly])
 
   const { data, isLoading, isError } = useQuery('weekly', onFetchWeekly, {
-    retry: false
+    retry: false,
+    staleTime: Infinity
   })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousWeek, {
