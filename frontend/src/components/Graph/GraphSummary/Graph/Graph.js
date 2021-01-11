@@ -81,7 +81,8 @@ const Graph = ({ isSavings, labels, data }) => {
   }
 
   return (
-    <div className={classes.Graph}>
+    <div
+      className={isSavings ? classes.GraphSavings : classes.GraphYearly}>
       {graph}
     </div>
   )
