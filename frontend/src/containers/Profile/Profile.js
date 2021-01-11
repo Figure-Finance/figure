@@ -84,9 +84,9 @@ const Profile = ({ history }) => {
   } else if (isError) {
     profileSummary = (
       <ProfileSummary
-        firstName={data.firstName}
-        lastName={data.lastName}
-        email={data.email}
+        firstName=''
+        lastName=''
+        email=''
         onUpdate={onUpdateProfile} />
     )
     incomeType = (
