@@ -117,11 +117,21 @@ const SignUpForm = ({ changeForm, onSubmit }) => {
     <>
       <form onSubmit={signUpHandler} className={classes.Form}>
         {formElementsArray.map(formElement => {
-          let legend = ''
+          let legend = (
+            <p></p>
+          )
           if (!formElement.config.valid && formElement.config.touched) {
-            legend = formElement.config.invalidText
+            legend = (
+              <p className='danger'>
+                {formElement.config.invalidText}
+              </p>
+            )
           } else if (formElement.config.valid) {
-            legend = formElement.config.validText
+            legend = (
+              <p className='primary'>
+                {formElement.config.validText}
+              </p>
+            )
           }
           return (
             <fieldset key={formElement.id}>
@@ -134,9 +144,7 @@ const SignUpForm = ({ changeForm, onSubmit }) => {
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
                 onChange={event => inputChangedHandler(event, formElement.id)} />
-              <p className='danger'>
-                {legend}
-              </p>
+              {legend}
             </fieldset>
           )
         })}
