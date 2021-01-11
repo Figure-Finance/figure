@@ -69,7 +69,8 @@ const Profile = ({ history }) => {
   useEffect(onFetchProfile, [onFetchProfile])
 
   const { data, isLoading, isError } = useQuery('profile', onFetchProfile, {
-    retry: false
+    retry: false,
+    staleTime: Infinity
   })
 
   let profileSummary
