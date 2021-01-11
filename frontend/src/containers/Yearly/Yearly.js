@@ -13,7 +13,6 @@ import Graph from '../../components/Graph/Graph'
 import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
-import Error from '../../components/Error/Error'
 
 const Yearly = () => {
   const today = useMemo(() => startOfToday(), [])
@@ -117,9 +116,33 @@ const Yearly = () => {
     incomeBreakdown = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
-    graph = <Error />
-    incomeBreakdown = <Error />
-    expensesBreakdown = <Error />
+    graph = (
+      <Graph
+        data={{
+          income: [],
+          expenses: []
+        }}
+        labels={months}
+        timePeriods={yearStringMap}
+        previousTimePeriod={previousYearHandler}
+        nextTimePeriod={nextYearHandler}
+        selectTimePeriod={changeYear}
+        currentTimePeriod={yearStringMap[currentYearIndex]} />
+    )
+    incomeBreakdown = (
+      <Breakdown
+        content={[]}
+        color='primary'
+        height='50%'
+        width='100%' />
+    )
+    expensesBreakdown = (
+      <Breakdown
+        content={[]}
+        color='danger'
+        height='50%'
+        width='100%' />
+    )
   } else {
     const { income, expenses, incomeByMonth, expensesByMonth } = updateIncomeExpenses(data)
     graph = (
