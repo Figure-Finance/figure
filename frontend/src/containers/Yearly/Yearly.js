@@ -74,6 +74,13 @@ const Yearly = () => {
     setCurrentYearIndex(index)
   }
 
+  const onFetchYearlyGraph = useCallback(async () => {
+    const startDate = years[currentYearIndex]
+    const endDate = endOfYear(startDate)
+    const res = await api.get(`yearly/graph/${startDate}/${endDate}`)
+    return res.data
+  }, [currentYearIndex, years])
+
   const previousYear = () => {
     if (currentYearIndex > 0) {
       setCurrentYearIndex(currentYearIndex - 1)
@@ -87,6 +94,7 @@ const Yearly = () => {
   }
 
   useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
+  useEffect(onFetchYearlyGraph, [onFetchYearlyGraph, currentYearIndex])
 
   const { data, isLoading, isError } = useQuery('monthly', onFetchYearly, {
     retry: false,
