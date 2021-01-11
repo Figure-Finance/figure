@@ -99,7 +99,7 @@ const Weekly = () => {
 
   const changeWeek = useCallback(event => {
     const index = weekStringMap.findIndex(el => el === event.target.innerHTML)
-    setCurrentWeekIndex(index)
+    return setCurrentWeekIndex(index)
   }, [weekStringMap])
 
   const previousWeek = useCallback(() => {
@@ -121,12 +121,19 @@ const Weekly = () => {
     staleTime: Infinity
   })
   const queryClient = useQueryClient()
+  const mutateSelectWeek = useMutation(changeWeek, {
+    onSuccess: () => queryClient.clear()
+  })
   const mutateLeftClick = useMutation(previousWeek, {
     onSuccess: () => queryClient.clear()
   })
   const mutateRightClick = useMutation(nextWeek, {
     onSuccess: () => queryClient.clear()
   })
+
+  const changeWeekHandler = () => {
+    mutateSelectWeek.mutate()
+  }
 
   const previousWeekHandler = () => {
     mutateLeftClick.mutate()
@@ -172,7 +179,7 @@ const Weekly = () => {
         timePeriods={weekStringMap}
         previousTimePeriod={previousWeekHandler}
         nextTimePeriod={nextWeekHandler}
-        selectTimePeriod={changeWeek}
+        selectTimePeriod={changeWeekHandler}
         currentTimePeriod={weekStringMap[currentWeekIndex]} />
     )
     expensesBreakdown = (
