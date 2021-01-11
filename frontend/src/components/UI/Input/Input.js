@@ -21,13 +21,13 @@ const Input = ({
 
   if (color === 'primary') {
     inputClassNames.push(classes.Primary)
-    labelClassNames.push(classes.Primary)
+    labelClassNames.push(classes.PrimaryLabel)
   } else if (color === 'neutral') {
     inputClassNames.push(classes.Neutral)
-    labelClassNames.push(classes.Neutral)
+    labelClassNames.push(classes.NeutralLabel)
   } else if (color === 'danger') {
     inputClassNames.push(classes.Danger)
-    labelClassNames.push(classes.Danger)
+    labelClassNames.push(classes.DangerLabel)
   }
 
   if (invalid && shouldValidate && touched) {
@@ -38,14 +38,21 @@ const Input = ({
     inputClassNames.push(classes.TextArea)
   }
 
-  // const moveLabelOut = event => {
-  //   event.target.style.transform = 'translateY(0px)'
-  //   console.log(event.target.parentElement)
-  // }
+  const moveSelfOut = event => {
+    event.target.style.transform = 'translateY(0px)'
+    event.target.nextElementSibling.focus()
+  }
 
-  // const moveLabelIn = event => {
-  //   event.target.style.transform = 'translateY(40px)'
-  // }
+  const moveLabelOut = event => {
+    event.target.previousElementSibling.style.transform = 'translateY(0px)'
+    event.target.focus()
+  }
+
+  const moveLabelIn = event => {
+    if (event.target.value === '') {
+      event.target.previousElementSibling.style.transform = 'translateY(40px)'
+    }
+  }
 
   switch (type) {
     case ('input'):
@@ -55,7 +62,9 @@ const Input = ({
           {...config}
           style={{ width: width || '100%' }}
           value={value}
-          onChange={onChange} />
+          onChange={onChange}
+          onFocus={moveLabelOut}
+          onBlur={moveLabelIn} />
       )
       break
     case ('textarea'):
@@ -65,7 +74,9 @@ const Input = ({
           {...config}
           style={{ width: width || '100%' }}
           value={value}
-          onChange={onChange} />
+          onChange={onChange}
+          onFocus={moveLabelOut}
+          onBlur={moveLabelIn} />
       )
       break
     case ('select'):
@@ -74,7 +85,9 @@ const Input = ({
           className={inputClassNames.join(' ')}
           value={value}
           style={{ width: width || '100%' }}
-          onChange={onChange}>
+          onChange={onChange}
+          onFocus={moveLabelOut}
+          onBlur={moveLabelIn}>
           {config.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -90,7 +103,9 @@ const Input = ({
           {...config}
           style={{ width: width || '100%' }}
           value={value}
-          onChange={onChange} />
+          onChange={onChange}
+          onFocus={moveLabelOut}
+          onBlur={moveLabelIn} />
       )
   }
 
@@ -106,7 +121,8 @@ const Input = ({
   return (
     <>
       <label
-        className={labelClassNames.join(' ')}>
+        className={labelClassNames.join(' ')}
+        onClick={moveSelfOut}>
         {config.label}
       </label>
       {inputElement}
