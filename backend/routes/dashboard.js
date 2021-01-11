@@ -12,9 +12,9 @@ router.get('/:startDate/:endDate', isAuth, dashWeeklyController.getUserFinances)
 
 router.post('/', isAuth, [
   // TODO: set up custom validator to ensure category is one of user's categories
-  body('amount')
+  body('amount', 'Please make sure amount is a valid number greater than zero.')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
   body('description')
@@ -41,9 +41,9 @@ router.patch('/', isAuth, [
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),
   // TODO: set up custom validator to ensure category is one of user's categories
-  body('amount')
+  body('amount', 'Please make sure amount is a valid number greater than zero.')
     .isDecimal()
-    .withMessage('Please enter a valid number.')
+    .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
   body('description')
