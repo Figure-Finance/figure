@@ -14,7 +14,6 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
-import Error from '../../components/Error/Error'
 
 const Monthly = () => {
   const today = useMemo(() => startOfToday(), [])
@@ -102,10 +101,34 @@ const Monthly = () => {
     chart = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
-    progress = <Error />
-    incomeBreakdown = <Error />
-    chart = <Error />
-    expensesBreakdown = <Error />
+    progress = (
+      <Progress
+        leftColor='primary'
+        leftAmount={totalIncome}
+        rightColor='danger'
+        rightAmount={totalExpenses} />
+    )
+    incomeBreakdown = (
+      <Breakdown
+        title='Income'
+        content={[]}
+        color='primary' />
+    )
+    chart = (
+      <Chart
+        data={[]}
+        timePeriods={monthStringMap}
+        previousTimePeriod={previousMonthHandler}
+        nextTimePeriod={nextMonthHandler}
+        selectTimePeriod={changeMonth}
+        currentTimePeriod={monthStringMap[currentMonthIndex]} />
+    )
+    expensesBreakdown = (
+      <Breakdown
+        title='Expenses'
+        content={[]}
+        color='danger' />
+    )
   } else {
     const { income, expenses } = updateIncomeExpenses(data)
     progress = (
