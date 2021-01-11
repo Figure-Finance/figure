@@ -12,8 +12,8 @@ exports.signup = (req, res, next) => {
   const email = req.body.email
   const firstName = req.body.firstName
   const lastName = req.body.lastName
-  const categories = [{ category: 'Groceries', isIncome: false }]
   const password = req.body.password
+  const categories = [{ category: 'Groceries', isIncome: false }]
   bcrypt.hash(password, 12)
     .then(hashedPassword => {
       user = new User({

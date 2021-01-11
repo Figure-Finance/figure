@@ -17,14 +17,15 @@ router.post('/', isAuth, [
     .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
-  body('description')
+  body('description', 'Please ensure description is between 1 and 100 characters.')
     .isLength({ min: 1, max: 100 })
-    .withMessage('Please ensure description is between 1 and 100 characters.')
+    .escape()
     .not()
     .isEmpty(),
   body('location')
     .isLength({ min: 1, max: 25 })
     .withMessage('Please ensure location is between 1 and 25 characters.')
+    .escape()
     .not()
     .isEmpty(),
   body('isIncome')
@@ -49,11 +50,13 @@ router.patch('/', isAuth, [
   body('description')
     .isLength({ min: 1, max: 100 })
     .withMessage('Please ensure description is between 1 and 100 characters.')
+    .escape()
     .not()
     .isEmpty(),
   body('location')
     .isLength({ min: 1, max: 25 })
     .withMessage('Please ensure location is between 1 and 25 characters.')
+    .escape()
     .not()
     .isEmpty()
 ],

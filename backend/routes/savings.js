@@ -49,17 +49,17 @@ savingsController.updateTotalSavingsProgress
 router.get('/progress/:timeFrame', isAuth, savingsController.getByTimeFrame)
 
 router.post('/goal', isAuth, [
-  body('name')
+  body('name', 'Name must be between 1 and 25 characters.')
     .isLength({ min: 1, max: 25 })
-    .withMessage('Name must be between 1 and 25 characters'),
+    .escape(),
   body('amount')
     .isDecimal()
     .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
-  body('description')
+  body('description', 'Description must be between 1 and 100 characters.')
     .isLength({ min: 1, max: 100 })
-    .withMessage('Description must be between 1 and 100 characters.')
+    .escape()
 ],
 itemGoalController.postItemGoals
 )
@@ -68,23 +68,29 @@ router.get('/goal/:id', isAuth, itemGoalController.getItemGoalDetails)
 
 router.delete('/goal/:id', isAuth, itemGoalController.deleteItemGoal)
 
-router.patch('/goal/allocate', isAuth, itemGoalController.allocateGoalFunds)
+router.patch('/goal/allocate', isAuth, [
+  body('allocateAmount', 'Please make sure amount is valid number greater than zero.')
+    .isDecimal()
+    .custom((value, { req }) => (value > 0))
+    .not()
+    .isEmpty()
+], itemGoalController.allocateGoalFunds)
 
 router.patch('/goal', isAuth, [
   body('id')
     .isLength({ min: 16, max: 24 })
     .withMessage('ID must be string between 16 and 24 characters.'),
-  body('name')
+  body('name', 'Name must be between 1 and 25 characters.')
     .isLength({ min: 1, max: 25 })
-    .withMessage('Name must be between 1 and 25 characters'),
+    .escape(),
   body('amount')
     .isDecimal()
     .custom((value, { req }) => (value > 0))
     .not()
     .isEmpty(),
-  body('description')
+  body('description', 'Description must be between 1 and 100 characters.')
     .isLength({ min: 1, max: 100 })
-    .withMessage('Description must be between 1 and 100 characters.')
+    .escape()
 ],
 itemGoalController.editItemGoal
 )
