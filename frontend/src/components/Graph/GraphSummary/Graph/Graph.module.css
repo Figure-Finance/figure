@@ -1,7 +1,15 @@
-.Graph {
+.GraphSavings {
   bottom: 95px;
   left: 0;
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.GraphYearly {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 95px;
 }
