@@ -17,10 +17,10 @@ exports.postItemGoals = (req, res, next) => {
   const description = req.body.description
   let newGoal
   let loadedUser
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       loadedUser = user
-      return ItemGoal.find()
+      return ItemGoal.find({ userId: loadedUser._id })
     })
     .then(itemGoals => {
       newGoal = new ItemGoal({
@@ -119,10 +119,9 @@ exports.editItemGoal = (req, res, next) => {
 }
 
 exports.allocateGoalFunds = (req, res, next) => {
-  // TODO: when we have users, find this savings doc by current user
   const itemGoalId = req.body.id
   const allocateAmount = req.body.allocateAmount
-  Savings.findOne()
+  Savings.findOne({ userId: req.userId })
     .then(totalSavings => {
       if (totalSavings.totalSavingsProgress < allocateAmount) {
         throw new Error("You don't have enough saved yet to allocate that much to this goal!")

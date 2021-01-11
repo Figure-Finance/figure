@@ -15,14 +15,19 @@ const sub = require('date-fns/sub')
 const isWithinInterval = require('date-fns/isWithinInterval')
 
 const { filterByTimeFrame, filterSavingsData } = timeFrameUtils
+
 // TOTAL SAVINGS ROUTES
 
+// TODO: Figure out why we're getting header errors here
+
 exports.getSavings = (req, res, next) => {
-  // TODO: findOne by current user's id
   let savings
   let itemGoals
-  Savings.findOne()
+  Savings.findOne({ userId: req.userId })
     .then(savingsDoc => {
+      if (!savingsDoc) {
+        throw new Error('Cannot find any savings for this user.')
+      }
       return savings = {
         id: savingsDoc._id,
         totalSavingsGoal: savingsDoc.totalSavingsGoal,
@@ -31,15 +36,10 @@ exports.getSavings = (req, res, next) => {
           return { id: update._id, date: update.date, curTotal: update.curTotal }
         })
       }
-      next()
     })
-    .catch(err => {
-      if (!err.statusCode) {
-        err.statusCode = 500
-      }
-      next(err)
+    .then(result => {
+      return ItemGoal.find({ userId: req.userId })
     })
-  ItemGoal.find()
     .then(itemGoalArray => {
       itemGoals = itemGoalArray.map(i => {
         return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
@@ -55,6 +55,7 @@ exports.getSavings = (req, res, next) => {
 }
 
 exports.postTotalSavings = (req, res, next) => {
+  // Create a new Savings document in savings collection
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
@@ -66,11 +67,10 @@ exports.postTotalSavings = (req, res, next) => {
   // TODO: bankProgress will auto update and is just received through here for testing
   const totalSavingsProgress = req.body.totalSavingsProgress
   let newSavings
-  // TODO: find user by current authorized user id
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       newSavings = new Savings({
-        totalSavingsGoal: totalSavingsGoal, // { name: 'New Bike', amount: 450 }
+        totalSavingsGoal: totalSavingsGoal, // { totalSavingsGoal: 10000, totalSavingsProgress: 450 }
         totalSavingsProgress: totalSavingsProgress,
         userId: user._id
       })
@@ -89,6 +89,7 @@ exports.postTotalSavings = (req, res, next) => {
 }
 
 exports.editTotalSavings = (req, res, next) => {
+  // Edit the user's savings document: change totalSavingsGoal
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
@@ -97,8 +98,7 @@ exports.editTotalSavings = (req, res, next) => {
     throw error
   }
   const newTotalSavingsGoal = req.body.totalSavingsGoal
-  // TODO: find by user
-  Savings.findOne()
+  Savings.findOne({ userId: req.userId })
     .then(savingsItem => {
       savingsItem.totalSavingsGoal = newTotalSavingsGoal
       return savingsItem.save()
@@ -115,6 +115,7 @@ exports.editTotalSavings = (req, res, next) => {
 }
 
 exports.updateTotalSavingsProgress = (req, res, next) => {
+  // Update totalSavingsProgress: increase $ amount user has saved
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
@@ -122,8 +123,7 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
     error.data = errors.array()
     throw error
   }
-  // TODO: get this by user
-  Savings.findOne()
+  Savings.findOne({ userId: req.userId })
     .then(savingsItem => {
       const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
       const curTotal = savingsItem.totalSavingsProgress + req.body.progressAmount
@@ -151,7 +151,7 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 exports.getByTimeFrame = (req, res, next) => {
   const timeFrame = req.params.timeFrame
   const savings = []
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       if (timeFrame === 'week') {
         Savings.aggregate([

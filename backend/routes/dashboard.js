@@ -12,21 +12,22 @@ router.get('/:startDate/:endDate', isAuth, dashWeeklyController.getUserFinances)
 
 router.post('/', isAuth, [
   // body('category')
-  // TODO: set up custom validator to ensure category is one of the user's categories
-  // .custom((value, { req }) => {
-  //   // TODO find this by current user
-  //   return User.findOne()
-  //     .then(user => {
-  //       console.log('In then block')
-  //       console.log(`Is it in there? ${user.categories.values.indexOf(value)}`)
-  //       console.log(`User.categories.values: ${user.categories.values}`)
-  //       if (!user.categories.values.indexOf(value)) {
-  //         console.log('false')
-  //         console.log(user.categories.values.indexOf(value))
-  //         return Promise.reject('Please add a category for this item first.')
-  //       }
-  //     })
-  // }),
+  //   .custom((value, { req }) => {
+  //     console.log(`value: ${value}`)
+  //     User.findOne({ id: req.userId })
+  //       .then(user => {
+  //         if (!user) {
+  //           console.log('We made it into the if statement')
+  //           return Promise.reject('You do not have this category.')
+  //         }
+  //       })
+  //       .catch(err => {
+  //         if (!err.statusCode) {
+  //           err.statusCode = 500
+  //         }
+  //         next(err)
+  //       })
+  //   }),
   body('amount')
     .isDecimal()
     .withMessage('Please enter a valid number.')
@@ -43,7 +44,10 @@ router.post('/', isAuth, [
     .not()
     .isEmpty(),
   body('isIncome')
-    .isBoolean()
+    .isBoolean(),
+  body('date')
+    .not()
+    .isEmpty()
 ],
 dashWeeklyController.postUserFinances
 )

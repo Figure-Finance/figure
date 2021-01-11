@@ -7,7 +7,7 @@ exports.getUserMonthlyFinances = (req, res, next) => {
   const startDate = new Date(req.params.startDate)
   const endDate = new Date(req.params.endDate)
   let finances
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       Finance.aggregate([
         {

@@ -107,8 +107,7 @@ exports.updateUserProfile = (req, res, next) => {
   const newLastName = req.body.lastName
   const newEmail = req.body.email
 
-  // TODO: get this by auth token
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       user.firstName = newFirstName
       user.lastName = newLastName
@@ -129,7 +128,7 @@ exports.updateUserProfile = (req, res, next) => {
 exports.addUserCategory = (req, res, next) => {
   const category = req.body.category
   const isIncome = req.body.isIncome
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       user.categories.push({ category: category, isIncome: isIncome })
       user.save(err => console.log(err))
@@ -145,8 +144,7 @@ exports.addUserCategory = (req, res, next) => {
 
 exports.deleteUserCategory = (req, res, next) => {
   const categoryId = req.params.id
-  // TODO: find user based on logged in user (JWT)
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       user.categories = user.categories.filter(category => {
         return category._id.toString() !== categoryId.toString()

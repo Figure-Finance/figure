@@ -9,7 +9,7 @@ const isAuth = require('../middleware/is-auth')
 
 const router = express.Router()
 
-router.get('/', savingsController.getSavings)
+router.get('/', isAuth, savingsController.getSavings)
 
 router.post('/', isAuth, [
   body('totalSavingsGoal')

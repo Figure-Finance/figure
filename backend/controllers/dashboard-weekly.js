@@ -8,9 +8,9 @@ const Finance = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   const startDate = req.params.startDate
   const endDate = req.params.endDate
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
-      Finance.find({ userId: user._id })
+      return Finance.find({ userId: user._id })
     })
     .then(finances => {
       if (!finances) {
@@ -38,6 +38,7 @@ exports.getUserFinances = (req, res, next) => {
 exports.postUserFinances = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
+    console.log(`Validation Result line 41 controller: ${validationResult(req)}`)
     const error = new Error('Validation failed.')
     error.statusCode = 422
     error.data = errors.array()
@@ -49,7 +50,7 @@ exports.postUserFinances = (req, res, next) => {
   const description = req.body.description
   const isIncome = req.body.isIncome
   const date = req.body.date // YYYY-mm-dd
-  const user = User.findOne()
+  const user = User.findById(req.userId)
     .then(user => {
       const finances = new Finance({
         category: category,

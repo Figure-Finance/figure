@@ -10,8 +10,7 @@ exports.getUserYearlyGraph = (req, res, next) => {
   const startDate = new Date(req.params.startDate)
   const endDate = new Date(req.params.endDate)
   let dates
-  // TODO: find user by authenticated/current user
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       Finance.aggregate([
         {
@@ -49,7 +48,7 @@ exports.getUserYearlyFinances = (req, res, next) => {
   const startDate = new Date(req.params.startDate)
   const endDate = new Date(req.params.endDate)
   let finances
-  User.findOne()
+  User.findById(req.userId)
     .then(user => {
       Finance.aggregate([
         {
