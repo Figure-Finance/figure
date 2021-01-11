@@ -1,5 +1,8 @@
-const User = require('../models/user')
 const process = require('process')
+
+const User = require('../models/user')
+
+const postSavings = require('../util/postSavings')
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -24,6 +27,9 @@ exports.signup = (req, res, next) => {
         categories: categories
       })
       return user.save()
+    })
+    .then(result => {
+      return postSavings(0, 0, user._id)
     })
     .then(result => {
       const token = jwt.sign({

@@ -5,6 +5,7 @@ const Savings = require('../models/savings')
 const ItemGoal = require('../models/itemGoal')
 
 const timeFrameUtils = require('../util/savingsByTimeFrame')
+const postSavings = require('../util/postSavings')
 
 const startOfToday = require('date-fns/startOfToday')
 const startOfWeek = require('date-fns/startOfWeek')
@@ -14,7 +15,7 @@ const sub = require('date-fns/sub')
 
 const isWithinInterval = require('date-fns/isWithinInterval')
 
-const { filterByTimeFrame, filterSavingsData } = timeFrameUtils
+const { filterSavingsData } = timeFrameUtils
 
 // TOTAL SAVINGS ROUTES
 
@@ -62,20 +63,9 @@ exports.postTotalSavings = (req, res, next) => {
     error.data = errors.array()
     throw error
   }
-  const totalSavingsGoal = req.body.totalSavingsGoal
-  const totalSavingsProgress = req.body.totalSavingsProgress
-  let newSavings
-  User.findById(req.userId)
-    .then(user => {
-      newSavings = new Savings({
-        totalSavingsGoal: totalSavingsGoal, // { totalSavingsGoal: 10000, totalSavingsProgress: 450 }
-        totalSavingsProgress: totalSavingsProgress,
-        userId: user._id
-      })
-      newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
-      return newSavings.save()
-    })
-    .then(result => {
+  // console.log(`postSavings results: ${postSavings(req.body.totalSavingsGoal, req.body.totalSavingsProgress, req.userId)}`)
+  postSavings(req.body.totalSavingsGoal, req.body.totalSavingsProgress, req.userId)
+    .then(newSavings => {
       return res.status(201).json({ id: newSavings._id })
     })
     .catch(err => {
