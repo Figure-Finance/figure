@@ -13,12 +13,13 @@
 }
 
 .Label {
+  cursor: text;
   display: block;
   font-family: inherit;
   font-size: 20px;
   text-align: center;
-  /* transform: translateY(40px); */
-  /* z-index: 3; */
+  transform: translateY(40px);
+  z-index: 3;
 }
 
 .TextArea {
@@ -26,7 +27,7 @@
   resize: none;
 }
 
-.Primary {
+.PrimaryLabel {
   color: var(--primary);
 }
 
@@ -34,7 +35,7 @@
   border: 2px ridge var(--primary)
 }
 
-.Neutral {
+.NeutralLabel {
   color: var(--neutral);
 }
 
@@ -42,7 +43,7 @@
   border: 2px ridge var(--neutral);
 }
 
-.Danger {
+.DangerLabel {
   color: var(--danger);
 }
 
