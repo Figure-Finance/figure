@@ -53,18 +53,27 @@ const Yearly = ({ history }) => {
   const updateIncomeExpenses = updatedItems => {
     const income = []
     const expenses = []
+    for (const item of updatedItems) {
+      if (item.isIncome) {
+        income.push(item)
+      } else {
+        expenses.push(item)
+      }
+    }
+    return { income, expenses }
+  }
+
+  const updateIncomeExpensesByMonth = updatedItems => {
     const incomeByMonth = Array(12).fill(0)
     const expensesByMonth = Array(12).fill(0)
     for (const item of updatedItems) {
       if (item.isIncome) {
-        income.push(item)
         incomeByMonth[item.month - 1] += item.amount
       } else {
-        expenses.push(item)
         expensesByMonth[item.month - 1] += item.amount
       }
     }
-    return { income, expenses, incomeByMonth, expensesByMonth }
+    return { incomeByMonth, expensesByMonth }
   }
 
   const onFetchYearly = useCallback(async () => {
@@ -74,17 +83,18 @@ const Yearly = ({ history }) => {
     return res.data
   }, [currentYearIndex, years])
 
-  const changeYear = event => {
-    const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
-    setCurrentYearIndex(index)
-  }
-
   const onFetchYearlyGraph = useCallback(async () => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
     const res = await api.get(`yearly/graph/${startDate}/${endDate}`)
+    console.log(res.data)
     return res.data
   }, [currentYearIndex, years])
+
+  const changeYear = event => {
+    const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
+    setCurrentYearIndex(index)
+  }
 
   const previousYear = () => {
     if (currentYearIndex > 0) {
@@ -101,7 +111,15 @@ const Yearly = ({ history }) => {
   useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
   useEffect(onFetchYearlyGraph, [onFetchYearlyGraph, currentYearIndex])
 
-  const { data, isLoading, isError, error } = useQuery('monthly', onFetchYearly, {
+  const { data, isLoading, isError, error } = useQuery('yearly', onFetchYearly, {
+    retry: false,
+    staleTime: Infinity
+  })
+  const {
+    data: graphData,
+    isLoading: graphIsLoading,
+    isError: graphIsError
+  } = useQuery('yearlyGraph', onFetchYearlyGraph, {
     retry: false,
     staleTime: Infinity
   })
@@ -126,26 +144,12 @@ const Yearly = ({ history }) => {
   let expensesBreakdown
 
   if (isLoading) {
-    graph = <Loader />
     incomeBreakdown = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
     if (error.response.status && error.response.status === 401) {
       history.push('/auth')
     }
-    graph = (
-      <Graph
-        data={{
-          income: [],
-          expenses: []
-        }}
-        labels={months}
-        timePeriods={yearStringMap}
-        previousTimePeriod={previousYearHandler}
-        nextTimePeriod={nextYearHandler}
-        selectTimePeriod={changeYear}
-        currentTimePeriod={yearStringMap[currentYearIndex]} />
-    )
     incomeBreakdown = (
       <Breakdown
         content={[]}
@@ -160,21 +164,8 @@ const Yearly = ({ history }) => {
         height='50%'
         width='100%' />
     )
-  } else {
-    const { income, expenses, incomeByMonth, expensesByMonth } = updateIncomeExpenses(data)
-    graph = (
-      <Graph
-        data={{
-          income: incomeByMonth,
-          expenses: expensesByMonth
-        }}
-        labels={months}
-        timePeriods={yearStringMap}
-        previousTimePeriod={previousYearHandler}
-        nextTimePeriod={nextYearHandler}
-        selectTimePeriod={changeYear}
-        currentTimePeriod={yearStringMap[currentYearIndex]} />
-    )
+  } else if (data) {
+    const { income, expenses } = updateIncomeExpenses(data)
     incomeBreakdown = (
       <Breakdown
         content={income}
@@ -188,6 +179,39 @@ const Yearly = ({ history }) => {
         color='danger'
         height='50%'
         width='100%' />
+    )
+  }
+
+  if (graphIsLoading) {
+    graph = <Loader />
+  } else if (graphIsError) {
+    graph = (
+      <Graph
+        data={{
+          income: [],
+          expenses: []
+        }}
+        labels={months}
+        timePeriods={yearStringMap}
+        previousTimePeriod={previousYearHandler}
+        nextTimePeriod={nextYearHandler}
+        selectTimePeriod={changeYear}
+        currentTimePeriod={yearStringMap[currentYearIndex]} />
+    )
+  } else if (graphData) {
+    const { incomeByMonth, expensesByMonth } = updateIncomeExpensesByMonth(graphData)
+    graph = (
+      <Graph
+        data={{
+          income: incomeByMonth,
+          expenses: expensesByMonth
+        }}
+        labels={months}
+        timePeriods={yearStringMap}
+        previousTimePeriod={previousYearHandler}
+        nextTimePeriod={nextYearHandler}
+        selectTimePeriod={changeYear}
+        currentTimePeriod={yearStringMap[currentYearIndex]} />
     )
   }
 
