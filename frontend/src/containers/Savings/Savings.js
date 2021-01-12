@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
 import api from '../../api'
 import classes from './Savings.module.css'
@@ -16,10 +16,33 @@ const Savings = ({ history }) => {
 
   const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
 
+  const getTimeFrame = useCallback(period => {
+    switch (period) {
+      case '1W':
+        return 'week'
+      case '1M':
+        return 'month'
+      case '3M':
+        return 'quarter'
+      case '1Y':
+        return 'year'
+      case 'A':
+        return 'all'
+      default:
+        break
+    }
+  }, [])
+
   const onFetchSavings = useCallback(async () => {
     const res = await api.get('savings')
     return res.data
   }, [])
+
+  const onFetchSavingsGraph = useCallback(async () => {
+    const period = getTimeFrame(graphTimePeriod)
+    const res = await api.get(`savings/progress/${period}`)
+    return res.data
+  }, [getTimeFrame, graphTimePeriod])
 
   const onDeposit = useCallback(async progressAmount => {
     const res = await api.patch('savings/progress', {
@@ -65,23 +88,30 @@ const Savings = ({ history }) => {
     return res.data
   }, [])
 
-  const onFetchGraphData = useCallback(async timeFrame => {
-    const res = await api.get(`savings/progress/${timeFrame}`)
-    return res.data
-  }, [])
-
-  useEffect(() => {
-    onFetchSavings()
-    onFetchGraphData('year')
-  }, [onFetchSavings, onFetchGraphData])
+  useEffect(onFetchSavings, [onFetchSavings])
+  useEffect(onFetchSavingsGraph, [onFetchSavingsGraph])
 
   const { data, isLoading, isError, error } = useQuery('savings', onFetchSavings, {
     retry: false,
     staleTime: Infinity
   })
+  const {
+    data: graphData,
+    isLoading: graphIsLoading,
+    isError: graphIsError
+  } = useQuery('savingsGraph', onFetchSavingsGraph)
 
-  const graphTimePeriodChangeHandler = event => {
+  const timePeriodChange = event => {
     setGraphTimePeriod(event.target.innerHTML)
+  }
+
+  const queryClient = useQueryClient()
+  const mutateTimePeriod = useMutation(timePeriodChange, {
+    onSuccess: () => queryClient.clear()
+  })
+
+  const timePeriodChangeHandler = () => {
+    mutateTimePeriod.mutate()
   }
 
   const labels = [
@@ -100,7 +130,6 @@ const Savings = ({ history }) => {
 
   if (isLoading) {
     progress = <Loader />
-    graph = <Loader />
     breakdown = <Loader />
   } else if (isError) {
     if (error.response.status && error.response.status === 401) {
@@ -115,13 +144,6 @@ const Savings = ({ history }) => {
         rightAmount={0}
         single
         showButtons />
-    )
-    graph = (
-      <Graph
-        onNavSavingsChange={graphTimePeriodChangeHandler}
-        active={graphTimePeriod}
-        labels={labels}
-        isSavings />
     )
     breakdown = (
       <Breakdown
@@ -151,13 +173,6 @@ const Savings = ({ history }) => {
         single
         showButtons />
     )
-    graph = (
-      <Graph
-        onNavSavingsChange={graphTimePeriodChangeHandler}
-        active={graphTimePeriod}
-        labels={labels}
-        isSavings />
-    )
     breakdown = (
       <Breakdown
         allocateSavings={onAllocateSavings}
@@ -171,6 +186,27 @@ const Savings = ({ history }) => {
         canAdd
         isSavings
         showButtons />
+    )
+  }
+
+  if (graphIsLoading) {
+    graph = <Loader />
+  } else if (graphIsError) {
+    graph = (
+      <Graph
+        onNavSavingsChange={timePeriodChangeHandler}
+        active={graphTimePeriod}
+        labels={labels}
+        isSavings />
+    )
+  } else if (graphData) {
+    console.log(graphData)
+    graph = (
+      <Graph
+        onNavSavingsChange={timePeriodChangeHandler}
+        active={graphTimePeriod}
+        labels={labels}
+        isSavings />
     )
   }
 
