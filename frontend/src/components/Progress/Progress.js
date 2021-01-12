@@ -23,9 +23,8 @@ const Progress = ({
   }
 
   const leftModalSubmitHandler = value => {
-    updateProgress(value, res => {
-      leftModalCloseHandler()
-    })
+    updateProgress(value)
+    leftModalCloseHandler()
   }
 
   const rightModalCloseHandler = () => {
@@ -33,9 +32,8 @@ const Progress = ({
   }
 
   const rightModalSubmitHandler = value => {
-    updateGoal(value, data => {
-      rightModalCloseHandler()
-    })
+    updateGoal(value)
+    rightModalCloseHandler()
   }
 
   let content = (
