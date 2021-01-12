@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import PropTypes from 'prop-types'
 import {
   format,
   startOfToday,
@@ -15,7 +16,11 @@ import Chart from '../../components/Chart/Chart'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
 
-const Monthly = () => {
+const Monthly = ({ history }) => {
+  if (!localStorage.getItem('token')) {
+    history.push('/auth')
+  }
+
   const today = useMemo(() => startOfToday(), [])
   const lastYear = useMemo(() => subYears(today, 1), [today])
   const months = useMemo(
@@ -71,7 +76,7 @@ const Monthly = () => {
 
   useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
 
-  const { data, isLoading, isError } = useQuery('monthly', onFetchMonthly, {
+  const { data, isLoading, isError, error } = useQuery('monthly', onFetchMonthly, {
     retry: false,
     staleTime: Infinity
   })
@@ -102,6 +107,9 @@ const Monthly = () => {
     chart = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
+    if (error.response.status && error.response.status === 401) {
+      history.push('/auth')
+    }
     progress = (
       <Progress
         leftColor='primary'
@@ -173,6 +181,10 @@ const Monthly = () => {
       <Navbar active='m' />
     </div>
   )
+}
+
+Monthly.propTypes = {
+  history: PropTypes.object
 }
 
 export default Monthly
