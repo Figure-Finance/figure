@@ -87,7 +87,6 @@ const Yearly = ({ history }) => {
     const startDate = years[currentYearIndex]
     const endDate = endOfYear(startDate)
     const res = await api.get(`yearly/graph/${startDate}/${endDate}`)
-    console.log(res.data)
     return res.data
   }, [currentYearIndex, years])
 
@@ -199,7 +198,9 @@ const Yearly = ({ history }) => {
         currentTimePeriod={yearStringMap[currentYearIndex]} />
     )
   } else if (graphData) {
-    const { incomeByMonth, expensesByMonth } = updateIncomeExpensesByMonth(graphData)
+    const { income, expenses } = graphData
+    const updatedGraphData = [...income, ...expenses]
+    const { incomeByMonth, expensesByMonth } = updateIncomeExpensesByMonth(updatedGraphData)
     graph = (
       <Graph
         data={{
