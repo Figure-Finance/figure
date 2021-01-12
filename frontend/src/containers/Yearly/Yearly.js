@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import PropTypes from 'prop-types'
 import {
   format,
   startOfToday,
@@ -14,7 +15,11 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
 
-const Yearly = () => {
+const Yearly = ({ history }) => {
+  if (!localStorage.getItem('token')) {
+    history.push('/auth')
+  }
+
   const today = useMemo(() => startOfToday(), [])
   const tenYearsAgo = useMemo(
     () => subYears(today, 10), [today]
@@ -96,7 +101,7 @@ const Yearly = () => {
   useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
   useEffect(onFetchYearlyGraph, [onFetchYearlyGraph, currentYearIndex])
 
-  const { data, isLoading, isError } = useQuery('monthly', onFetchYearly, {
+  const { data, isLoading, isError, error } = useQuery('monthly', onFetchYearly, {
     retry: false,
     staleTime: Infinity
   })
@@ -125,6 +130,9 @@ const Yearly = () => {
     incomeBreakdown = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
+    if (error.response.status && error.response.status === 401) {
+      history.push('/auth')
+    }
     graph = (
       <Graph
         data={{
@@ -195,6 +203,10 @@ const Yearly = () => {
       <Navbar active='y' />
     </div>
   )
+}
+
+Yearly.propTypes = {
+  history: PropTypes.object
 }
 
 export default Yearly
