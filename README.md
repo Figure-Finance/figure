@@ -12,21 +12,21 @@ Other budget apps are often clunky and difficult to use, with a lack of intuitiv
 
 Self-identifying areas to improve empowers users to change their habits from within, providing long-term accountability and change.
 
+![Figure sign in screen](/imgs/activesignin.png)
+
+![Figure weekly dashboard](/imgs/weekly.png)
+
+![Figure monthly dashboard](/imgs/monthly.png)
+
 *Goal-oriented, so it works*
 
 Users set goals, and can see how they're reaching them day by day. Providing excitement and reinforcement, Figure provides them the tools to reach these goals, and feel good about them.
 
-![Figure sign in screen]('/imgs/activesignin.png')
-
-![Figure weekly dashboard]('/imgs/weekly.png')
-
-![Figure monthly dashboard]('/imgs/monthly.png')
-
 ![Figure savings dashboard](/imgs/savings.png)
 
-![Figure user profile]('/imgs/profile.png')
+![Figure user profile](/imgs/profile.png)
 
-![Figure button interactions close up]('/imgs/micro.png')
+![Figure button interactions close up](/imgs/micro.png)
 
 ## Installation
 
