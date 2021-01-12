@@ -27,7 +27,7 @@ const Auth = ({ history }) => {
       localStorage.setItem('token', res.data.token)
       history.push('/')
     } catch (err) {
-      if (err.response.status === 401) {
+      if (err.response && err.response.status && err.response.status === 401) {
         console.log('Wrong Password')
       }
     }
