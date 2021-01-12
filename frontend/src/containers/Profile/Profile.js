@@ -10,6 +10,10 @@ import Button from '../../components/UI/Button/Button'
 import Loader from '../../components/Loader/Loader'
 
 const Profile = ({ history }) => {
+  if (!localStorage.getItem('token')) {
+    history.push('/auth')
+  }
+
   const updateIncomeExpenses = updatedItems => {
     const income = []
     const expenses = []
@@ -68,7 +72,7 @@ const Profile = ({ history }) => {
 
   useEffect(onFetchProfile, [onFetchProfile])
 
-  const { data, isLoading, isError } = useQuery('profile', onFetchProfile, {
+  const { data, isLoading, isError, error } = useQuery('profile', onFetchProfile, {
     retry: false,
     staleTime: Infinity
   })
@@ -82,6 +86,9 @@ const Profile = ({ history }) => {
     incomeType = <Loader />
     expensesType = <Loader />
   } else if (isError) {
+    if (error.response.status && error.response.status === 401) {
+      history.push('/auth')
+    }
     profileSummary = (
       <ProfileSummary
         firstName=''
