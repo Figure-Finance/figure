@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import api from '../../api'
 import classes from './Auth.module.css'
@@ -9,8 +9,9 @@ import Logo from '../../components/Logo/Logo'
 
 const Auth = ({ history }) => {
   const [isSignUp, setIsSignUp] = useState(true)
+  const [formError, setFormError] = useState('')
 
-  const onUserSignUp = async signUpData => {
+  const onUserSignUp = useCallback(async signUpData => {
     try {
       const res = await api.post('user/signup', signUpData)
       console.log(res.data)
@@ -19,19 +20,20 @@ const Auth = ({ history }) => {
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [history])
 
-  const onUserSignIn = async signInData => {
+  const onUserSignIn = useCallback(async signInData => {
     try {
       const res = await api.post('user/signin', signInData)
       localStorage.setItem('token', res.data.token)
       history.push('/')
     } catch (err) {
+      console.log(err.response.status)
       if (err.response && err.response.status && err.response.status === 401) {
-        console.log('Wrong Password')
+        setFormError('Wrong Password')
       }
     }
-  }
+  }, [history])
 
   return (
     <div className={classes.Auth}>
@@ -40,10 +42,12 @@ const Auth = ({ history }) => {
           {isSignUp
             ? <SignUpForm
               onSubmit={onUserSignUp}
-              changeForm={() => setIsSignUp(false)} />
+              changeForm={() => setIsSignUp(false)}
+              error={formError} />
             : <SignInForm
               onSubmit={onUserSignIn}
-              changeForm={() => setIsSignUp(true)} />
+              changeForm={() => setIsSignUp(true)}
+              error={formError} />
           }
         </div>
       </Container>
