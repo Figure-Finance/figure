@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useQuery } from 'react-query'
+import PropTypes from 'prop-types'
 import api from '../../api'
 import classes from './Savings.module.css'
 import Graph from '../../components/Graph/Graph'
@@ -8,7 +9,11 @@ import Breakdown from '../../components/Breakdown/Breakdown'
 import Navbar from '../../components/Navbar/Navbar'
 import Loader from '../../components/Loader/Loader'
 
-const Savings = () => {
+const Savings = ({ history }) => {
+  if (!localStorage.getItem('token')) {
+    history.push('/auth')
+  }
+
   const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
 
   const onFetchSavings = useCallback(async () => {
@@ -70,7 +75,7 @@ const Savings = () => {
     onFetchGraphData('year')
   }, [onFetchSavings, onFetchGraphData])
 
-  const { data, isLoading, isError } = useQuery('savings', onFetchSavings, {
+  const { data, isLoading, isError, error } = useQuery('savings', onFetchSavings, {
     retry: false,
     staleTime: Infinity
   })
@@ -98,6 +103,9 @@ const Savings = () => {
     graph = <Loader />
     breakdown = <Loader />
   } else if (isError) {
+    if (error.response.status && error.response.status === 401) {
+      history.push('/auth')
+    }
     progress = (
       <Progress
         updateGoal={onUpdateTotalGoal}
@@ -176,6 +184,10 @@ const Savings = () => {
       <Navbar active='s' />
     </div>
   )
+}
+
+Savings.propTypes = {
+  history: PropTypes.objects
 }
 
 export default Savings
