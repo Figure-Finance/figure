@@ -8,6 +8,7 @@ const timeFrameUtils = require('../util/savingsByTimeFrame')
 const postSavings = require('../util/postSavings')
 
 const startOfToday = require('date-fns/startOfToday')
+const startOfDay = require('date-fns/startOfDay')
 const startOfWeek = require('date-fns/startOfWeek')
 const startOfMonth = require('date-fns/startOfMonth')
 const startOfQuarter = require('date-fns/startOfQuarter')
@@ -63,7 +64,6 @@ exports.postTotalSavings = (req, res, next) => {
     error.data = errors.array()
     throw error
   }
-  // console.log(`postSavings results: ${postSavings(req.body.totalSavingsGoal, req.body.totalSavingsProgress, req.userId)}`)
   postSavings(req.body.totalSavingsGoal, req.body.totalSavingsProgress, req.userId)
     .then(newSavings => {
       return res.status(201).json({ id: newSavings._id })
@@ -138,126 +138,38 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 
 exports.getByTimeFrame = (req, res, next) => {
   // Get savings documents by specified time frame for graphs
-  // TODO: clean up & break into utility function
   const timeFrame = req.params.timeFrame
-  const savings = []
+  // const savings = []
   User.findById(req.userId)
     .then(user => {
       if (timeFrame === 'week') {
-        Savings.aggregate([
-          {
-            $match: {
-              userId: user._id
-            }
-          },
-          { $unwind: { path: '$progressUpdates' } },
-          { $group: { _id: '$progressUpdates.date', amount: { $sum: '$progressUpdates.curTotal' } } }
-        ])
-          .exec((err, result) => {
-            if (err) {
-              console.log(err)
-            }
-            if (result) {
-              console.log(result)
-              result.map(r => {
-                if (isWithinInterval(new Date(r._id), {
-                  start: sub(startOfToday(), {
-                    days: 7
-                  }),
-                  end: startOfToday()
-                })) {
-                  return savings.push({ period: r._id, amount: r.amount })
-                }
-              })
-              return res.status(200).json(savings)
-            }
+        filterSavingsData(user, startOfDay, '%d', 7)
+          .then(result => {
+            console.log(result)
+            return res.status(200).json(result)
           })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'month') {
-        Savings.aggregate([
-          {
-            $match: {
-              userId: user._id
-            }
-          },
-          { $unwind: { path: '$progressUpdates' } },
-          { $group: { _id: '$progressUpdates.date', amount: { $sum: '$progressUpdates.curTotal' } } }
-        ])
-          .exec((err, result) => {
-            if (err) {
-              console.log(err)
-            }
-            if (result) {
-              console.log(result)
-              result.map(r => {
-                if (isWithinInterval(new Date(r._id), {
-                  start: sub(startOfToday(), {
-                    months: 1
-                  }),
-                  end: startOfToday()
-                })) {
-                  return savings.push({ period: r._id, amount: r.amount })
-                }
-              })
-              return res.status(200).json(savings)
-            }
+        filterSavingsData(user, startOfDay, '%d', 30)
+          .then(result => {
+            console.log(result)
+            return res.status(200).json(result)
           })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'quarter') {
-        Savings.aggregate([
-          {
-            $match: {
-              userId: user._id
-            }
-          },
-          { $unwind: { path: '$progressUpdates' } },
-          { $group: { _id: { $dateToString: { format: '%U', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
-        ])
-          .exec((err, result) => {
-            if (err) {
-              console.log(err)
-            }
-            if (result) {
-              console.log(result)
-              result.map(r => {
-                if (isWithinInterval(new Date(r.date), {
-                  start: sub(startOfToday(), {
-                    days: 120
-                  }),
-                  end: startOfToday()
-                })) {
-                  return savings.push({ period: startOfWeek(r.date), amount: r.amount })
-                }
-              })
-              return res.status(200).json(savings)
-            }
+        filterSavingsData(user, startOfWeek, '%U', 120)
+          .then(result => {
+            console.log(result)
+            return res.status(200).json(result)
           })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'year') {
-        Savings.aggregate([
-          {
-            $match: {
-              userId: user._id
-            }
-          },
-          { $unwind: { path: '$progressUpdates' } },
-          { $group: { _id: { $dateToString: { format: '%m', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
-        ])
-          .exec((err, result) => {
-            if (err) {
-              console.log(err)
-            }
-            if (result) {
-              result.map(r => {
-                if (isWithinInterval(new Date(r.date), {
-                  start: sub(startOfToday(), {
-                    days: 365
-                  }),
-                  end: startOfToday()
-                })) {
-                  return savings.push({ period: startOfMonth(r.date), amount: r.amount })
-                }
-              })
-              return res.status(200).json(savings)
-            }
+        filterSavingsData(user, startOfMonth, '%m', 365)
+          .then(result => {
+            console.log(result)
+            return res.status(200).json(result)
           })
+          .catch(err => console.log(err))
       } else if (timeFrame === 'all') {
         Savings.aggregate([
           {

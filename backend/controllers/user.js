@@ -7,10 +7,16 @@ const postSavings = require('../util/postSavings')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-// Going to need this soon
 const { validationResult } = require('express-validator')
 
 exports.signup = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   let user
   const email = req.body.email
   const firstName = req.body.firstName
@@ -49,6 +55,13 @@ exports.signup = (req, res, next) => {
 }
 
 exports.signin = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const email = req.body.email
   const password = req.body.password
   let loadedUser
@@ -109,6 +122,13 @@ exports.getUserProfile = (req, res, next) => {
 }
 
 exports.updateUserProfile = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const newFirstName = req.body.firstName
   const newLastName = req.body.lastName
   const newEmail = req.body.email
@@ -132,6 +152,13 @@ exports.updateUserProfile = (req, res, next) => {
 }
 
 exports.addUserCategory = (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.')
+    error.statusCode = 422
+    error.data = errors.array()
+    throw error
+  }
   const category = req.body.category
   const isIncome = req.body.isIncome
   User.findById(req.userId)

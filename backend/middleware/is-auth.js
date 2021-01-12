@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, process.env.SECRET_KEY)
   } catch (err) {
-    console.log(`In catch block token: ${token}`)
     err.statusCode = 500
     throw err
   }
