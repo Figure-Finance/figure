@@ -12,7 +12,12 @@ const PieChart = ({ names, amounts }) => (
           '#F28505',
           '#05F21D',
           '#EDF205',
-          '#F205CC'
+          '#F205CC',
+          '#d91a1a',
+          '#1805f2',
+          '#05f2c0',
+          '#1bb121',
+          '#4fb2c8'
         ],
         borderColor: '#F2F2F2'
       }]
