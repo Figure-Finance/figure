@@ -5,7 +5,7 @@ import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import { checkInputValidity } from '../../validation'
 
-const SignUpForm = ({ changeForm, onSubmit }) => {
+const SignUpForm = ({ changeForm, onSubmit, error }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     firstName: {
@@ -116,6 +116,7 @@ const SignUpForm = ({ changeForm, onSubmit }) => {
   return (
     <>
       <form onSubmit={signUpHandler} className={classes.Form}>
+        <h4 className={classes.Error}>{error}</h4>
         {formElementsArray.map(formElement => {
           let legend = (
             <p></p>
@@ -169,7 +170,8 @@ const SignUpForm = ({ changeForm, onSubmit }) => {
 
 SignUpForm.propTypes = {
   changeForm: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  error: PropTypes.string
 }
 
 export default SignUpForm
