@@ -13,8 +13,13 @@ services:
 
   backend:
     restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     container_name: backend
-    image: index.docker.io/starlightromero/figure-backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     env_file:
       - ./env/backend.env
     networks:
@@ -24,26 +29,29 @@ services:
 
   frontend:
     restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     container_name: frontend
-    image: index.docker.io/starlightromero/figure-frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    # stdin_open: true
+    # tty: true
     env_file:
       - ./env/frontend.env
-    networks:
-      - figure-network
     depends_on:
       - mongo
       - backend
 
   nginx:
     restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
     container_name: nginx
-    image: index.docker.io/starlightromero/figure-nginx
     ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /root/certs-data/:/data/letsencrypt/
-      - /etc/letsencrypt/:/etc/letsencrypt/
+      - 8080:80
     networks:
       - figure-network
     depends_on:

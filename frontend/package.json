@@ -26,11 +26,14 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HOST=0.0.0.0 PORT=3000 react-scripts start",
+    "start-prod": "serve -s build -l 3000",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prod": "node build/index.js"
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
+    "lint-files": "eslint --fix \"src/**/*.{js,jsx}\"",
+    "lint": "yarn format && yarn lint-files"
   },
   "eslintConfig": {
     "extends": [
@@ -53,12 +56,14 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.12.1",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.2.1"
   }
 }

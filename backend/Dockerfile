@@ -1,16 +1,15 @@
-FROM node
+FROM node:lts-alpine
 
-WORKDIR /app
+LABEL decription="Production image for Figure backend."
 
-COPY package.json .
+WORKDIR /usr/src/app
+
+COPY backend/package.json .
+
+COPY backend/yarn.lock .
 
 RUN yarn install
 
-COPY . .
-
-EXPOSE 80
-
-# ENV MONGODB_USERNAME=root
-# ENV MONGODB_PASSWORD=secret
+COPY backend .
 
 CMD ["yarn", "start"]

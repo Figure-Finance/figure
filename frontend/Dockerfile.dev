@@ -1,0 +1,15 @@
+FROM node:lts-alpine
+
+LABEL decription="Development image for Figure frontend."
+
+WORKDIR /app
+
+COPY package.json .
+
+COPY yarn.lock .
+
+RUN yarn install
+
+COPY . .
+
+CMD ["yarn", "start"]

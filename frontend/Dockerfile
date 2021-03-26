@@ -1,13 +1,19 @@
-FROM node
+FROM node:lts-alpine
 
-WORKDIR /app
+LABEL decription="Production image for Figure frontend."
 
-COPY package.json .
+WORKDIR /usr/src/app
+
+COPY frontend/package.json .
+
+COPY frontend/yarn.lock .
+
+RUN yarn install serve
 
 RUN yarn install
 
-COPY . .
+COPY frontend .
 
-EXPOSE 3000
+RUN yarn build
 
-CMD ["yarn", "start"]
+CMD ["yarn", "start-prod"]
