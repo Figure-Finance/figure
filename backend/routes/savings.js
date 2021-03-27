@@ -6,7 +6,7 @@ const savingsController = require('../controllers/savings')
 
 const itemGoalController = require('../controllers/itemGoals')
 
-const isAuth = require('../middleware/is-auth')
+const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 

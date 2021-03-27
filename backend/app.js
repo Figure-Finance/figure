@@ -13,7 +13,16 @@ const savingsRoutes = require('./routes/savings')
 const userRoutes = require('./routes/user')
 
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  const allowedOrigins = [
+    'http://127.0.0.1:8080',
+    'http://localhost:8080',
+    'http://figurefinance.tk',
+    'https://figurefinance.tk'
+  ]
+  const origin = req.headers.origin
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE')
   res.setHeader(
     'Access-Control-Allow-Headers',

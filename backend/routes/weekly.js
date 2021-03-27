@@ -4,7 +4,7 @@ const express = require('express')
 
 const dashWeeklyController = require('../controllers/weekly')
 
-const isAuth = require('../middleware/is-auth')
+const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 

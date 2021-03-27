@@ -2,7 +2,7 @@ const express = require('express')
 
 const dashMonthlyController = require('../controllers/monthly')
 
-const isAuth = require('../middleware/is-auth')
+const isAuth = require('../middleware/isAuth')
 
 const router = express.Router()
 
