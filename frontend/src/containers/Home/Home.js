@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
 import classes from './Home.module.css'
 import Logo from '../../components/Logo/Logo'
 import Button from '../../components/UI/Button/Button'
@@ -16,12 +17,16 @@ const Home = ({ history }) => {
           </div>
         </div>
         <div className={classes.Auth}>
-          <Button color="primary" size="small" type="sumbit">
-            Sign In
-          </Button>
-          <Button color="primary" size="small" type="sumbit">
-            Sign Up
-          </Button>
+          <NavLink to={'/auth'}>
+            <Button color="primary" size="small" type="sumbit">
+              Sign In
+            </Button>
+          </NavLink>
+          <NavLink to={'/auth'}>
+            <Button color="primary" size="small" type="sumbit">
+              Sign Up
+            </Button>
+          </NavLink>
         </div>
       </div>
       <div className={classes.Main}>
