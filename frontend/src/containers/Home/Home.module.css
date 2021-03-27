@@ -1,0 +1,63 @@
+.Home {
+  background: rgb(5, 242, 155);
+  background: linear-gradient(
+      40deg,
+      rgba(5, 242, 155, 0.5) 0%,
+      rgba(141, 239, 203, 0.5) 20%,
+      rgba(242, 242, 242, 0.5) 50%
+    ),
+    linear-gradient(
+      320deg,
+      rgba(5, 242, 155, 0.5) 0%,
+      rgba(141, 239, 203, 0.5) 20%,
+      rgba(242, 242, 242, 0.5) 50%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(5, 242, 155, 0.5) 0%,
+      rgba(141, 239, 203, 0.5) 20%,
+      rgba(242, 242, 242, 0.5) 50%
+    );
+  height: 100%;
+}
+
+.HeadBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Brand {
+  display: flex;
+  flex-direction: row;
+}
+
+.BrandName {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.BrandName > h2 {
+  margin: 0;
+}
+
+.Auth {
+  display: flex;
+  flex-direction: row;
+}
+
+.Auth > * {
+  margin: 5px 10px;
+}
+
+.Main {
+  margin: auto;
+  text-align: center;
+}
+
+.Title {
+  font-size: 200px;
+  font-weight: bold;
+}
