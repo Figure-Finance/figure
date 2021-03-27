@@ -8,7 +8,7 @@ COPY frontend/package.json .
 
 COPY frontend/yarn.lock .
 
-RUN yarn install serve
+RUN yarn add serve
 
 RUN yarn install
 
