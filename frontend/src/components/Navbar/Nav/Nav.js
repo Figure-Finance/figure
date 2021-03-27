@@ -4,7 +4,11 @@ import NavItem from '../NavItem/NavItem'
 
 const Nav = ({ active }) => (
   <>
-    <NavItem color="primary" size="square" link="/" active={active === 'w'}>
+    <NavItem
+      color="primary"
+      size="square"
+      link="/weekly"
+      active={active === 'w'}>
       W
     </NavItem>
     <NavItem
