@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   mongo:
     restart: always
@@ -41,9 +41,9 @@ services:
     ports:
       - 80:80
       - 443:443
-    volumes:
-      - /root/certs-data/:/data/letsencrypt/
-      - /etc/letsencrypt/:/etc/letsencrypt/
+    # volumes:
+    #   - /root/certs-data/:/data/letsencrypt/
+    #   - /etc/letsencrypt/:/etc/letsencrypt/
     networks:
       - figure-network
     depends_on:
