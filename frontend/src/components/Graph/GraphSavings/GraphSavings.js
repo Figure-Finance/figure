@@ -7,13 +7,14 @@ const GraphSavings = ({ onChange, active, labels }) => (
     onNavSavingsChange={onChange}
     active={active}
     labels={labels}
-    isSavings />
+    isSavings
+  />
 )
 
 GraphSavings.propTypes = {
   onChange: PropTypes.func,
   active: PropTypes.string,
-  labels: PropTypes.arrayOf(PropTypes.string)
+  labels: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default GraphSavings

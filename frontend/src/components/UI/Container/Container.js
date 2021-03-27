@@ -9,7 +9,7 @@ const Container = ({ children, height, width, borderRadius }) => {
       style={{
         width: width,
         height: height,
-        borderRadius: borderRadius || '30px'
+        borderRadius: borderRadius || '30px',
       }}>
       {children}
     </div>
@@ -20,7 +20,7 @@ Container.propTypes = {
   children: PropTypes.any,
   height: PropTypes.string,
   width: PropTypes.string,
-  borderRadius: PropTypes.string
+  borderRadius: PropTypes.string,
 }
 
 export default Container

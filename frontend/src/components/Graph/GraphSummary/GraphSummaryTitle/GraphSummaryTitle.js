@@ -9,19 +9,15 @@ const GraphSummaryTitle = ({
   openModal,
   buttonContent,
   decrementNumber,
-  incrementNumber
+  incrementNumber,
 }) => {
   return (
     <div className={classes.Buttons}>
-      <LeftArrowButton color='danger' onClick={decrementNumber} />
-      <Button
-        onClick={openModal}
-        color='danger'
-        size='large'
-        width='300px'>
+      <LeftArrowButton color="danger" onClick={decrementNumber} />
+      <Button onClick={openModal} color="danger" size="large" width="300px">
         {buttonContent}
       </Button>
-      <RightArrowButton color='danger' onClick={incrementNumber} />
+      <RightArrowButton color="danger" onClick={incrementNumber} />
     </div>
   )
 }
@@ -30,7 +26,7 @@ GraphSummaryTitle.propTypes = {
   openModal: PropTypes.func,
   buttonContent: PropTypes.string,
   decrementNumber: PropTypes.func,
-  incrementNumber: PropTypes.func
+  incrementNumber: PropTypes.func,
 }
 
 export default GraphSummaryTitle

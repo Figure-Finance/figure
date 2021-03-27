@@ -12,15 +12,15 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Name'
+        label: 'Name',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
   const queryClient = useQueryClient()
@@ -31,8 +31,8 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
   //   )
   // })
   // TODO: instead of invalidating the query set the query data. This allows us to save a call to the backend
-  const mutateAdd = useMutation(newType => onAdd(newType), {
-    onSuccess: data => queryClient.invalidateQueries()
+  const mutateAdd = useMutation((newType) => onAdd(newType), {
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const addItemHandler = () => {
@@ -42,10 +42,10 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
@@ -65,14 +65,14 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
   for (const key in formElements) {
     formElementsArray.push({
       id: key,
-      config: formElements[key]
+      config: formElements[key],
     })
   }
 
   return (
     <div className={classes.BreakdownAddModal}>
       <div className={classes.Inputs}>
-        {formElementsArray.map(formElement => (
+        {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
             color={color}
@@ -82,23 +82,20 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            onChange={event => inputChangedHandler(event, formElement.id)} />
+            onChange={(event) => inputChangedHandler(event, formElement.id)}
+          />
         ))}
       </div>
       <div className={classes.Buttons}>
-        <Button
-          size='medium'
-          color={color}
-          onClick={onClose}
-          width='48%'>
+        <Button size="medium" color={color} onClick={onClose} width="48%">
           Cancel
         </Button>
         <Button
           color={color}
-          size='medium'
+          size="medium"
           onClick={addItemHandler}
           disabled={!formIsValid}
-          width='48%'>
+          width="48%">
           Add
         </Button>
       </div>
@@ -109,7 +106,7 @@ const TypeAddModal = ({ color, onClose, onAdd }) => {
 TypeAddModal.propTypes = {
   color: PropTypes.string,
   onClose: PropTypes.func,
-  onAdd: PropTypes.func
+  onAdd: PropTypes.func,
 }
 
 export default TypeAddModal

@@ -14,25 +14,19 @@ const Navbar = ({ active, isSavings, onNavSavingsChange }) => {
 
   if (isSavings) {
     nav = (
-      <Container borderRadius='25px' width='370px'>
-        <NavSavings
-          navSavingsChange={onNavSavingsChange}
-          active={active} />
+      <Container borderRadius="25px" width="370px">
+        <NavSavings navSavingsChange={onNavSavingsChange} active={active} />
       </Container>
     )
   }
 
-  return (
-    <div className={classes.Navbar}>
-      {nav}
-    </div>
-  )
+  return <div className={classes.Navbar}>{nav}</div>
 }
 
 Navbar.propTypes = {
   active: PropTypes.string,
   isSavings: PropTypes.bool,
-  onNavSavingsChange: PropTypes.func
+  onNavSavingsChange: PropTypes.func,
 }
 
 export default Navbar

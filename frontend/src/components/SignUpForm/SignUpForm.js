@@ -12,87 +12,88 @@ const SignUpForm = ({ changeForm, onSubmit, error }) => {
       type: 'input',
       config: {
         type: 'text',
-        label: 'First Name'
+        label: 'First Name',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       validText: 'Looks good!',
       invalidText: 'First name cannot be empty',
       valid: false,
-      touched: false
+      touched: false,
     },
     lastName: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Last Name'
+        label: 'Last Name',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       validText: 'Looks good!',
       invalidText: 'Last name cannot be empty',
       valid: false,
-      touched: false
+      touched: false,
     },
     email: {
       type: 'input',
       config: {
         type: 'email',
-        label: 'Email'
+        label: 'Email',
       },
       value: '',
       validation: {
         required: true,
-        isEmail: true
+        isEmail: true,
       },
       validText: 'Looks good!',
       invalidText: 'Must be a valid email',
       valid: false,
-      touched: false
+      touched: false,
     },
     password: {
       type: 'input',
       config: {
         type: 'password',
-        label: 'Password'
+        label: 'Password',
       },
       value: '',
       validation: {
         required: true,
-        minLength: 8
+        minLength: 8,
       },
       validText: 'Looks good!',
       invalidText: 'Must be at least 8 characters',
       valid: false,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
-  const signUpHandler = event => {
+  const signUpHandler = (event) => {
     event.preventDefault()
     onSubmit({
       firstName: formElements.firstName.value,
       lastName: formElements.lastName.value,
       email: formElements.email.value,
-      password: formElements.password.value
+      password: formElements.password.value,
     })
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
     updatedFormElement.valid = checkInputValidity(
-      updatedFormElement.value, updatedFormElement.validation
+      updatedFormElement.value,
+      updatedFormElement.validation
     )
     updatedFormElement.touched = true
     updatedAuthForm[inputIdentifier] = updatedFormElement
@@ -109,7 +110,7 @@ const SignUpForm = ({ changeForm, onSubmit, error }) => {
   for (const key in formElements) {
     formElementsArray.push({
       id: key,
-      config: formElements[key]
+      config: formElements[key],
     })
   }
 
@@ -117,51 +118,39 @@ const SignUpForm = ({ changeForm, onSubmit, error }) => {
     <>
       <form onSubmit={signUpHandler} className={classes.Form}>
         <h4 className={classes.Error}>{error}</h4>
-        {formElementsArray.map(formElement => {
-          let legend = (
-            <p></p>
-          )
+        {formElementsArray.map((formElement) => {
+          let legend = <p></p>
           if (!formElement.config.valid && formElement.config.touched) {
-            legend = (
-              <p className='danger'>
-                {formElement.config.invalidText}
-              </p>
-            )
+            legend = <p className="danger">{formElement.config.invalidText}</p>
           } else if (formElement.config.valid) {
-            legend = (
-              <p className='primary'>
-                {formElement.config.validText}
-              </p>
-            )
+            legend = <p className="primary">{formElement.config.validText}</p>
           }
           return (
             <fieldset key={formElement.id}>
               <Input
-                color='primary'
+                color="primary"
                 type={formElement.config.type}
                 config={formElement.config.config}
                 value={formElement.config.value}
                 invalid={!formElement.config.valid}
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
-                onChange={event => inputChangedHandler(event, formElement.id)} />
+                onChange={(event) => inputChangedHandler(event, formElement.id)}
+              />
               {legend}
             </fieldset>
           )
         })}
         <Button
           onClick={signUpHandler}
-          color='primary'
-          size='large'
-          type='submit'
+          color="primary"
+          size="large"
+          type="submit"
           disabled={!formIsValid}>
           Sign Up
         </Button>
       </form>
-      <Button
-        onClick={changeForm}
-        color='primary'
-        size='small'>
+      <Button onClick={changeForm} color="primary" size="small">
         Change
       </Button>
     </>
@@ -171,7 +160,7 @@ const SignUpForm = ({ changeForm, onSubmit, error }) => {
 SignUpForm.propTypes = {
   changeForm: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
 }
 
 export default SignUpForm

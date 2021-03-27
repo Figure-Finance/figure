@@ -14,7 +14,7 @@ const Profile = ({ history }) => {
     history.push('/auth')
   }
 
-  const updateIncomeExpenses = updatedItems => {
+  const updateIncomeExpenses = (updatedItems) => {
     const income = []
     const expenses = []
     for (const item of updatedItems) {
@@ -32,35 +32,35 @@ const Profile = ({ history }) => {
     return res.data
   }, [])
 
-  const onUpdateProfile = useCallback(async updatedUser => {
+  const onUpdateProfile = useCallback(async (updatedUser) => {
     const res = await api.patch('user', updatedUser)
     return res.data
   }, [])
 
-  const onAddIncomeType = useCallback(async type => {
+  const onAddIncomeType = useCallback(async (type) => {
     const isIncome = true
     const res = await api.patch('user/category', {
       category: type,
-      isIncome
+      isIncome,
     })
     return res.data
   }, [])
 
-  const onAddExpenseType = useCallback(async type => {
+  const onAddExpenseType = useCallback(async (type) => {
     const isIncome = false
     const res = await api.patch('user/category', {
       category: type,
-      isIncome
+      isIncome,
     })
     return res.data
   }, [])
 
-  const onDeleteIncomeType = useCallback(async id => {
+  const onDeleteIncomeType = useCallback(async (id) => {
     const res = await api.delete(`user/category/${id}`)
     return res.data
   }, [])
 
-  const onDeleteExpenseType = useCallback(async id => {
+  const onDeleteExpenseType = useCallback(async (id) => {
     const res = await api.delete(`user/category/${id}`)
     return res.data
   }, [])
@@ -72,10 +72,14 @@ const Profile = ({ history }) => {
 
   useEffect(onFetchProfile, [onFetchProfile])
 
-  const { data, isLoading, isError, error } = useQuery('profile', onFetchProfile, {
-    retry: false,
-    staleTime: Infinity
-  })
+  const { data, isLoading, isError, error } = useQuery(
+    'profile',
+    onFetchProfile,
+    {
+      retry: false,
+      staleTime: Infinity,
+    }
+  )
 
   let profileSummary
   let incomeType
@@ -91,24 +95,27 @@ const Profile = ({ history }) => {
     }
     profileSummary = (
       <ProfileSummary
-        firstName=''
-        lastName=''
-        email=''
-        onUpdate={onUpdateProfile} />
+        firstName=""
+        lastName=""
+        email=""
+        onUpdate={onUpdateProfile}
+      />
     )
     incomeType = (
       <Type
         content={[]}
-        color='primary'
+        color="primary"
         addType={onAddIncomeType}
-        deleteType={onDeleteIncomeType} />
+        deleteType={onDeleteIncomeType}
+      />
     )
     expensesType = (
       <Type
         content={[]}
-        color='danger'
+        color="danger"
         addType={onAddExpenseType}
-        deleteType={onDeleteExpenseType} />
+        deleteType={onDeleteExpenseType}
+      />
     )
   } else {
     const { income, expenses } = updateIncomeExpenses(data.categories)
@@ -117,21 +124,24 @@ const Profile = ({ history }) => {
         firstName={data.firstName}
         lastName={data.lastName}
         email={data.email}
-        onUpdate={onUpdateProfile} />
+        onUpdate={onUpdateProfile}
+      />
     )
     incomeType = (
       <Type
         content={income}
-        color='primary'
+        color="primary"
         addType={onAddIncomeType}
-        deleteType={onDeleteIncomeType} />
+        deleteType={onDeleteIncomeType}
+      />
     )
     expensesType = (
       <Type
         content={expenses}
-        color='danger'
+        color="danger"
         addType={onAddExpenseType}
-        deleteType={onDeleteExpenseType} />
+        deleteType={onDeleteExpenseType}
+      />
     )
   }
 
@@ -141,9 +151,9 @@ const Profile = ({ history }) => {
         <div className={classes.Column}>
           {profileSummary}
           <Button
-            color='primary'
-            size='medium'
-            width='100%'
+            color="primary"
+            size="medium"
+            width="100%"
             onClick={onSignOut}>
             Sign Out
           </Button>
@@ -151,13 +161,13 @@ const Profile = ({ history }) => {
         {incomeType}
         {expensesType}
       </div>
-      <Navbar active='p' />
+      <Navbar active="p" />
     </div>
   )
 }
 
 Profile.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 }
 
 export default Profile

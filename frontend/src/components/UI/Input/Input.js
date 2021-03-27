@@ -13,7 +13,7 @@ const Input = ({
   valueType,
   shouldValidate,
   type,
-  config
+  config,
 }) => {
   let inputElement = null
   const labelClassNames = [classes.Label]
@@ -38,24 +38,24 @@ const Input = ({
     inputClassNames.push(classes.TextArea)
   }
 
-  const moveSelfOut = event => {
+  const moveSelfOut = (event) => {
     event.target.style.transform = 'translateY(0px)'
     event.target.nextElementSibling.focus()
   }
 
-  const moveLabelOut = event => {
+  const moveLabelOut = (event) => {
     event.target.previousElementSibling.style.transform = 'translateY(0px)'
     event.target.focus()
   }
 
-  const moveLabelIn = event => {
+  const moveLabelIn = (event) => {
     if (event.target.value === '') {
       event.target.previousElementSibling.style.transform = 'translateY(40px)'
     }
   }
 
   switch (type) {
-    case ('input'):
+    case 'input':
       inputElement = (
         <input
           className={inputClassNames.join(' ')}
@@ -64,10 +64,11 @@ const Input = ({
           value={value}
           onChange={onChange}
           onFocus={moveLabelOut}
-          onBlur={moveLabelIn} />
+          onBlur={moveLabelIn}
+        />
       )
       break
-    case ('textarea'):
+    case 'textarea':
       inputElement = (
         <textarea
           className={inputClassNames.join(' ')}
@@ -76,10 +77,11 @@ const Input = ({
           value={value}
           onChange={onChange}
           onFocus={moveLabelOut}
-          onBlur={moveLabelIn} />
+          onBlur={moveLabelIn}
+        />
       )
       break
-    case ('select'):
+    case 'select':
       inputElement = (
         <select
           className={inputClassNames.join(' ')}
@@ -88,7 +90,7 @@ const Input = ({
           onChange={onChange}
           onFocus={moveLabelOut}
           onBlur={moveLabelIn}>
-          {config.options.map(option => (
+          {config.options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
             </option>
@@ -105,7 +107,8 @@ const Input = ({
           value={value}
           onChange={onChange}
           onFocus={moveLabelOut}
-          onBlur={moveLabelIn} />
+          onBlur={moveLabelIn}
+        />
       )
   }
 
@@ -120,9 +123,7 @@ const Input = ({
 
   return (
     <>
-      <label
-        className={labelClassNames.join(' ')}
-        onClick={moveSelfOut}>
+      <label className={labelClassNames.join(' ')} onClick={moveSelfOut}>
         {config.label}
       </label>
       {inputElement}
@@ -141,7 +142,7 @@ Input.propTypes = {
   valueType: PropTypes.string,
   shouldValidate: PropTypes.object,
   type: PropTypes.string,
-  config: PropTypes.object
+  config: PropTypes.object,
 }
 
 export default Input

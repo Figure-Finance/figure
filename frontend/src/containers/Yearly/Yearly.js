@@ -6,7 +6,7 @@ import {
   startOfToday,
   endOfYear,
   eachYearOfInterval,
-  subYears
+  subYears,
 } from 'date-fns'
 import api from '../../api'
 import classes from './Yearly.module.css'
@@ -21,36 +21,39 @@ const Yearly = ({ history }) => {
   }
 
   const today = useMemo(() => startOfToday(), [])
-  const tenYearsAgo = useMemo(
-    () => subYears(today, 10), [today]
-  )
+  const tenYearsAgo = useMemo(() => subYears(today, 10), [today])
   const years = useMemo(
     () => eachYearOfInterval({ start: tenYearsAgo, end: today }),
     [today, tenYearsAgo]
   )
   const yearStringMap = useMemo(
-    () => years.map(day => format(day, 'yyy').toString()),
+    () => years.map((day) => format(day, 'yyy').toString()),
     [years]
   )
 
-  const months = useMemo(() => [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ], [])
+  const months = useMemo(
+    () => [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
+    []
+  )
 
-  const [currentYearIndex, setCurrentYearIndex] = useState(yearStringMap.length - 1)
+  const [currentYearIndex, setCurrentYearIndex] = useState(
+    yearStringMap.length - 1
+  )
 
-  const updateIncomeExpenses = updatedItems => {
+  const updateIncomeExpenses = (updatedItems) => {
     const income = []
     const expenses = []
     for (const item of updatedItems) {
@@ -63,7 +66,7 @@ const Yearly = ({ history }) => {
     return { income, expenses }
   }
 
-  const updateIncomeExpensesByMonth = updatedItems => {
+  const updateIncomeExpensesByMonth = (updatedItems) => {
     const incomeByMonth = Array(12).fill(0)
     const expensesByMonth = Array(12).fill(0)
     for (const item of updatedItems) {
@@ -90,8 +93,8 @@ const Yearly = ({ history }) => {
     return res.data
   }, [currentYearIndex, years])
 
-  const changeYear = event => {
-    const index = yearStringMap.findIndex(el => el === event.target.innerHTML)
+  const changeYear = (event) => {
+    const index = yearStringMap.findIndex((el) => el === event.target.innerHTML)
     setCurrentYearIndex(index)
   }
 
@@ -110,24 +113,28 @@ const Yearly = ({ history }) => {
   useEffect(onFetchYearly, [onFetchYearly, currentYearIndex])
   useEffect(onFetchYearlyGraph, [onFetchYearlyGraph, currentYearIndex])
 
-  const { data, isLoading, isError, error } = useQuery('yearly', onFetchYearly, {
-    retry: false,
-    staleTime: Infinity
-  })
+  const { data, isLoading, isError, error } = useQuery(
+    'yearly',
+    onFetchYearly,
+    {
+      retry: false,
+      staleTime: Infinity,
+    }
+  )
   const {
     data: graphData,
     isLoading: graphIsLoading,
-    isError: graphIsError
+    isError: graphIsError,
   } = useQuery('yearlyGraph', onFetchYearlyGraph, {
     retry: false,
-    staleTime: Infinity
+    staleTime: Infinity,
   })
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousYear, {
-    onSuccess: () => queryClient.clear()
+    onSuccess: () => queryClient.clear(),
   })
   const mutateRightClick = useMutation(nextYear, {
-    onSuccess: () => queryClient.clear()
+    onSuccess: () => queryClient.clear(),
   })
 
   const previousYearHandler = () => {
@@ -150,34 +157,18 @@ const Yearly = ({ history }) => {
       history.push('/auth')
     }
     incomeBreakdown = (
-      <Breakdown
-        content={[]}
-        color='primary'
-        height='50%'
-        width='100%' />
+      <Breakdown content={[]} color="primary" height="50%" width="100%" />
     )
     expensesBreakdown = (
-      <Breakdown
-        content={[]}
-        color='danger'
-        height='50%'
-        width='100%' />
+      <Breakdown content={[]} color="danger" height="50%" width="100%" />
     )
   } else if (data) {
     const { income, expenses } = updateIncomeExpenses(data)
     incomeBreakdown = (
-      <Breakdown
-        content={income}
-        color='primary'
-        height='50%'
-        width='100%' />
+      <Breakdown content={income} color="primary" height="50%" width="100%" />
     )
     expensesBreakdown = (
-      <Breakdown
-        content={expenses}
-        color='danger'
-        height='50%'
-        width='100%' />
+      <Breakdown content={expenses} color="danger" height="50%" width="100%" />
     )
   }
 
@@ -188,31 +179,35 @@ const Yearly = ({ history }) => {
       <Graph
         data={{
           income: [],
-          expenses: []
+          expenses: [],
         }}
         labels={months}
         timePeriods={yearStringMap}
         previousTimePeriod={previousYearHandler}
         nextTimePeriod={nextYearHandler}
         selectTimePeriod={changeYear}
-        currentTimePeriod={yearStringMap[currentYearIndex]} />
+        currentTimePeriod={yearStringMap[currentYearIndex]}
+      />
     )
   } else if (graphData) {
     const { income, expenses } = graphData
     const updatedGraphData = [...income, ...expenses]
-    const { incomeByMonth, expensesByMonth } = updateIncomeExpensesByMonth(updatedGraphData)
+    const { incomeByMonth, expensesByMonth } = updateIncomeExpensesByMonth(
+      updatedGraphData
+    )
     graph = (
       <Graph
         data={{
           income: incomeByMonth,
-          expenses: expensesByMonth
+          expenses: expensesByMonth,
         }}
         labels={months}
         timePeriods={yearStringMap}
         previousTimePeriod={previousYearHandler}
         nextTimePeriod={nextYearHandler}
         selectTimePeriod={changeYear}
-        currentTimePeriod={yearStringMap[currentYearIndex]} />
+        currentTimePeriod={yearStringMap[currentYearIndex]}
+      />
     )
   }
 
@@ -225,13 +220,13 @@ const Yearly = ({ history }) => {
           {expensesBreakdown}
         </div>
       </div>
-      <Navbar active='y' />
+      <Navbar active="y" />
     </div>
   )
 }
 
 Yearly.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 }
 
 export default Yearly

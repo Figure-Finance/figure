@@ -1,5 +1,3 @@
 .Logo {
-  box-shadow:
-    -6px -6px 9px var(--white-shadow),
-    6px 6px 9px var(--black-shadow);
+  box-shadow: -6px -6px 9px var(--white-shadow), 6px 6px 9px var(--black-shadow);
 }

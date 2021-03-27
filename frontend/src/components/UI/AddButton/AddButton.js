@@ -16,9 +16,9 @@ const AddButton = ({ color, onClick, disabled }) => {
 
   return (
     <Button
-      width='100%'
+      width="100%"
       color={color}
-      size='medium'
+      size="medium"
       onClick={onClick}
       disabled={disabled}>
       <Add fill={fill} />
@@ -29,7 +29,7 @@ const AddButton = ({ color, onClick, disabled }) => {
 AddButton.propTypes = {
   color: PropTypes.string,
   onClick: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
 }
 
 export default AddButton

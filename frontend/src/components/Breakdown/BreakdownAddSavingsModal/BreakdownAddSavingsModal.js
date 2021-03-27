@@ -12,46 +12,46 @@ const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Name'
+        label: 'Name',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     amount: {
       type: 'input',
       config: {
         type: 'number',
-        label: 'Amount'
+        label: 'Amount',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     description: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Description'
+        label: 'Description',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
   const queryClient = useQueryClient()
-  const mutateAdd = useMutation(newItem => onAdd(newItem), {
-    onSuccess: data => queryClient.invalidateQueries()
+  const mutateAdd = useMutation((newItem) => onAdd(newItem), {
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const addItemHandler = () => {
@@ -59,16 +59,16 @@ const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
     mutateAdd.mutate({
       name: formElements.name.value,
       amount: formElements.amount.value,
-      description: formElements.description.value
+      description: formElements.description.value,
     })
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
@@ -88,14 +88,14 @@ const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
   for (const key in formElements) {
     formElementsArray.push({
       id: key,
-      config: formElements[key]
+      config: formElements[key],
     })
   }
 
   return (
     <div className={classes.BreakdownAddModal}>
       <div className={classes.Inputs}>
-        {formElementsArray.map(formElement => (
+        {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
             color={color}
@@ -105,19 +105,17 @@ const BreakdownAddSavingsModal = ({ title, onClose, onAdd, color }) => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            onChange={event => inputChangedHandler(event, formElement.id)} />
+            onChange={(event) => inputChangedHandler(event, formElement.id)}
+          />
         ))}
       </div>
       <div className={classes.Buttons}>
-        <Button
-          size='large'
-          color={color}
-          onClick={onClose}>
+        <Button size="large" color={color} onClick={onClose}>
           Cancel
         </Button>
         <Button
           color={color}
-          size='large'
+          size="large"
           onClick={addItemHandler}
           disabled={!formIsValid}>
           Add
@@ -131,7 +129,7 @@ BreakdownAddSavingsModal.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func,
   onAdd: PropTypes.func,
-  color: PropTypes.string
+  color: PropTypes.string,
 }
 
 export default BreakdownAddSavingsModal

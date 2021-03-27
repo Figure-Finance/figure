@@ -16,7 +16,7 @@ const Savings = ({ history }) => {
 
   const [graphTimePeriod, setGraphTimePeriod] = useState('1W')
 
-  const getTimeFrame = useCallback(period => {
+  const getTimeFrame = useCallback((period) => {
     switch (period) {
       case '1W':
         return 'week'
@@ -44,26 +44,26 @@ const Savings = ({ history }) => {
     return res.data
   }, [getTimeFrame, graphTimePeriod])
 
-  const onDeposit = useCallback(async progressAmount => {
+  const onDeposit = useCallback(async (progressAmount) => {
     const res = await api.patch('savings/progress', {
-      progressAmount
+      progressAmount,
     })
     return res.data
   }, [])
 
-  const onUpdateTotalGoal = useCallback(async totalSavingsGoal => {
+  const onUpdateTotalGoal = useCallback(async (totalSavingsGoal) => {
     const res = await api.patch('savings/total', {
-      totalSavingsGoal
+      totalSavingsGoal,
     })
     return res.data
   }, [])
 
-  const onGetGoal = useCallback(async id => {
+  const onGetGoal = useCallback(async (id) => {
     const res = await api.get(`savings/goal/${id}`)
     return res.data
   }, [])
 
-  const onAddGoal = useCallback(async newGoal => {
+  const onAddGoal = useCallback(async (newGoal) => {
     newGoal.amount = +newGoal.amount
     const res = await api.post('savings/goal', newGoal)
     return res.data
@@ -73,7 +73,7 @@ const Savings = ({ history }) => {
     allocateAmount = +allocateAmount
     const res = await api.patch('savings/goal/allocate', {
       id,
-      allocateAmount
+      allocateAmount,
     })
     return res.data
   }, [])
@@ -83,7 +83,7 @@ const Savings = ({ history }) => {
     return res.data
   }, [])
 
-  const onDeleteGoal = useCallback(async id => {
+  const onDeleteGoal = useCallback(async (id) => {
     const res = await api.delete(`savings/goal/${id}`)
     return res.data
   }, [])
@@ -91,23 +91,27 @@ const Savings = ({ history }) => {
   useEffect(onFetchSavings, [onFetchSavings])
   useEffect(onFetchSavingsGraph, [onFetchSavingsGraph])
 
-  const { data, isLoading, isError, error } = useQuery('savings', onFetchSavings, {
-    retry: false,
-    staleTime: Infinity
-  })
+  const { data, isLoading, isError, error } = useQuery(
+    'savings',
+    onFetchSavings,
+    {
+      retry: false,
+      staleTime: Infinity,
+    }
+  )
   const {
     data: graphData,
     isLoading: graphIsLoading,
-    isError: graphIsError
+    isError: graphIsError,
   } = useQuery('savingsGraph', onFetchSavingsGraph)
 
-  const timePeriodChange = event => {
+  const timePeriodChange = (event) => {
     setGraphTimePeriod(event.target.innerHTML)
   }
 
   const queryClient = useQueryClient()
   const mutateTimePeriod = useMutation(timePeriodChange, {
-    onSuccess: () => queryClient.clear()
+    onSuccess: () => queryClient.clear(),
   })
 
   const timePeriodChangeHandler = () => {
@@ -121,7 +125,7 @@ const Savings = ({ history }) => {
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday'
+    'Sunday',
   ]
 
   let progress
@@ -139,11 +143,12 @@ const Savings = ({ history }) => {
       <Progress
         updateGoal={onUpdateTotalGoal}
         updateProgress={onDeposit}
-        leftColor='neutral'
+        leftColor="neutral"
         leftAmount={0}
         rightAmount={0}
         single
-        showButtons />
+        showButtons
+      />
     )
     breakdown = (
       <Breakdown
@@ -152,12 +157,13 @@ const Savings = ({ history }) => {
         addItem={onAddGoal}
         updateItem={onUpdateGoal}
         deleteItem={onDeleteGoal}
-        color='neutral'
-        title='Goals'
+        color="neutral"
+        title="Goals"
         content={[]}
         canAdd
         isSavings
-        showButtons />
+        showButtons
+      />
     )
   } else {
     const goals = data.itemGoals
@@ -167,11 +173,12 @@ const Savings = ({ history }) => {
       <Progress
         updateGoal={onUpdateTotalGoal}
         updateProgress={onDeposit}
-        leftColor='neutral'
+        leftColor="neutral"
         leftAmount={goalProgress}
         rightAmount={totalGoal}
         single
-        showButtons />
+        showButtons
+      />
     )
     breakdown = (
       <Breakdown
@@ -180,12 +187,13 @@ const Savings = ({ history }) => {
         addItem={onAddGoal}
         updateItem={onUpdateGoal}
         deleteItem={onDeleteGoal}
-        color='neutral'
-        title='Goals'
+        color="neutral"
+        title="Goals"
         content={goals}
         canAdd
         isSavings
-        showButtons />
+        showButtons
+      />
     )
   }
 
@@ -197,7 +205,8 @@ const Savings = ({ history }) => {
         onNavSavingsChange={timePeriodChangeHandler}
         active={graphTimePeriod}
         labels={labels}
-        isSavings />
+        isSavings
+      />
     )
   } else if (graphData) {
     console.log(graphData)
@@ -206,7 +215,8 @@ const Savings = ({ history }) => {
         onNavSavingsChange={timePeriodChangeHandler}
         active={graphTimePeriod}
         labels={labels}
-        isSavings />
+        isSavings
+      />
     )
   }
 
@@ -217,13 +227,13 @@ const Savings = ({ history }) => {
         {graph}
         {breakdown}
       </div>
-      <Navbar active='s' />
+      <Navbar active="s" />
     </div>
   )
 }
 
 Savings.propTypes = {
-  history: PropTypes.objects
+  history: PropTypes.objects,
 }
 
 export default Savings

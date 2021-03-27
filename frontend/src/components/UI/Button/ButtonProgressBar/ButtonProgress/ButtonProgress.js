@@ -14,15 +14,13 @@ const ButtonProgress = ({ color, percent }) => {
   }
 
   return (
-    <div
-      className={classNames.join(' ')}
-      style={{ width: `${percent}%` }} />
+    <div className={classNames.join(' ')} style={{ width: `${percent}%` }} />
   )
 }
 
 ButtonProgress.propTypes = {
   color: PropTypes.string,
-  percent: PropTypes.number
+  percent: PropTypes.number,
 }
 
 export default ButtonProgress

@@ -2,8 +2,7 @@
   background-color: var(--white);
   border: 2px ridge transparent;
   border-radius: 21px;
-  box-shadow:
-    inset -6px -6px 9px var(--white-shadow),
+  box-shadow: inset -6px -6px 9px var(--white-shadow),
     inset 6px 6px 9px var(--black-shadow);
   font-family: inherit;
   font-size: 20px;
@@ -32,7 +31,7 @@
 }
 
 .Primary:focus {
-  border: 2px ridge var(--primary)
+  border: 2px ridge var(--primary);
 }
 
 .NeutralLabel {

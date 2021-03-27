@@ -18,11 +18,14 @@ const Type = ({ color, content, addType, deleteType }) => {
     setShowAddModal(false)
   }, [])
 
-  const openDetailModalHandler = useCallback(id => {
-    const selectedItem = content.filter(item => item.id === id)
-    setCurrentItem(selectedItem[0])
-    setShowDetailModal(true)
-  }, [content])
+  const openDetailModalHandler = useCallback(
+    (id) => {
+      const selectedItem = content.filter((item) => item.id === id)
+      setCurrentItem(selectedItem[0])
+      setShowDetailModal(true)
+    },
+    [content]
+  )
 
   const closeDetailModalHandler = useCallback(() => {
     setShowDetailModal(false)
@@ -32,8 +35,9 @@ const Type = ({ color, content, addType, deleteType }) => {
     <TypeSummary
       color={color}
       content={content}
-      openDetailModal={id => openDetailModalHandler(id)}
-      openAddModal={openAddModalHandler} />
+      openDetailModal={(id) => openDetailModalHandler(id)}
+      openAddModal={openAddModalHandler}
+    />
   )
 
   if (showAddModal) {
@@ -41,7 +45,8 @@ const Type = ({ color, content, addType, deleteType }) => {
       <TypeAddModal
         color={color}
         onClose={closeAddModalHandler}
-        onAdd={addType} />
+        onAdd={addType}
+      />
     )
   } else if (showDetailModal) {
     modal = (
@@ -49,14 +54,13 @@ const Type = ({ color, content, addType, deleteType }) => {
         type={currentItem}
         color={color}
         onClose={closeDetailModalHandler}
-        onDelete={deleteType} />
+        onDelete={deleteType}
+      />
     )
   }
 
   return (
-    <Container
-      height='100%'
-      width='33%'>
+    <Container height="100%" width="33%">
       {modal}
     </Container>
   )
@@ -66,7 +70,7 @@ Type.propTypes = {
   content: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.string,
   addType: PropTypes.func,
-  deleteType: PropTypes.func
+  deleteType: PropTypes.func,
 }
 
 export default Type

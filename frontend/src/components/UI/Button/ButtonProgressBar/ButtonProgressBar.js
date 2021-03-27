@@ -6,16 +6,14 @@ import ButtonProgress from './ButtonProgress/ButtonProgress'
 const ButtonProgressBar = ({ color, percent }) => {
   return (
     <div className={classes.ButtonProgressBar}>
-      <ButtonProgress
-        color={color}
-        percent={percent} />
+      <ButtonProgress color={color} percent={percent} />
     </div>
   )
 }
 
 ButtonProgressBar.propTypes = {
   color: PropTypes.string,
-  percent: PropTypes.number
+  percent: PropTypes.number,
 }
 
 export default ButtonProgressBar

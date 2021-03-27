@@ -6,9 +6,9 @@ const Finance = require('./models/finances')
 
 const app = express()
 
-const dashWeeklyRoutes = require('./routes/dashboard')
-const dashMonthlyRoutes = require('./routes/dashboard-monthly')
-const dashYearlyRoutes = require('./routes/dashboard-yearly')
+const weeklyRoutes = require('./routes/weekly')
+const monthlyRoutes = require('./routes/monthly')
+const yearlyRoutes = require('./routes/yearly')
 const savingsRoutes = require('./routes/savings')
 const userRoutes = require('./routes/user')
 
@@ -24,9 +24,9 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.json())
 
-app.use('/api/weekly', dashWeeklyRoutes)
-app.use('/api/monthly', dashMonthlyRoutes)
-app.use('/api/yearly', dashYearlyRoutes)
+app.use('/api/weekly', weeklyRoutes)
+app.use('/api/monthly', monthlyRoutes)
+app.use('/api/yearly', yearlyRoutes)
 app.use('/api/savings', savingsRoutes)
 app.use('/api/user', userRoutes)
 

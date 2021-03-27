@@ -15,13 +15,11 @@ const RightArrow = ({ fill }) => {
     fillHex = '#CF79F7'
   }
 
-  return (
-    <Right style={{ width: '30px', fill: fillHex, marginTop: '6px' }} />
-  )
+  return <Right style={{ width: '30px', fill: fillHex, marginTop: '6px' }} />
 }
 
 RightArrow.propTypes = {
-  fill: PropTypes.string
+  fill: PropTypes.string,
 }
 
 export default RightArrow

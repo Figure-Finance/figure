@@ -20,13 +20,17 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
-    categories: [{
-      category: { type: String, required: true },
-      isIncome: { type: Boolean, required: true }
-    }],
-    finances: [{
-      id: { type: Schema.Types.ObjectId, ref: 'Finance' }
-    }]
+    categories: [
+      {
+        category: { type: String, required: true },
+        isIncome: { type: Boolean, required: true }
+      }
+    ],
+    finances: [
+      {
+        id: { type: Schema.Types.ObjectId, ref: 'Finance' }
+      }
+    ]
   },
   { timestamps: true }
 )

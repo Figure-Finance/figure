@@ -15,7 +15,7 @@ const Button = ({
   disabled,
   showProgress,
   progressPercent,
-  type
+  type,
 }) => {
   const classNames = [classes.Button]
   let content = children
@@ -57,13 +57,9 @@ const Button = ({
   if (secondary) {
     content = (
       <div className={classes.ButtonInfo}>
-        <span>
-          {children}
-        </span>
+        <span>{children}</span>
         <span className={classes.Split}></span>
-        <span>
-          {secondary}
-        </span>
+        <span>{secondary}</span>
       </div>
     )
   }
@@ -73,19 +69,13 @@ const Button = ({
       <>
         <div className={classes.TopRow}>
           <div className={classes.ButtonInfo}>
-            <span>
-              {children}
-            </span>
+            <span>{children}</span>
             <span className={classes.Split}></span>
-            <span>
-              {secondary}
-            </span>
+            <span>{secondary}</span>
           </div>
         </div>
         <div className={classes.BottomRow}>
-          <ButtonProgressBar
-            percent={progressPercent}
-            color={color} />
+          <ButtonProgressBar percent={progressPercent} color={color} />
         </div>
       </>
     )
@@ -115,7 +105,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   showProgress: PropTypes.bool,
   progressPercent: PropTypes.number,
-  type: PropTypes.string
+  type: PropTypes.string,
 }
 
 export default Button

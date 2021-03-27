@@ -7,13 +7,14 @@ const Logo = () => (
   // <LogoIcon className={classes.Logo} />
   <div classes={classes.Logo}>
     <img
-      height='400'
+      height="400"
       src={LogoIcon}
-      alt='Figure logo'
+      alt="Figure logo"
       style={{
         display: 'block',
-        margin: 'auto'
-      }} />
+        margin: 'auto',
+      }}
+    />
   </div>
 )
 

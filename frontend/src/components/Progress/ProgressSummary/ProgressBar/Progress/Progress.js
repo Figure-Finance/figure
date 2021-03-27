@@ -24,9 +24,7 @@ const Progress = ({ color, percent, position, single }) => {
   }
 
   return (
-    <div
-      className={classNames.join(' ')}
-      style={{ width: `${percent}%` }} />
+    <div className={classNames.join(' ')} style={{ width: `${percent}%` }} />
   )
 }
 
@@ -34,7 +32,7 @@ Progress.propTypes = {
   color: PropTypes.string,
   percent: PropTypes.number,
   position: PropTypes.string,
-  single: PropTypes.bool
+  single: PropTypes.bool,
 }
 
 export default Progress

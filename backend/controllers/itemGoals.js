@@ -18,11 +18,11 @@ exports.postItemGoals = (req, res, next) => {
   let newGoal
   let loadedUser
   User.findById(req.userId)
-    .then(user => {
+    .then((user) => {
       loadedUser = user
       return ItemGoal.find({ userId: loadedUser._id })
     })
-    .then(itemGoals => {
+    .then((itemGoals) => {
       newGoal = new ItemGoal({
         name: name,
         amount: amount,
@@ -31,10 +31,10 @@ exports.postItemGoals = (req, res, next) => {
       })
       return newGoal.save()
     })
-    .then(result => {
+    .then((result) => {
       return res.status(201).json({ id: newGoal._id })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -45,7 +45,7 @@ exports.postItemGoals = (req, res, next) => {
 exports.getItemGoalDetails = (req, res, next) => {
   const itemGoalId = req.params.id
   ItemGoal.findOne({ _id: itemGoalId })
-    .then(itemGoal => {
+    .then((itemGoal) => {
       res.status(200).json({
         name: itemGoal.name,
         amount: itemGoal.amount,
@@ -53,7 +53,7 @@ exports.getItemGoalDetails = (req, res, next) => {
         progress: itemGoal.progress
       })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -64,20 +64,21 @@ exports.getItemGoalDetails = (req, res, next) => {
 exports.deleteItemGoal = (req, res, next) => {
   const itemGoalId = req.params.id
   ItemGoal.findOne({ _id: itemGoalId })
-    .then(itemGoal => {
+    .then((itemGoal) => {
       return Savings.findOne({ userId: itemGoal.userId })
-        .then(savings => {
-          savings.totalSavingsProgress = savings.totalSavingsProgress + itemGoal.progress
+        .then((savings) => {
+          savings.totalSavingsProgress =
+            savings.totalSavingsProgress + itemGoal.progress
           return savings.save()
         })
-        .then(result => {
-          ItemGoal.findByIdAndDelete(itemGoalId, err => {
+        .then((result) => {
+          ItemGoal.findByIdAndDelete(itemGoalId, (err) => {
             console.log(err)
           })
           return res.status(200).json({ message: 'Goal successfully deleted.' })
         })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -98,7 +99,7 @@ exports.editItemGoal = (req, res, next) => {
   const newAmount = req.body.amount
   const newDescription = req.body.description
   ItemGoal.findOne({ _id: itemGoalId })
-    .then(itemGoal => {
+    .then((itemGoal) => {
       if (!itemGoal) {
         const error = new Error('Goal not found.')
         error.statusCode = 500
@@ -108,9 +109,11 @@ exports.editItemGoal = (req, res, next) => {
       itemGoal.amount = newAmount
       itemGoal.description = newDescription
       itemGoal.save()
-      return res.status(200).json({ message: 'Item goal successfully updated!' })
+      return res
+        .status(200)
+        .json({ message: 'Item goal successfully updated!' })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -122,17 +125,19 @@ exports.allocateGoalFunds = (req, res, next) => {
   const itemGoalId = req.body.id
   const allocateAmount = req.body.allocateAmount
   Savings.findOne({ userId: req.userId })
-    .then(totalSavings => {
+    .then((totalSavings) => {
       if (totalSavings.totalSavingsProgress < allocateAmount) {
-        throw new Error("You don't have enough saved yet to allocate that much to this goal!")
+        throw new Error(
+          "You don't have enough saved yet to allocate that much to this goal!"
+        )
       }
       totalSavings.totalSavingsProgress -= allocateAmount
       return totalSavings.save()
     })
-    .then(result => {
+    .then((result) => {
       return ItemGoal.findOne({ _id: itemGoalId })
     })
-    .then(itemGoal => {
+    .then((itemGoal) => {
       console.log(itemGoal)
       if (itemGoal.progress >= itemGoal.amount) {
         throw new Error('This goal has been reached.')
@@ -141,13 +146,12 @@ exports.allocateGoalFunds = (req, res, next) => {
       } else {
         itemGoal.progress += allocateAmount
         return itemGoal.save()
-        console.log(itemGoal)
       }
     })
-    .then(result => {
+    .then((result) => {
       return res.status(200).json({ message: 'Funds successfully allocated!' })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }

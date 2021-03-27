@@ -12,14 +12,14 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Type'
+        label: 'Type',
       },
       value: item.type,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     amount: {
       type: 'input',
@@ -27,62 +27,62 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
         type: 'number',
         label: 'Amount',
         min: '0',
-        step: '0.01'
+        step: '0.01',
       },
       value: item.amount,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     location: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Location'
+        label: 'Location',
       },
       value: item.location,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     description: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Description'
+        label: 'Description',
       },
       value: item.description,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     date: {
       type: 'input',
       config: {
         type: 'date',
-        label: 'Date'
+        label: 'Date',
       },
       value: item.date,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
   const queryClient = useQueryClient()
-  const mutateUpdate = useMutation(newItem => onUpdate(newItem), {
-    onSuccess: data => queryClient.invalidateQueries()
+  const mutateUpdate = useMutation((newItem) => onUpdate(newItem), {
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
   const mutateDelete = useMutation(() => onDelete(item.id), {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const updateHandler = () => {
@@ -92,7 +92,7 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
       amount: formElements.amount.value,
       location: formElements.location.value,
       description: formElements.description.value,
-      date: formElements.date.value
+      date: formElements.date.value,
     })
   }
 
@@ -103,10 +103,10 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
@@ -129,7 +129,7 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
     for (const key in formElements) {
       formElementsArray.push({
         id: key,
-        config: formElements[key]
+        config: formElements[key],
       })
     }
   }, [formElements, formElementsArray])
@@ -139,7 +139,7 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
   return (
     <div className={classes.BreakdownDetailModal}>
       <div className={classes.Inputs}>
-        {formElementsArray.map(formElement => (
+        {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
             color={color}
@@ -153,21 +153,18 @@ const BreakdownDetailModal = ({ color, item, onUpdate, onDelete, onClose }) => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            onChange={event => inputChangedHandler(event, formElement.id)} />
+            onChange={(event) => inputChangedHandler(event, formElement.id)}
+          />
         ))}
       </div>
       <div className={classes.Buttons}>
-        <Button
-          size='medium'
-          color={color}
-          width='48%'
-          onClick={deleteHandler}>
+        <Button size="medium" color={color} width="48%" onClick={deleteHandler}>
           Delete
         </Button>
         <Button
-          size='medium'
+          size="medium"
           color={color}
-          width='48%'
+          width="48%"
           onClick={updateHandler}
           disabled={!formIsValid}>
           Update
@@ -182,7 +179,7 @@ BreakdownDetailModal.propTypes = {
   item: PropTypes.object,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 }
 
 export default BreakdownDetailModal

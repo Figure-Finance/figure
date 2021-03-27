@@ -6,7 +6,12 @@ import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
 const BreakdownDetailSavingsModal = ({
-  color, item, onClose, onUpdate, onDelete, onAllocate
+  color,
+  item,
+  onClose,
+  onUpdate,
+  onDelete,
+  onAllocate,
 }) => {
   const [allocateAmount, setAllocateAmount] = useState('0')
   const [formIsValid, setFormIsValid] = useState(true)
@@ -15,14 +20,14 @@ const BreakdownDetailSavingsModal = ({
       type: 'input',
       config: {
         type: 'text',
-        label: 'Type'
+        label: 'Type',
       },
       value: item.name,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     amount: {
       type: 'input',
@@ -30,39 +35,39 @@ const BreakdownDetailSavingsModal = ({
         type: 'number',
         label: 'Amount',
         min: '0',
-        step: '0.01'
+        step: '0.01',
       },
       value: item.amount,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
+      touched: false,
     },
     description: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Description'
+        label: 'Description',
       },
       value: item.description,
       validation: {
-        required: true
+        required: true,
       },
       valid: true,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
   const queryClient = useQueryClient()
   const mutateAllocate = useMutation(() => onAllocate(allocateAmount), {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
-  const mutateUpdate = useMutation(newItem => onUpdate(newItem), {
-    onSuccess: data => queryClient.invalidateQueries()
+  const mutateUpdate = useMutation((newItem) => onUpdate(newItem), {
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
   const mutateDelete = useMutation(() => onDelete(item.id), {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const allocateHandler = () => {
@@ -75,7 +80,7 @@ const BreakdownDetailSavingsModal = ({
     mutateUpdate.mutate({
       name: formElements.type.value,
       amount: formElements.amount.value,
-      description: formElements.description.value
+      description: formElements.description.value,
     })
   }
 
@@ -86,10 +91,10 @@ const BreakdownDetailSavingsModal = ({
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
@@ -112,7 +117,7 @@ const BreakdownDetailSavingsModal = ({
     for (const key in formElements) {
       formElementsArray.push({
         id: key,
-        config: formElements[key]
+        config: formElements[key],
       })
     }
   }, [formElements, formElementsArray])
@@ -122,28 +127,28 @@ const BreakdownDetailSavingsModal = ({
   return (
     <div className={classes.BreakdownDetailSavingsModal}>
       <Input
-        key='allocate'
+        key="allocate"
         color={color}
-        type='input'
+        type="input"
         config={{
           type: 'number',
           label: 'Amount',
           min: '0',
-          step: '0.01'
+          step: '0.01',
         }}
         value={allocateAmount}
-        onChange={e => setAllocateAmount(e.target.value)} />
+        onChange={(e) => setAllocateAmount(e.target.value)}
+      />
       <Button
-        size='medium'
+        size="medium"
         color={color}
-        width='100%'
+        width="100%"
         onClick={allocateHandler}>
         Allocate
       </Button>
-      <div
-        className={classes.Divider} />
+      <div className={classes.Divider} />
       <div className={classes.Inputs}>
-        {formElementsArray.map(formElement => (
+        {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
             color={color}
@@ -157,21 +162,18 @@ const BreakdownDetailSavingsModal = ({
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            onChange={event => inputChangedHandler(event, formElement.id)} />
+            onChange={(event) => inputChangedHandler(event, formElement.id)}
+          />
         ))}
       </div>
       <div className={classes.Buttons}>
-        <Button
-          size='medium'
-          color={color}
-          width='48%'
-          onClick={deleteHandler}>
+        <Button size="medium" color={color} width="48%" onClick={deleteHandler}>
           Delete
         </Button>
         <Button
-          size='medium'
+          size="medium"
           color={color}
-          width='48%'
+          width="48%"
           onClick={updateHandler}
           disabled={!formIsValid}>
           Update
@@ -187,7 +189,7 @@ BreakdownDetailSavingsModal.propTypes = {
   onClose: PropTypes.func,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
-  onAllocate: PropTypes.func
+  onAllocate: PropTypes.func,
 }
 
 export default BreakdownDetailSavingsModal

@@ -7,7 +7,7 @@ const Add = ({ fill }) => (
 )
 
 Add.propTypes = {
-  fill: PropTypes.string
+  fill: PropTypes.string,
 }
 
 export default Add

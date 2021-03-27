@@ -4,23 +4,21 @@ import classes from './ProgressModal.module.css'
 import Button from '../../UI/Button/Button'
 import Input from '../../UI/Input/Input'
 
-const ProgressModal = ({
-  closeModal, color, title, onSubmit, amount
-}) => {
+const ProgressModal = ({ closeModal, color, title, onSubmit, amount }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElement, setFormElement] = useState({
     id: '0',
     type: 'input',
     config: {
       type: 'number',
-      placeholder: 'Amount'
+      placeholder: 'Amount',
     },
     value: amount || '',
     validation: {
-      required: true
+      required: true,
     },
     valid: true,
-    touched: false
+    touched: false,
   })
 
   const submitHandler = () => {
@@ -29,7 +27,7 @@ const ProgressModal = ({
 
   const inputChangedHandler = (event) => {
     const updatedForm = {
-      ...formElement
+      ...formElement,
     }
     updatedForm.value = event.target.value
     updatedForm.valid = true
@@ -41,10 +39,7 @@ const ProgressModal = ({
 
   return (
     <div className={classes.ProgressModal}>
-      <Button
-        onClick={closeModal}
-        size='square'
-        color={color}>
+      <Button onClick={closeModal} size="square" color={color}>
         X
       </Button>
       <div className={classes.Main}>
@@ -57,12 +52,13 @@ const ProgressModal = ({
           invalid={!formElement.valid}
           shouldValidate={formElement.validation}
           touched={formElement.touched}
-          width='200px'
-          onChange={event => inputChangedHandler(event)} />
+          width="200px"
+          onChange={(event) => inputChangedHandler(event)}
+        />
       </div>
       <Button
         onClick={submitHandler}
-        size='square'
+        size="square"
         color={color}
         disabled={!formIsValid}>
         √
@@ -76,7 +72,7 @@ ProgressModal.propTypes = {
   color: PropTypes.string,
   title: PropTypes.string,
   onSubmit: PropTypes.func,
-  amount: PropTypes.string
+  amount: PropTypes.string,
 }
 
 export default ProgressModal

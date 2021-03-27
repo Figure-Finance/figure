@@ -18,64 +18,45 @@ const Questions = ({ history }) => {
     {
       prompt: 'Do you pay for your housing?',
       shortPrompt: 'Housing',
-      answers: [
-        'Yes',
-        'No'
-      ],
+      answers: ['Yes', 'No'],
       setState: setPayHousing,
-      answer: payHousing
+      answer: payHousing,
     },
     {
       prompt: 'What is your primary mode of transportation?',
       shortPrompt: 'Transportation',
-      answers: [
-        'Personal vehicle',
-        'Public transit/ride sharing',
-        'Other'
-      ],
+      answers: ['Personal vehicle', 'Public transit/ride sharing', 'Other'],
       setState: setTransportation,
-      answer: transportation
+      answer: transportation,
     },
     {
       prompt: 'Do you have any subscriptions?',
       shortPrompt: 'Subscriptions',
-      answers: [
-        'Yes',
-        'No'
-      ],
+      answers: ['Yes', 'No'],
       setState: setHaveSubscriptions,
-      answer: haveSubscriptions
+      answer: haveSubscriptions,
     },
     {
       prompt: 'Do you have any pets?',
       shortPrompt: 'Pets',
-      answers: [
-        'Yes',
-        'No'
-      ],
+      answers: ['Yes', 'No'],
       setState: setHavePets,
-      answer: havePets
+      answer: havePets,
     },
     {
       prompt: 'Do you pay for a gym?',
       shortPrompt: 'Gym',
-      answers: [
-        'Yes',
-        'No'
-      ],
+      answers: ['Yes', 'No'],
       setState: setPayGym,
-      answer: payGym
+      answer: payGym,
     },
     {
       prompt: 'Do you have any habits?',
       shortPrompt: 'Habits',
-      answers: [
-        'Yes',
-        'No'
-      ],
+      answers: ['Yes', 'No'],
       setState: setHaveHabits,
-      answer: haveHabits
-    }
+      answer: haveHabits,
+    },
   ]
 
   const submitAnswer = (answer, setState) => {
@@ -91,37 +72,34 @@ const Questions = ({ history }) => {
     }
   }
 
-  const pastAnswers = questionList.map((question, index) => (
-    questionNumber > index
-      ? (
-        <Button
-          key={question.shortPrompt}
-          size='thin'
-          color='primary'
-          secondary={question.answer}
-          dual>
-          {question.shortPrompt}
-        </Button>
-        )
-      : null
-  ))
+  const pastAnswers = questionList.map((question, index) =>
+    questionNumber > index ? (
+      <Button
+        key={question.shortPrompt}
+        size="thin"
+        color="primary"
+        secondary={question.answer}
+        dual>
+        {question.shortPrompt}
+      </Button>
+    ) : null
+  )
 
   return (
     <div className={classes.Questions}>
-      <Container width='98%' height='96%'>
+      <Container width="98%" height="96%">
         <Question
           onAnswer={submitAnswer}
-          questionSet={questionList[questionNumber]} />
-        <div className={classes.PastAnswers}>
-          {pastAnswers}
-        </div>
+          questionSet={questionList[questionNumber]}
+        />
+        <div className={classes.PastAnswers}>{pastAnswers}</div>
       </Container>
     </div>
   )
 }
 
 Questions.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 }
 
 export default Questions

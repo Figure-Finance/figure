@@ -15,7 +15,7 @@ const GraphSummary = ({
   onNavSavingsChange,
   active,
   labels,
-  data
+  data,
 }) => {
   let title = null
   let nav = null
@@ -26,7 +26,8 @@ const GraphSummary = ({
         openModal={openModal}
         buttonContent={buttonContent}
         decrementNumber={decrementNumber}
-        incrementNumber={incrementNumber} />
+        incrementNumber={incrementNumber}
+      />
     )
   }
 
@@ -35,7 +36,8 @@ const GraphSummary = ({
       <Navbar
         onNavSavingsChange={onNavSavingsChange}
         active={active}
-        isSavings />
+        isSavings
+      />
     )
   }
 
@@ -46,7 +48,8 @@ const GraphSummary = ({
         active={active}
         isSavings={isSavings}
         labels={labels}
-        data={data} />
+        data={data}
+      />
       {nav}
     </div>
   )
@@ -62,7 +65,7 @@ GraphSummary.propTypes = {
   onNavSavingsChange: PropTypes.func,
   active: PropTypes.string,
   labels: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.object
+  data: PropTypes.object,
 }
 
 export default GraphSummary

@@ -10,7 +10,7 @@ const GraphYearly = ({
   leftArrowClick,
   rightArrowClick,
   labels,
-  data
+  data,
 }) => {
   const [showModal, setShowModal] = useState(false)
 
@@ -18,7 +18,7 @@ const GraphYearly = ({
     setShowModal(true)
   }
 
-  const closeModalHandler = event => {
+  const closeModalHandler = (event) => {
     onButtonClick(event)
     setShowModal(false)
   }
@@ -31,15 +31,12 @@ const GraphYearly = ({
       openModal={openModalHandler}
       buttonContent={buttonContent}
       decrementNumber={leftArrowClick}
-      incrementNumber={rightArrowClick} />
+      incrementNumber={rightArrowClick}
+    />
   )
 
   if (showModal) {
-    content = (
-      <GraphModal
-        years={timePeriods}
-        onClick={closeModalHandler} />
-    )
+    content = <GraphModal years={timePeriods} onClick={closeModalHandler} />
   }
 
   return content
@@ -52,7 +49,7 @@ GraphYearly.propTypes = {
   leftArrowClick: PropTypes.func,
   rightArrowClick: PropTypes.func,
   labels: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.object
+  data: PropTypes.object,
 }
 
 export default GraphYearly

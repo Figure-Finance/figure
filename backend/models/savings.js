@@ -11,10 +11,12 @@ const savingsSchema = new Schema({
     type: Number,
     required: false
   },
-  progressUpdates: [{
-    date: { type: Date },
-    curTotal: { type: Number }
-  }],
+  progressUpdates: [
+    {
+      date: { type: Date },
+      curTotal: { type: Number }
+    }
+  ],
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',

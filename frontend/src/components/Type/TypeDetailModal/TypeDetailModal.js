@@ -7,7 +7,7 @@ import Button from '../../UI/Button/Button'
 const TypeDetailModal = ({ type, color, onDelete, onClose }) => {
   const queryClient = useQueryClient()
   const mutateDelete = useMutation(() => onDelete(type.id), {
-    onSuccess: data => queryClient.invalidateQueries()
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const deleteItemHandler = () => {
@@ -17,21 +17,15 @@ const TypeDetailModal = ({ type, color, onDelete, onClose }) => {
 
   return (
     <div className={classes.TypeDetailModal}>
-      <h1 className={color}>
-        {type.category}
-      </h1>
+      <h1 className={color}>{type.category}</h1>
       <div className={classes.Buttons}>
-        <Button
-          size='medium'
-          color={color}
-          width='100%'
-          onClick={onClose}>
+        <Button size="medium" color={color} width="100%" onClick={onClose}>
           Close
         </Button>
         <Button
-          size='medium'
+          size="medium"
           color={color}
-          width='100%'
+          width="100%"
           onClick={deleteItemHandler}>
           Delete
         </Button>
@@ -44,7 +38,7 @@ TypeDetailModal.propTypes = {
   type: PropTypes.object,
   color: PropTypes.string,
   onDelete: PropTypes.func,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
 }
 
 export default TypeDetailModal

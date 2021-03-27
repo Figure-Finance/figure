@@ -13,7 +13,7 @@ const Progress = ({
   leftAmount,
   rightAmount,
   single,
-  showButtons
+  showButtons,
 }) => {
   const [showLeftModal, setShowLeftModal] = useState(false)
   const [showRightModal, setShowRightModal] = useState(false)
@@ -22,7 +22,7 @@ const Progress = ({
     setShowLeftModal(false)
   }
 
-  const leftModalSubmitHandler = value => {
+  const leftModalSubmitHandler = (value) => {
     updateProgress(value)
     leftModalCloseHandler()
   }
@@ -31,7 +31,7 @@ const Progress = ({
     setShowRightModal(false)
   }
 
-  const rightModalSubmitHandler = value => {
+  const rightModalSubmitHandler = (value) => {
     updateGoal(value)
     rightModalCloseHandler()
   }
@@ -45,33 +45,34 @@ const Progress = ({
       leftColor={leftColor}
       rightColor={rightColor}
       single={single}
-      showButtons={showButtons} />
+      showButtons={showButtons}
+    />
   )
 
   if (showLeftModal) {
     content = (
       <ProgressModal
-        title='Deposit'
+        title="Deposit"
         closeModal={leftModalCloseHandler}
         onSubmit={leftModalSubmitHandler}
-        color={leftColor} />
+        color={leftColor}
+      />
     )
   } else if (showRightModal) {
     content = (
       <ProgressModal
-        title='Update Goal'
+        title="Update Goal"
         amount={rightAmount.toString()}
         closeModal={rightModalCloseHandler}
         onSubmit={rightModalSubmitHandler}
-        color={rightColor || leftColor} />
+        color={rightColor || leftColor}
+      />
     )
   }
 
   return (
     <div className={classes.Progress}>
-      <Container height='100px'>
-        {content}
-      </Container>
+      <Container height="100px">{content}</Container>
     </div>
   )
 }
@@ -84,7 +85,7 @@ Progress.propTypes = {
   leftAmount: PropTypes.number,
   rightAmount: PropTypes.number,
   single: PropTypes.bool,
-  showButtons: PropTypes.bool
+  showButtons: PropTypes.bool,
 }
 
 export default Progress

@@ -9,25 +9,30 @@ exports.getUserFinances = (req, res, next) => {
   const startDate = req.params.startDate
   const endDate = req.params.endDate
   User.findById(req.userId)
-    .then(user => {
+    .then((user) => {
       return Finance.find({ userId: user._id })
     })
-    .then(finances => {
+    .then((finances) => {
       if (!finances) {
         throw new Error('This user has no finances yet!')
       }
-      const weeklyFinances = finances.filter(i => {
+      const weeklyFinances = finances.filter((i) => {
         return isWithinInterval(new Date(i.date), {
           start: new Date(startDate),
           end: new Date(endDate)
         })
       })
-      const financeData = weeklyFinances.map(entry => {
-        return { id: entry._id, category: entry.category, amount: entry.amount, isIncome: entry.isIncome }
+      const financeData = weeklyFinances.map((entry) => {
+        return {
+          id: entry._id,
+          category: entry.category,
+          amount: entry.amount,
+          isIncome: entry.isIncome
+        }
       })
       return res.status(200).json(financeData)
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -38,7 +43,9 @@ exports.getUserFinances = (req, res, next) => {
 exports.postUserFinances = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    console.log(`Validation Result line 41 controller: ${validationResult(req)}`)
+    console.log(
+      `Validation Result line 41 controller: ${validationResult(req)}`
+    )
     const error = new Error('Validation failed.')
     error.statusCode = 422
     error.data = errors.array()
@@ -50,8 +57,8 @@ exports.postUserFinances = (req, res, next) => {
   const description = req.body.description
   const isIncome = req.body.isIncome
   const date = req.body.date // YYYY-mm-dd
-  const user = User.findById(req.userId)
-    .then(user => {
+  User.findById(req.userId)
+    .then((user) => {
       const finances = new Finance({
         category: category,
         amount: amount,
@@ -68,7 +75,7 @@ exports.postUserFinances = (req, res, next) => {
         id: finances._id
       })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -79,7 +86,7 @@ exports.postUserFinances = (req, res, next) => {
 exports.getFinanceDetailsById = (req, res, next) => {
   const financeId = req.params.id
   Finance.findOne({ _id: financeId })
-    .then(financeEntry => {
+    .then((financeEntry) => {
       const finance = {
         id: financeEntry._id,
         category: financeEntry.category,
@@ -96,7 +103,7 @@ exports.getFinanceDetailsById = (req, res, next) => {
         data: finance.date
       })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -127,7 +134,7 @@ exports.editFinanceEntryById = (req, res, next) => {
   const newLocation = req.body.location
   const newDate = req.body.date
   Finance.findOne({ _id: financeId })
-    .then(financeEntry => {
+    .then((financeEntry) => {
       financeEntry.category = newCategory
       financeEntry.amount = newAmount
       financeEntry.description = newDescription
@@ -135,10 +142,12 @@ exports.editFinanceEntryById = (req, res, next) => {
       financeEntry.date = newDate
       return financeEntry.save()
     })
-    .then(result => {
-      return res.status(200).json({ message: 'Finance entry successfully updated.' })
+    .then((result) => {
+      return res
+        .status(200)
+        .json({ message: 'Finance entry successfully updated.' })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }

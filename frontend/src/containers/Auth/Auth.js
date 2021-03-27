@@ -11,44 +11,57 @@ const Auth = ({ history }) => {
   const [isSignUp, setIsSignUp] = useState(true)
   const [formError, setFormError] = useState('')
 
-  const onUserSignUp = useCallback(async signUpData => {
-    try {
-      const res = await api.post('user/signup', signUpData)
-      console.log(res.data)
-      localStorage.setItem('token', res.data.token)
-      history.push('/')
-    } catch (err) {
-      console.log(err)
-    }
-  }, [history])
-
-  const onUserSignIn = useCallback(async signInData => {
-    try {
-      const res = await api.post('user/signin', signInData)
-      localStorage.setItem('token', res.data.token)
-      history.push('/')
-    } catch (err) {
-      console.log(err.response.status)
-      if (err.response && err.response.status && err.response.status === 401) {
-        setFormError('Wrong Password')
+  const onUserSignUp = useCallback(
+    async (signUpData) => {
+      try {
+        const res = await api.post('user/signup', signUpData)
+        console.log(res.data)
+        localStorage.setItem('token', res.data.token)
+        history.push('/')
+      } catch (err) {
+        console.log(err)
       }
-    }
-  }, [history])
+    },
+    [history]
+  )
+
+  const onUserSignIn = useCallback(
+    async (signInData) => {
+      try {
+        const res = await api.post('user/signin', signInData)
+        localStorage.setItem('token', res.data.token)
+        history.push('/')
+      } catch (err) {
+        console.log(err.response.status)
+        if (
+          err.response &&
+          err.response.status &&
+          err.response.status === 401
+        ) {
+          setFormError('Wrong Password')
+        }
+      }
+    },
+    [history]
+  )
 
   return (
     <div className={classes.Auth}>
-      <Container height='98%' width='50%'>
+      <Container height="98%" width="50%">
         <div className={classes.Main}>
-          {isSignUp
-            ? <SignUpForm
+          {isSignUp ? (
+            <SignUpForm
               onSubmit={onUserSignUp}
               changeForm={() => setIsSignUp(false)}
-              error={formError} />
-            : <SignInForm
+              error={formError}
+            />
+          ) : (
+            <SignInForm
               onSubmit={onUserSignIn}
               changeForm={() => setIsSignUp(true)}
-              error={formError} />
-          }
+              error={formError}
+            />
+          )}
         </div>
       </Container>
       <div>
@@ -59,7 +72,7 @@ const Auth = ({ history }) => {
 }
 
 Auth.propTypes = {
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 }
 
 export default Auth

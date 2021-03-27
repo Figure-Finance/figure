@@ -6,7 +6,7 @@ import {
   startOfToday,
   endOfMonth,
   eachMonthOfInterval,
-  subYears
+  subYears,
 } from 'date-fns'
 import api from '../../api'
 import classes from './Monthly.module.css'
@@ -24,18 +24,22 @@ const Monthly = ({ history }) => {
   const today = useMemo(() => startOfToday(), [])
   const lastYear = useMemo(() => subYears(today, 1), [today])
   const months = useMemo(
-    () => eachMonthOfInterval({ start: lastYear, end: today }), [lastYear, today]
+    () => eachMonthOfInterval({ start: lastYear, end: today }),
+    [lastYear, today]
   )
   const monthStringMap = useMemo(
-    () => months.map(day => format(day, 'MMM. yyy').toString()), [months]
+    () => months.map((day) => format(day, 'MMM. yyy').toString()),
+    [months]
   )
 
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(monthStringMap.length - 1)
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(
+    monthStringMap.length - 1
+  )
 
   let totalIncome = 0
   let totalExpenses = 0
 
-  const updateIncomeExpenses = updatedItems => {
+  const updateIncomeExpenses = (updatedItems) => {
     const income = []
     const expenses = []
     for (const item of updatedItems) {
@@ -57,8 +61,10 @@ const Monthly = ({ history }) => {
     return res.data
   }, [currentMonthIndex, months])
 
-  const changeMonth = event => {
-    const index = monthStringMap.findIndex(el => el === event.target.innerHTML)
+  const changeMonth = (event) => {
+    const index = monthStringMap.findIndex(
+      (el) => el === event.target.innerHTML
+    )
     setCurrentMonthIndex(index)
   }
 
@@ -76,16 +82,20 @@ const Monthly = ({ history }) => {
 
   useEffect(onFetchMonthly, [onFetchMonthly, currentMonthIndex])
 
-  const { data, isLoading, isError, error } = useQuery('monthly', onFetchMonthly, {
-    retry: false,
-    staleTime: Infinity
-  })
+  const { data, isLoading, isError, error } = useQuery(
+    'monthly',
+    onFetchMonthly,
+    {
+      retry: false,
+      staleTime: Infinity,
+    }
+  )
   const queryClient = useQueryClient()
   const mutateLeftClick = useMutation(previousMonth, {
-    onSuccess: () => queryClient.clear()
+    onSuccess: () => queryClient.clear(),
   })
   const mutateRightClick = useMutation(nextMonth, {
-    onSuccess: () => queryClient.clear()
+    onSuccess: () => queryClient.clear(),
   })
 
   const previousMonthHandler = () => {
@@ -112,17 +122,13 @@ const Monthly = ({ history }) => {
     }
     progress = (
       <Progress
-        leftColor='primary'
+        leftColor="primary"
         leftAmount={totalIncome}
-        rightColor='danger'
-        rightAmount={totalExpenses} />
+        rightColor="danger"
+        rightAmount={totalExpenses}
+      />
     )
-    incomeBreakdown = (
-      <Breakdown
-        title='Income'
-        content={[]}
-        color='primary' />
-    )
+    incomeBreakdown = <Breakdown title="Income" content={[]} color="primary" />
     chart = (
       <Chart
         data={[]}
@@ -130,28 +136,24 @@ const Monthly = ({ history }) => {
         previousTimePeriod={previousMonthHandler}
         nextTimePeriod={nextMonthHandler}
         selectTimePeriod={changeMonth}
-        currentTimePeriod={monthStringMap[currentMonthIndex]} />
+        currentTimePeriod={monthStringMap[currentMonthIndex]}
+      />
     )
     expensesBreakdown = (
-      <Breakdown
-        title='Expenses'
-        content={[]}
-        color='danger' />
+      <Breakdown title="Expenses" content={[]} color="danger" />
     )
   } else {
     const { income, expenses } = updateIncomeExpenses(data)
     progress = (
       <Progress
-        leftColor='primary'
+        leftColor="primary"
         leftAmount={totalIncome}
-        rightColor='danger'
-        rightAmount={totalExpenses} />
+        rightColor="danger"
+        rightAmount={totalExpenses}
+      />
     )
     incomeBreakdown = (
-      <Breakdown
-        title='Income'
-        content={income}
-        color='primary' />
+      <Breakdown title="Income" content={income} color="primary" />
     )
     chart = (
       <Chart
@@ -160,13 +162,11 @@ const Monthly = ({ history }) => {
         previousTimePeriod={previousMonthHandler}
         nextTimePeriod={nextMonthHandler}
         selectTimePeriod={changeMonth}
-        currentTimePeriod={monthStringMap[currentMonthIndex]} />
+        currentTimePeriod={monthStringMap[currentMonthIndex]}
+      />
     )
     expensesBreakdown = (
-      <Breakdown
-        title='Expenses'
-        content={expenses}
-        color='danger' />
+      <Breakdown title="Expenses" content={expenses} color="danger" />
     )
   }
 
@@ -178,13 +178,13 @@ const Monthly = ({ history }) => {
         {chart}
         {expensesBreakdown}
       </div>
-      <Navbar active='m' />
+      <Navbar active="m" />
     </div>
   )
 }
 
 Monthly.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
 }
 
 export default Monthly

@@ -11,8 +11,6 @@ const startOfToday = require('date-fns/startOfToday')
 const startOfDay = require('date-fns/startOfDay')
 const startOfWeek = require('date-fns/startOfWeek')
 const startOfMonth = require('date-fns/startOfMonth')
-const startOfQuarter = require('date-fns/startOfQuarter')
-const sub = require('date-fns/sub')
 
 const isWithinInterval = require('date-fns/isWithinInterval')
 
@@ -24,29 +22,39 @@ exports.getSavings = (req, res, next) => {
   let savings
   let itemGoals
   Savings.findOne({ userId: req.userId })
-    .then(savingsDoc => {
+    .then((savingsDoc) => {
       if (!savingsDoc) {
         throw new Error('Cannot find any savings for this user.')
       }
-      return savings = {
+      return (savings = {
         id: savingsDoc._id,
         totalSavingsGoal: savingsDoc.totalSavingsGoal,
         totalSavingsProgress: savingsDoc.totalSavingsProgress,
-        progressUpdates: savingsDoc.progressUpdates.map(update => {
-          return { id: update._id, date: update.date, curTotal: update.curTotal }
+        progressUpdates: savingsDoc.progressUpdates.map((update) => {
+          return {
+            id: update._id,
+            date: update.date,
+            curTotal: update.curTotal
+          }
         })
-      }
+      })
     })
-    .then(result => {
+    .then((result) => {
       return ItemGoal.find({ userId: req.userId })
     })
-    .then(itemGoalArray => {
-      itemGoals = itemGoalArray.map(i => {
-        return { id: i._id, progress: i.progress, name: i.name, amount: i.amount, description: i.description }
+    .then((itemGoalArray) => {
+      itemGoals = itemGoalArray.map((i) => {
+        return {
+          id: i._id,
+          progress: i.progress,
+          name: i.name,
+          amount: i.amount,
+          description: i.description
+        }
       })
       return res.status(200).json({ ...savings, itemGoals })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -64,11 +72,15 @@ exports.postTotalSavings = (req, res, next) => {
     error.data = errors.array()
     throw error
   }
-  postSavings(req.body.totalSavingsGoal, req.body.totalSavingsProgress, req.userId)
-    .then(newSavings => {
+  postSavings(
+    req.body.totalSavingsGoal,
+    req.body.totalSavingsProgress,
+    req.userId
+  )
+    .then((newSavings) => {
       return res.status(201).json({ id: newSavings._id })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -87,14 +99,16 @@ exports.editTotalSavings = (req, res, next) => {
   }
   const newTotalSavingsGoal = req.body.totalSavingsGoal
   Savings.findOne({ userId: req.userId })
-    .then(savingsItem => {
+    .then((savingsItem) => {
       savingsItem.totalSavingsGoal = newTotalSavingsGoal
       return savingsItem.save()
     })
-    .then(result => {
-      return res.status(200).json({ message: 'Savings goal successfully updated.' })
+    .then((result) => {
+      return res
+        .status(200)
+        .json({ message: 'Savings goal successfully updated.' })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -112,23 +126,32 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
     throw error
   }
   Savings.findOne({ userId: req.userId })
-    .then(savingsItem => {
-      const last = savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
-      const curTotal = savingsItem.totalSavingsProgress + req.body.progressAmount
+    .then((savingsItem) => {
+      const last =
+        savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
+      const curTotal =
+        savingsItem.totalSavingsProgress + req.body.progressAmount
       if (!last) {
-        savingsItem.progressUpdates = [{ date: startOfToday(), curTotal: curTotal }]
+        savingsItem.progressUpdates = [
+          { date: startOfToday(), curTotal: curTotal }
+        ]
       } else if (last.date.toString() === startOfToday().toString()) {
-	       last.curTotal = curTotal
+        last.curTotal = curTotal
       } else {
-	       savingsItem.progressUpdates.push({ date: startOfToday(), curTotal: curTotal })
+        savingsItem.progressUpdates.push({
+          date: startOfToday(),
+          curTotal: curTotal
+        })
       }
       savingsItem.totalSavingsProgress += req.body.progressAmount
       return savingsItem.save()
     })
-    .then(result => {
-      return res.status(200).json({ message: 'Total savings progress successfully updated.' })
+    .then((result) => {
+      return res
+        .status(200)
+        .json({ message: 'Total savings progress successfully updated.' })
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }
@@ -139,37 +162,37 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 exports.getByTimeFrame = (req, res, next) => {
   // Get savings documents by specified time frame for graphs
   const timeFrame = req.params.timeFrame
-  // const savings = []
+  const savings = []
   User.findById(req.userId)
-    .then(user => {
+    .then((user) => {
       if (timeFrame === 'week') {
         filterSavingsData(user, startOfDay, '%d', 7)
-          .then(result => {
+          .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch(err => console.log(err))
+          .catch((err) => console.log(err))
       } else if (timeFrame === 'month') {
         filterSavingsData(user, startOfDay, '%d', 30)
-          .then(result => {
+          .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch(err => console.log(err))
+          .catch((err) => console.log(err))
       } else if (timeFrame === 'quarter') {
         filterSavingsData(user, startOfWeek, '%U', 120)
-          .then(result => {
+          .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch(err => console.log(err))
+          .catch((err) => console.log(err))
       } else if (timeFrame === 'year') {
         filterSavingsData(user, startOfMonth, '%m', 365)
-          .then(result => {
+          .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch(err => console.log(err))
+          .catch((err) => console.log(err))
       } else if (timeFrame === 'all') {
         Savings.aggregate([
           {
@@ -178,27 +201,40 @@ exports.getByTimeFrame = (req, res, next) => {
             }
           },
           { $unwind: { path: '$progressUpdates' } },
-          { $group: { _id: { $dateToString: { format: '%m', date: '$progressUpdates.date' } }, amount: { $sum: '$progressUpdates.curTotal' }, date: { $first: '$progressUpdates.date' } } }
-        ])
-          .exec((err, result) => {
-            if (err) {
-              console.log(err)
+          {
+            $group: {
+              _id: {
+                $dateToString: { format: '%m', date: '$progressUpdates.date' }
+              },
+              amount: { $sum: '$progressUpdates.curTotal' },
+              date: { $first: '$progressUpdates.date' }
             }
-            if (result) {
-              result.map(r => {
-                if (isWithinInterval(new Date(r.date), {
+          }
+        ]).exec((err, result) => {
+          if (err) {
+            console.log(err)
+          }
+          if (result) {
+            result.map((r) => {
+              if (
+                isWithinInterval(new Date(r.date), {
                   start: user.createdAt,
                   end: startOfToday()
-                })) {
-                  return savings.push({ period: startOfMonth(r.date), amount: r.amount })
-                }
-              })
-              return res.status(200).json(savings)
-            }
-          })
+                })
+              ) {
+                return savings.push({
+                  period: startOfMonth(r.date),
+                  amount: r.amount
+                })
+              }
+              return savings
+            })
+            return res.status(200).json(savings)
+          }
+        })
       }
     })
-    .catch(err => {
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500
       }

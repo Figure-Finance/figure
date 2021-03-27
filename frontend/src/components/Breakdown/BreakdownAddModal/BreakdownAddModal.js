@@ -12,14 +12,14 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Type'
+        label: 'Type',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     amount: {
       type: 'input',
@@ -27,59 +27,59 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
         type: 'number',
         label: 'Amount',
         min: '0',
-        step: '0.01'
+        step: '0.01',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     location: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Location'
+        label: 'Location',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     description: {
       type: 'input',
       config: {
         type: 'text',
-        label: 'Description'
+        label: 'Description',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
+      touched: false,
     },
     date: {
       type: 'input',
       config: {
         type: 'date',
-        label: 'Date'
+        label: 'Date',
       },
       value: '',
       validation: {
-        required: true
+        required: true,
       },
       valid: false,
-      touched: false
-    }
+      touched: false,
+    },
   })
 
   const queryClient = useQueryClient()
-  const mutateAdd = useMutation(newItem => onAdd(newItem), {
-    onSuccess: data => queryClient.invalidateQueries()
+  const mutateAdd = useMutation((newItem) => onAdd(newItem), {
+    onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
   const addItemHandler = () => {
@@ -89,16 +89,16 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
       amount: formElements.amount.value,
       location: formElements.location.value,
       description: formElements.description.value,
-      date: formElements.date.value
+      date: formElements.date.value,
     })
   }
 
   const inputChangedHandler = (event, inputIdentifier) => {
     const updatedAuthForm = {
-      ...formElements
+      ...formElements,
     }
     const updatedFormElement = {
-      ...updatedAuthForm[inputIdentifier]
+      ...updatedAuthForm[inputIdentifier],
     }
     updatedFormElement.value = event.target.value
     updatedFormElement.valid = true
@@ -118,14 +118,14 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
   for (const key in formElements) {
     formElementsArray.push({
       id: key,
-      config: formElements[key]
+      config: formElements[key],
     })
   }
 
   return (
     <div className={classes.BreakdownAddModal}>
       <div className={classes.Inputs}>
-        {formElementsArray.map(formElement => (
+        {formElementsArray.map((formElement) => (
           <Input
             key={formElement.id}
             color={color}
@@ -135,23 +135,20 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
-            onChange={event => inputChangedHandler(event, formElement.id)} />
+            onChange={(event) => inputChangedHandler(event, formElement.id)}
+          />
         ))}
       </div>
       <div className={classes.Buttons}>
-        <Button
-          size='medium'
-          color={color}
-          onClick={onClose}
-          width='48%'>
+        <Button size="medium" color={color} onClick={onClose} width="48%">
           Cancel
         </Button>
         <Button
           color={color}
-          size='medium'
+          size="medium"
           onClick={addItemHandler}
           disabled={!formIsValid}
-          width='48%'>
+          width="48%">
           Add
         </Button>
       </div>
@@ -163,7 +160,7 @@ BreakdownAddModal.propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func,
   onAdd: PropTypes.func,
-  color: PropTypes.string
+  color: PropTypes.string,
 }
 
 export default BreakdownAddModal

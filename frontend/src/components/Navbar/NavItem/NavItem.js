@@ -5,13 +5,9 @@ import classes from './NavItem.module.css'
 import Button from '../../UI/Button/Button'
 
 const NavItem = ({ children, color, active, link, size }) => (
-  <div
-    className={classes.NavItem}>
+  <div className={classes.NavItem}>
     <NavLink to={link}>
-      <Button
-        color={color}
-        size={size}
-        active={active}>
+      <Button color={color} size={size} active={active}>
         {children}
       </Button>
     </NavLink>
@@ -23,7 +19,7 @@ NavItem.propTypes = {
   color: PropTypes.string,
   active: PropTypes.bool,
   link: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
 }
 
 export default NavItem

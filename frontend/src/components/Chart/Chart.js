@@ -10,7 +10,7 @@ const Chart = ({
   data,
   previousTimePeriod,
   nextTimePeriod,
-  selectTimePeriod
+  selectTimePeriod,
 }) => {
   const [showModal, setShowModal] = useState(false)
 
@@ -18,13 +18,13 @@ const Chart = ({
     setShowModal(true)
   }
 
-  const closeModalHandler = event => {
+  const closeModalHandler = (event) => {
     selectTimePeriod(event)
     setShowModal(false)
   }
 
-  const names = data.map(item => item.name || item.category)
-  const amounts = data.map(item => item.amount)
+  const names = data.map((item) => item.name || item.category)
+  const amounts = data.map((item) => item.amount)
 
   let content = (
     <ChartSummary
@@ -33,19 +33,18 @@ const Chart = ({
       amounts={amounts}
       openModal={openModalHandler}
       leftArrowClick={previousTimePeriod}
-      rightArrowClick={nextTimePeriod} />
+      rightArrowClick={nextTimePeriod}
+    />
   )
 
   if (showModal) {
     content = (
-      <ChartModal
-        timePeriods={timePeriods}
-        onClick={closeModalHandler} />
+      <ChartModal timePeriods={timePeriods} onClick={closeModalHandler} />
     )
   }
 
   return (
-    <Container height='100%' width='33%'>
+    <Container height="100%" width="33%">
       {content}
     </Container>
   )
@@ -57,7 +56,7 @@ Chart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   previousTimePeriod: PropTypes.func,
   nextTimePeriod: PropTypes.func,
-  selectTimePeriod: PropTypes.func
+  selectTimePeriod: PropTypes.func,
 }
 
 export default Chart

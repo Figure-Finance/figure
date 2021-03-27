@@ -14,7 +14,7 @@ const Graph = ({
   nextTimePeriod,
   selectTimePeriod,
   labels,
-  data
+  data,
 }) => {
   let content = (
     <GraphYearly
@@ -24,7 +24,8 @@ const Graph = ({
       buttonContent={currentTimePeriod}
       onButtonClick={selectTimePeriod}
       leftArrowClick={previousTimePeriod}
-      rightArrowClick={nextTimePeriod} />
+      rightArrowClick={nextTimePeriod}
+    />
   )
 
   if (isSavings) {
@@ -32,12 +33,13 @@ const Graph = ({
       <GraphSavings
         active={active}
         labels={labels}
-        onChange={onNavSavingsChange} />
+        onChange={onNavSavingsChange}
+      />
     )
   }
 
   return (
-    <Container height='100%' width='66%'>
+    <Container height="100%" width="66%">
       {content}
     </Container>
   )
@@ -53,7 +55,7 @@ Graph.propTypes = {
   nextTimePeriod: PropTypes.func,
   selectTimePeriod: PropTypes.func,
   labels: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.object
+  data: PropTypes.object,
 }
 
 export default Graph

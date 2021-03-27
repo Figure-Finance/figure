@@ -16,12 +16,19 @@ const LeftArrow = ({ fill }) => {
   }
 
   return (
-    <Left style={{ width: '30px', fill: fillHex, marginTop: '6px', marginRight: '6px' }} />
+    <Left
+      style={{
+        width: '30px',
+        fill: fillHex,
+        marginTop: '6px',
+        marginRight: '6px',
+      }}
+    />
   )
 }
 
 LeftArrow.propTypes = {
-  fill: PropTypes.string
+  fill: PropTypes.string,
 }
 
 export default LeftArrow

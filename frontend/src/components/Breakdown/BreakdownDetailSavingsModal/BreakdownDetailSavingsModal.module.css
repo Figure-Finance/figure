@@ -26,7 +26,8 @@
   justify-content: space-between;
 }
 
-.Inputs, .Buttons {
+.Inputs,
+.Buttons {
   margin: auto;
   width: 100%;
 }
