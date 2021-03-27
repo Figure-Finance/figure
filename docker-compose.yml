@@ -41,8 +41,8 @@ services:
     ports:
       - 80:80
       - 443:443
-    # volumes:
-    #   - /root/certs-data/:/data/letsencrypt/
+    volumes:
+      - /root/certs-data/:/data/letsencrypt/
     #   - /etc/letsencrypt/:/etc/letsencrypt/
     networks:
       - figure-network
