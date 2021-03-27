@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 services:
   mongo:
     restart: always
@@ -40,6 +40,8 @@ services:
     # tty: true
     env_file:
       - ./env/frontend.env
+    networks:
+      - figure-network
     depends_on:
       - mongo
       - backend
