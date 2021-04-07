@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import api from '../../api'
 import classes from './Auth.module.css'
@@ -8,7 +9,11 @@ import SignUpForm from '../../components/SignUpForm/SignUpForm'
 import Logo from '../../components/Logo/Logo'
 
 const Auth = ({ history }) => {
-  const [isSignUp, setIsSignUp] = useState(true)
+  const location = useLocation()
+
+  const [isSignUp, setIsSignUp] = useState(
+    location.state ? location.state.isSignUp : true
+  )
   const [formError, setFormError] = useState('')
 
   const onUserSignUp = useCallback(
@@ -17,7 +22,7 @@ const Auth = ({ history }) => {
         const res = await api.post('user/signup', signUpData)
         console.log(res.data)
         localStorage.setItem('token', res.data.token)
-        history.push('/')
+        history.push('/weekly')
       } catch (err) {
         console.log(err)
       }
@@ -30,7 +35,7 @@ const Auth = ({ history }) => {
       try {
         const res = await api.post('user/signin', signInData)
         localStorage.setItem('token', res.data.token)
-        history.push('/')
+        history.push('/weekly')
       } catch (err) {
         console.log(err.response.status)
         if (
