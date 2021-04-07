@@ -152,6 +152,7 @@
   box-shadow: -6px -6px 9px var(--white-shadow), 6px 6px 9px var(--black-shadow);
   font-size: 20px;
   height: 60px;
+  min-height: 60px;
   text-shadow: 2px 2px 2px var(--white-shadow);
   width: 160px;
 }
