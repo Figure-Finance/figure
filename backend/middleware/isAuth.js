@@ -9,17 +9,18 @@ module.exports = (req, res, next) => {
   }
   const token = req.get('Authorization').split(' ')[1]
   let decodedToken
-  try {
-    decodedToken = jwt.verify(token, process.env.SECRET_KEY)
-  } catch (err) {
-    err.statusCode = 401
-    throw err
-  }
-  if (!decodedToken) {
-    const error = new Error('Unable to authenticate.')
-    error.statusCode = 401
-    throw error
-  }
-  req.userId = decodedToken.userId
-  next()
+  jwt.verify(token, process.env.SECRET_KEY)
+    .then(decodedToken => {
+      if (!decodedToken) {
+        const error = new Error('Unable to authenticate.')
+        error.statusCode = 401
+        throw error
+      }
+      req.userId = decodedToken.userId
+      next()
+    })
+    .catch(err => {
+      err.statusCode = 401
+      throw err
+    })
 }
