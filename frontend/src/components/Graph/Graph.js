@@ -33,6 +33,7 @@ const Graph = ({
       <GraphSavings
         active={active}
         labels={labels}
+        data={data}
         onChange={onNavSavingsChange}
       />
     )

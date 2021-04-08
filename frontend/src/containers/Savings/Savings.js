@@ -110,12 +110,12 @@ const Savings = ({ history }) => {
   }
 
   const queryClient = useQueryClient()
-  const mutateTimePeriod = useMutation(timePeriodChange, {
+  const mutateTimePeriod = useMutation((event) => timePeriodChange(event), {
     onSuccess: () => queryClient.clear(),
   })
 
-  const timePeriodChangeHandler = () => {
-    mutateTimePeriod.mutate()
+  const timePeriodChangeHandler = (event) => {
+    mutateTimePeriod.mutate(event)
   }
 
   const labels = [
@@ -202,19 +202,25 @@ const Savings = ({ history }) => {
   } else if (graphIsError) {
     graph = (
       <Graph
-        onNavSavingsChange={timePeriodChangeHandler}
+        onNavSavingsChange={(e) => timePeriodChangeHandler(e)}
         active={graphTimePeriod}
         labels={labels}
         isSavings
       />
     )
   } else if (graphData) {
-    console.log(graphData)
+    const data = [0, 0, 0, 0, 0, 0, 0]
+    for (const dataElement of graphData) {
+      const date = new Date()
+      const dayOfWeek = date.getDay(dataElement.period)
+      data[dayOfWeek] = dataElement.amount
+    }
     graph = (
       <Graph
-        onNavSavingsChange={timePeriodChangeHandler}
+        onNavSavingsChange={(e) => timePeriodChangeHandler(e)}
         active={graphTimePeriod}
         labels={labels}
+        data={{ savings: data }}
         isSavings
       />
     )
@@ -233,7 +239,7 @@ const Savings = ({ history }) => {
 }
 
 Savings.propTypes = {
-  history: PropTypes.objects,
+  history: PropTypes.object,
 }
 
 export default Savings
