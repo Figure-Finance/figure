@@ -1,35 +1,27 @@
+// Require validationResult from express-validator to check form validation
 const { validationResult } = require('express-validator')
 
+// Require models
 const ItemGoal = require('../models/itemGoal')
 const Savings = require('../models/savings')
 const User = require('../models/user')
 
+// Create a new savings item goal
 exports.postItemGoals = (req, res, next) => {
+  // Check for validation errors, fail with status 422 if val. errors found
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
     res.status(422).send(error)
   }
-  const name = req.body.name
-  const amount = req.body.amount
-  const description = req.body.description
-  let newGoal
-  let loadedUser
-  User.findById(req.userId)
-    .then((user) => {
-      loadedUser = user
-      return ItemGoal.find({ userId: loadedUser._id })
-    })
-    .then((itemGoals) => {
-      newGoal = new ItemGoal({
-        name: name,
-        amount: amount,
-        description: description,
-        userId: loadedUser._id
-      })
-      return newGoal.save()
-    })
+  // Create our new ItemGoal object
+  const newGoal = new ItemGoal(req.body)
+  // Ensure our ItemGoal is associated with our current signed in user
+  newGoal.userId = req.userId
+  newGoal.save()
     .then((result) => {
+      // On successful save, set status 201 for 'resource successfully created'
+      // Return our newGoal id
       return res.status(201).json({ id: newGoal._id })
     })
     .catch((err) => {
@@ -41,9 +33,10 @@ exports.postItemGoals = (req, res, next) => {
 }
 
 exports.getItemGoalDetails = (req, res, next) => {
-  const itemGoalId = req.params.id
-  ItemGoal.findOne({ _id: itemGoalId })
+  // Find our itemGoal based on the id passed through our query params.
+  ItemGoal.findOne({ _id: req.params.id })
     .then((itemGoal) => {
+      // On successfully finding goal, return fields.
       res.status(200).json({
         name: itemGoal.name,
         amount: itemGoal.amount,
@@ -53,26 +46,33 @@ exports.getItemGoalDetails = (req, res, next) => {
     })
     .catch((err) => {
       if (!err.statusCode) {
-        err.statusCode = 500
+        // If there is an unspecified error, set 404 for 'resource not found'
+        err.statusCode = 404
       }
       next(err)
     })
 }
 
 exports.deleteItemGoal = (req, res, next) => {
-  const itemGoalId = req.params.id
-  ItemGoal.findOne({ _id: itemGoalId })
+  ItemGoal.findOne({ _id: req.params.id })
     .then((itemGoal) => {
+      // To update the totals correctly, we need to query our user's total Savings
+      // Then, before we delete our item goal, we want to return the "allocated funds" to our savings amount
+      // TODO: add a check to ask the user if they've 'spent' the money, or if they've decided not to save for this item
       return Savings.findOne({ userId: itemGoal.userId })
         .then((savings) => {
+          // Adjust our totalSavingsProgress to include the itemGoal progress $ amount
           savings.totalSavingsProgress =
             savings.totalSavingsProgress + itemGoal.progress
           return savings.save()
         })
         .then((result) => {
+          // Once we've updated our savings, find and delete our itemGoal
           ItemGoal.findByIdAndDelete(itemGoalId, (err) => {
-            console.log(err)
+            // Send error and set status to 500 to avoid crashing app on deletion failure
+            res.status(500).send(err.message)
           })
+          // If resource is successfully deleted, return status code 200 and message to confirm deletion
           return res.status(200).json({ message: 'Goal successfully deleted.' })
         })
     })
@@ -88,24 +88,20 @@ exports.editItemGoal = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // Send status code 422 on validation failure
+    res.status(422).send(error)
   }
-  const itemGoalId = req.body.id
-  const newName = req.body.name
-  const newAmount = req.body.amount
-  const newDescription = req.body.description
-  ItemGoal.findOne({ _id: itemGoalId })
+  ItemGoal.findOne({ _id: req.body.id })
     .then((itemGoal) => {
       if (!itemGoal) {
         const error = new Error('Goal not found.')
-        error.statusCode = 500
-        throw error
+        // If goal does not exist, send 404 for 'resource not found'
+        res.status(404).send(error)
       }
-      itemGoal.name = newName
-      itemGoal.amount = newAmount
-      itemGoal.description = newDescription
+      // Update itemGoal fields accordingly
+      itemGoal.name = req.body.name
+      itemGoal.amount = req.body.amount
+      itemGoal.description = req.body.description
       itemGoal.save()
       return res
         .status(200)
@@ -120,36 +116,48 @@ exports.editItemGoal = (req, res, next) => {
 }
 
 exports.allocateGoalFunds = (req, res, next) => {
-  const itemGoalId = req.body.id
+  console.log('CALLING ALLOCATE GOAL FUNDS')
   const allocateAmount = req.body.allocateAmount
+  // Find our user's savings to update allocated & remaining savings amounts
   Savings.findOne({ userId: req.userId })
     .then((totalSavings) => {
+      // Check if user has saved enough money to allocate the specified amount to this goal
       if (totalSavings.totalSavingsProgress < allocateAmount) {
-        throw new Error(
+        const error = new Error(
           "You don't have enough saved yet to allocate that much to this goal!"
         )
+        // Set status 304 'not modified' with the error if there aren't adequate funds
+        res.status(304).send(error)
       }
+      // If there are adequate funds, allocate to the goal
       totalSavings.totalSavingsProgress -= allocateAmount
       return totalSavings.save()
     })
     .then((result) => {
-      return ItemGoal.findOne({ _id: itemGoalId })
+      return ItemGoal.findOne({ _id: req.body.id })
     })
     .then((itemGoal) => {
-      console.log(itemGoal)
+      // Check if we've already saved enough for this goal
       if (itemGoal.progress >= itemGoal.amount) {
-        throw new Error('This goal has been reached.')
+        const error = new Error('This goal has been reached.')
+        // Set status 304 'not modified' if the goal has been reached
+        res.status(304).send(error)
       } else if (itemGoal.progress + allocateAmount > itemGoal.amount) {
-        throw new Error('This allocation will put you over goal.')
+        const error = new Error('This allocation will put you over goal.')
+        // If the allocateAmount will overshoot the goal, send 304 'not modified'
+        res.status(304).send(error)
       } else {
+        // If everything is correct, update itemGoal progress
         itemGoal.progress += allocateAmount
         return itemGoal.save()
       }
     })
     .then((result) => {
+      // Confirm funds allocated
       return res.status(200).json({ message: 'Funds successfully allocated!' })
     })
     .catch((err) => {
+      console.log('IN CATCH BLOCK LINE 160 ITEMGOAL CONTROLLER')
       if (!err.statusCode) {
         err.statusCode = 500
       }
