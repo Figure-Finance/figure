@@ -76,14 +76,14 @@ exports.editTotalSavings = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
-  const newTotalSavingsGoal = req.body.totalSavingsGoal
+  // Find our user's savings object
   Savings.findOne({ userId: req.userId })
     .then((savingsItem) => {
-      savingsItem.totalSavingsGoal = newTotalSavingsGoal
+      // Update goal amount
+      savingsItem.totalSavingsGoal = req.body.totalSavingsGoal
       return savingsItem.save()
     })
     .then((result) => {
@@ -104,28 +104,33 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
   Savings.findOne({ userId: req.userId })
     .then((savingsItem) => {
+      // Find our last progress update
       const last =
         savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
+      // Find our current progress total
       const curTotal =
         savingsItem.totalSavingsProgress + req.body.progressAmount
       if (!last) {
+        // If we haven't updated our progress yet -
         savingsItem.progressUpdates = [
           { date: startOfToday(), curTotal: curTotal }
         ]
       } else if (last.date.toString() === startOfToday().toString()) {
+        // Else, if the last time we updated was today
         last.curTotal = curTotal
       } else {
+        // If we've updated before, but not today, push a new update object
         savingsItem.progressUpdates.push({
           date: startOfToday(),
           curTotal: curTotal
         })
       }
+      // Increment total progress by amount
       savingsItem.totalSavingsProgress += req.body.progressAmount
       return savingsItem.save()
     })
@@ -144,39 +149,49 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 
 exports.getByTimeFrame = (req, res, next) => {
   // Get savings documents by specified time frame for graphs
+  // Time frame is going to be one of:
+  // ['week', 'month', 'year', 'quarter', 'all']
   const timeFrame = req.params.timeFrame
   const savings = []
+  // Find our user
   User.findById(req.userId)
     .then((user) => {
       if (timeFrame === 'week') {
+        // Call utility function
         filterSavingsData(user, startOfDay, '%d', 7)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'month') {
+        // Call utility function
         filterSavingsData(user, startOfDay, '%d', 30)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'quarter') {
+        // Call utility function
         filterSavingsData(user, startOfWeek, '%U', 120)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'year') {
+        // Call utility function
         filterSavingsData(user, startOfMonth, '%m', 365)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'all') {
+        // For time frame == 'all', we have a slightly different case
+        // Here we aggregate by the dates our savings progress was updated,
+        // For the amount of time the user has existed in our database
         Savings.aggregate([
           {
             $match: {
