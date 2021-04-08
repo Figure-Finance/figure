@@ -8,9 +8,7 @@ exports.postItemGoals = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    res.status(422).send(error)
   }
   const name = req.body.name
   const amount = req.body.amount
