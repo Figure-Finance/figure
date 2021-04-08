@@ -5,7 +5,6 @@ const Savings = require('../models/savings')
 const ItemGoal = require('../models/itemGoal')
 
 const timeFrameUtils = require('../util/savingsByTimeFrame')
-const postSavings = require('../util/postSavings')
 
 const startOfToday = require('date-fns/startOfToday')
 const startOfDay = require('date-fns/startOfDay')
@@ -20,39 +19,22 @@ const { filterSavingsData } = timeFrameUtils
 
 exports.getSavings = (req, res, next) => {
   let savings
-  let itemGoals
-  Savings.findOne({ userId: req.userId })
+  Savings.findOne({ userId: req.userId }).populate('progressUpdates')
     .then((savingsDoc) => {
       if (!savingsDoc) {
-        throw new Error('Cannot find any savings for this user.')
+        // If this savings item does not exist, send 404 'resource not found'
+        const error = new Error('Cannot find any savings for this user.')
+        res.status(404).send(error)
       }
-      return (savings = {
-        id: savingsDoc._id,
-        totalSavingsGoal: savingsDoc.totalSavingsGoal,
-        totalSavingsProgress: savingsDoc.totalSavingsProgress,
-        progressUpdates: savingsDoc.progressUpdates.map((update) => {
-          return {
-            id: update._id,
-            date: update.date,
-            curTotal: update.curTotal
-          }
-        })
-      })
-    })
-    .then((result) => {
+      // Once we have our savingsDoc, query for our user's savings item goals
+      // Call toClient on our savingsDoc to return correct format
+      savings = savingsDoc.toClient()
       return ItemGoal.find({ userId: req.userId })
     })
     .then((itemGoalArray) => {
-      itemGoals = itemGoalArray.map((i) => {
-        return {
-          id: i._id,
-          progress: i.progress,
-          name: i.name,
-          amount: i.amount,
-          description: i.description
-        }
-      })
-      return res.status(200).json({ ...savings, itemGoals })
+      // Ensure we return both savings and our itemGoalArray
+      // to display graphs and goals dashboard
+      return res.status(200).json({ savings, itemGoalArray })
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -68,16 +50,17 @@ exports.postTotalSavings = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
-  postSavings(
-    req.body.totalSavingsGoal,
-    req.body.totalSavingsProgress,
-    req.userId
-  )
+  // Create our new Savings object
+  const newSavings = new Savings(req.body)
+  newSavings.userId = req.userId
+  // Ensure that we create a progressUpdate for the initial Savings
+  newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: req.body.totalSavingsProgress })
+  newSavings.save()
     .then((newSavings) => {
+      // Send status 201 for 'resource created successfully'
       return res.status(201).json({ id: newSavings._id })
     })
     .catch((err) => {
@@ -93,14 +76,14 @@ exports.editTotalSavings = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
-  const newTotalSavingsGoal = req.body.totalSavingsGoal
+  // Find our user's savings object
   Savings.findOne({ userId: req.userId })
     .then((savingsItem) => {
-      savingsItem.totalSavingsGoal = newTotalSavingsGoal
+      // Update goal amount
+      savingsItem.totalSavingsGoal = req.body.totalSavingsGoal
       return savingsItem.save()
     })
     .then((result) => {
@@ -121,28 +104,33 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
   Savings.findOne({ userId: req.userId })
     .then((savingsItem) => {
+      // Find our last progress update
       const last =
         savingsItem.progressUpdates[savingsItem.progressUpdates.length - 1]
+      // Find our current progress total
       const curTotal =
         savingsItem.totalSavingsProgress + req.body.progressAmount
       if (!last) {
+        // If we haven't updated our progress yet -
         savingsItem.progressUpdates = [
           { date: startOfToday(), curTotal: curTotal }
         ]
       } else if (last.date.toString() === startOfToday().toString()) {
+        // Else, if the last time we updated was today
         last.curTotal = curTotal
       } else {
+        // If we've updated before, but not today, push a new update object
         savingsItem.progressUpdates.push({
           date: startOfToday(),
           curTotal: curTotal
         })
       }
+      // Increment total progress by amount
       savingsItem.totalSavingsProgress += req.body.progressAmount
       return savingsItem.save()
     })
@@ -161,39 +149,49 @@ exports.updateTotalSavingsProgress = (req, res, next) => {
 
 exports.getByTimeFrame = (req, res, next) => {
   // Get savings documents by specified time frame for graphs
+  // Time frame is going to be one of:
+  // ['week', 'month', 'year', 'quarter', 'all']
   const timeFrame = req.params.timeFrame
   const savings = []
+  // Find our user
   User.findById(req.userId)
     .then((user) => {
       if (timeFrame === 'week') {
+        // Call utility function
         filterSavingsData(user, startOfDay, '%d', 7)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'month') {
+        // Call utility function
         filterSavingsData(user, startOfDay, '%d', 30)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'quarter') {
+        // Call utility function
         filterSavingsData(user, startOfWeek, '%U', 120)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'year') {
+        // Call utility function
         filterSavingsData(user, startOfMonth, '%m', 365)
           .then((result) => {
             console.log(result)
             return res.status(200).json(result)
           })
-          .catch((err) => console.log(err))
+          .catch((err) => res.status(500).send(err))
       } else if (timeFrame === 'all') {
+        // For time frame == 'all', we have a slightly different case
+        // Here we aggregate by the dates our savings progress was updated,
+        // For the amount of time the user has existed in our database
         Savings.aggregate([
           {
             $match: {
