@@ -1,3 +1,2 @@
-* When changing savings goal. Page needs to be refreshed in order for updated goal to be reflected
 * BreakdownAddModal needs to get user's categories from backend
 
