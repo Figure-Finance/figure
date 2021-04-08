@@ -73,7 +73,7 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
         required: true,
       },
       valid: false,
-      touched: false,
+      touched: true,
     },
   })
 
