@@ -17,3 +17,7 @@
 .Buttons > button {
   margin: 0 5px;
 }
+
+.PieChart {
+  width: 95%;
+}
