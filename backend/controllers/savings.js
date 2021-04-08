@@ -53,13 +53,10 @@ exports.postTotalSavings = (req, res, next) => {
     res.status(422).send(error)
   }
   // Create our new Savings object
-  const newSavings = new Savings({
-    totalSavingsGoal: totalSavingsGoal, // { totalSavingsGoal: 10000, totalSavingsProgress: 450 }
-    totalSavingsProgress: totalSavingsProgress,
-    userId: req.userId
-  })
+  const newSavings = new Savings(req.body)
+  newSavings.userId = req.userId
   // Ensure that we create a progressUpdate for the initial Savings
-  newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
+  newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: req.body.totalSavingsProgress })
   newSavings.save()
     .then((newSavings) => {
       // Send status 201 for 'resource created successfully'

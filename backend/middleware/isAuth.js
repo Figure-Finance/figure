@@ -13,23 +13,14 @@ module.exports = (req, res, next) => {
   // Authorization header is in format: 'Bearer <token>'
   // Grab token from header
   const token = req.get('Authorization').split(' ')[1]
-  // Initialize variable for decodedToken to access within chained .then() scope
-  let decodedToken
   // Verify our token with jsonwebtoken library
-  jwt.verify(token, process.env.SECRET_KEY)
-    .then(decodedToken => {
-      // If malformed or otherwise not valid, throw 401 'not authenticated'
-      if (!decodedToken) {
-        const error = new Error('Unable to authenticate.')
-        error.statusCode = 401
-        throw error
-      }
-      // Set the request userId for use in rest of middleware
-      req.userId = decodedToken.userId
-      next()
-    })
-    .catch(err => {
-      err.statusCode = 401
-      throw err
-    })
+  const decodedToken = jwt.verify(token, process.env.SECRET_KEY)
+  if (!decodedToken) {
+    const error = new Error('Unable to authenticate.')
+    error.statusCode = 401
+    throw error
+  }
+  // Set the request userId for use in rest of middleware
+  req.userId = decodedToken.userId
+  next()
 }
