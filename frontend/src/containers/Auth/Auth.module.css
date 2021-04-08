@@ -20,6 +20,13 @@
   margin: auto;
   overflow: scroll;
   width: 60%;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.Main::-webkit-scrollbar {
+  display: none;
 }
 
 .Main button {
