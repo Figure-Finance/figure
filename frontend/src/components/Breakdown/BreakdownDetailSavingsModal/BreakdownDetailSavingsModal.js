@@ -27,7 +27,7 @@ const BreakdownDetailSavingsModal = ({
         required: true,
       },
       valid: true,
-      touched: false,
+      touched: true,
     },
     amount: {
       type: 'input',
@@ -42,7 +42,7 @@ const BreakdownDetailSavingsModal = ({
         required: true,
       },
       valid: true,
-      touched: false,
+      touched: true,
     },
     description: {
       type: 'input',
@@ -55,7 +55,7 @@ const BreakdownDetailSavingsModal = ({
         required: true,
       },
       valid: true,
-      touched: false,
+      touched: true,
     },
   })
 
@@ -136,6 +136,7 @@ const BreakdownDetailSavingsModal = ({
           min: '0',
           step: '0.01',
         }}
+        touched
         value={allocateAmount}
         onChange={(e) => setAllocateAmount(e.target.value)}
       />

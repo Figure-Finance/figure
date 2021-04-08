@@ -20,8 +20,8 @@ const Auth = ({ history }) => {
     async (signUpData) => {
       try {
         const res = await api.post('user/signup', signUpData)
-        console.log(res.data)
         localStorage.setItem('token', res.data.token)
+        api.defaults.headers.common.Authorization = `Bearer ${res.data.token}`
         history.push('/weekly')
       } catch (err) {
         console.log(err)
@@ -35,6 +35,7 @@ const Auth = ({ history }) => {
       try {
         const res = await api.post('user/signin', signInData)
         localStorage.setItem('token', res.data.token)
+        api.defaults.headers.common.Authorization = `Bearer ${res.data.token}`
         history.push('/weekly')
       } catch (err) {
         console.log(err.response.status)

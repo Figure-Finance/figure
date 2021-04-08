@@ -1,0 +1,1 @@
+Send categories to frontend for dropdown

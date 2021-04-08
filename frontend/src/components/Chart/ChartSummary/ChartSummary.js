@@ -29,7 +29,7 @@ const ChartSummary = ({
         </Button>
         <RightArrowButton onClick={rightArrowClick} color="danger" />
       </div>
-      {content}
+      <div className={classes.PieChart}>{content}</div>
     </div>
   )
 }

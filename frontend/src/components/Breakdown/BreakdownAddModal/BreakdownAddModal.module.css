@@ -6,6 +6,16 @@
   justify-content: space-between;
   width: 90%;
   margin: auto;
+  margin-top: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.BreakdownAddModal::-webkit-scrollbar {
+  display: none;
 }
 
 .Buttons {
@@ -17,7 +27,7 @@
 .Inputs,
 .Buttons {
   margin: auto;
-  width: 100%;
+  width: 90%;
 }
 
 .Inputs > input,
