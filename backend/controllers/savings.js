@@ -5,7 +5,6 @@ const Savings = require('../models/savings')
 const ItemGoal = require('../models/itemGoal')
 
 const timeFrameUtils = require('../util/savingsByTimeFrame')
-const postSavings = require('../util/postSavings')
 
 const startOfToday = require('date-fns/startOfToday')
 const startOfDay = require('date-fns/startOfDay')
@@ -20,39 +19,21 @@ const { filterSavingsData } = timeFrameUtils
 
 exports.getSavings = (req, res, next) => {
   let savings
-  let itemGoals
-  Savings.findOne({ userId: req.userId })
+  Savings.findOne({ userId: req.userId }).populate('progressUpdates')
     .then((savingsDoc) => {
       if (!savingsDoc) {
-        throw new Error('Cannot find any savings for this user.')
+        // If this savings item does not exist, send 404 'resource not found'
+        const error = new Error('Cannot find any savings for this user.')
+        res.status(404).send(error)
       }
-      return (savings = {
-        id: savingsDoc._id,
-        totalSavingsGoal: savingsDoc.totalSavingsGoal,
-        totalSavingsProgress: savingsDoc.totalSavingsProgress,
-        progressUpdates: savingsDoc.progressUpdates.map((update) => {
-          return {
-            id: update._id,
-            date: update.date,
-            curTotal: update.curTotal
-          }
-        })
-      })
-    })
-    .then((result) => {
+      // Once we have our savingsDoc, query for our user's savings item goals
+      savings = savingsDoc
       return ItemGoal.find({ userId: req.userId })
     })
     .then((itemGoalArray) => {
-      itemGoals = itemGoalArray.map((i) => {
-        return {
-          id: i._id,
-          progress: i.progress,
-          name: i.name,
-          amount: i.amount,
-          description: i.description
-        }
-      })
-      return res.status(200).json({ ...savings, itemGoals })
+      // Ensure we return both savings and our itemGoalArray
+      // to display graphs and goals dashboard
+      return res.status(200).json({ ...savings, itemGoalArray })
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -68,16 +49,20 @@ exports.postTotalSavings = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // If validation fails, send status 422 and our error
+    res.status(422).send(error)
   }
-  postSavings(
-    req.body.totalSavingsGoal,
-    req.body.totalSavingsProgress,
-    req.userId
-  )
+  // Create our new Savings object
+  const newSavings = new Savings({
+    totalSavingsGoal: totalSavingsGoal, // { totalSavingsGoal: 10000, totalSavingsProgress: 450 }
+    totalSavingsProgress: totalSavingsProgress,
+    userId: req.userId
+  })
+  // Ensure that we create a progressUpdate for the initial Savings
+  newSavings.progressUpdates.push({ date: startOfToday(), progressAmount: totalSavingsProgress })
+  newSavings.save()
     .then((newSavings) => {
+      // Send status 201 for 'resource created successfully'
       return res.status(201).json({ id: newSavings._id })
     })
     .catch((err) => {
