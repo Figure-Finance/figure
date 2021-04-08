@@ -113,9 +113,21 @@ const Savings = ({ history }) => {
   const mutateTimePeriod = useMutation((event) => timePeriodChange(event), {
     onSuccess: () => queryClient.clear(),
   })
+  const mutateDeposit = useMutation((value) => onDeposit(value), {
+    onSuccess: () => queryClient.clear(),
+  })
+  const mutateTotalGoal = useMutation((value) => onUpdateTotalGoal(value), {
+    onSuccess: () => queryClient.clear(),
+  })
 
   const timePeriodChangeHandler = (event) => {
     mutateTimePeriod.mutate(event)
+  }
+  const depositChangeHandler = (value) => {
+    mutateDeposit.mutate(value)
+  }
+  const totalGoalChangeHandler = (value) => {
+    mutateTotalGoal.mutate(value)
   }
 
   const labels = [
@@ -141,8 +153,8 @@ const Savings = ({ history }) => {
     }
     progress = (
       <Progress
-        updateGoal={onUpdateTotalGoal}
-        updateProgress={onDeposit}
+        updateGoal={(value) => totalGoalChangeHandler(value)}
+        updateProgress={(value) => depositChangeHandler(value)}
         leftColor="neutral"
         leftAmount={0}
         rightAmount={0}
@@ -171,8 +183,8 @@ const Savings = ({ history }) => {
     const totalGoal = data.totalSavingsGoal
     progress = (
       <Progress
-        updateGoal={onUpdateTotalGoal}
-        updateProgress={onDeposit}
+        updateGoal={(value) => totalGoalChangeHandler(value)}
+        updateProgress={(value) => depositChangeHandler(value)}
         leftColor="neutral"
         leftAmount={goalProgress}
         rightAmount={totalGoal}
