@@ -14,7 +14,7 @@ const Graph = ({ isSavings, labels, data }) => {
           datasets: [
             {
               label: 'Savings',
-              data: [12, 19, 3, 5, 2, 3, 1, 22, 88, 99, 2, 6],
+              data: data.savings,
               backgroundColor: ['rgba(101, 200, 255, 0.2)'],
               borderColor: ['#65C8FF'],
               borderWidth: 2,
@@ -28,7 +28,18 @@ const Graph = ({ isSavings, labels, data }) => {
         }}
         height={300}
         width={600}
-        options={{ maintainAspctRatio: false }}
+        options={{
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+        }}
       />
     )
   } else {
@@ -65,7 +76,18 @@ const Graph = ({ isSavings, labels, data }) => {
         }}
         height={370}
         width={600}
-        options={{ maintainAspctRatio: false }}
+        options={{
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+        }}
       />
     )
   }

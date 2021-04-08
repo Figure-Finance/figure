@@ -21,6 +21,16 @@
   z-index: 3;
 }
 
+.LabelTouched {
+  cursor: text;
+  display: block;
+  font-family: inherit;
+  font-size: 20px;
+  text-align: center;
+  transform: translateY(0px);
+  z-index: 3;
+}
+
 .TextArea {
   height: 50px;
   resize: none;

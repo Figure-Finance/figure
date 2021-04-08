@@ -16,8 +16,14 @@ const Input = ({
   config,
 }) => {
   let inputElement = null
-  const labelClassNames = [classes.Label]
+  const labelClassNames = []
   const inputClassNames = [classes.Input]
+
+  if (touched) {
+    labelClassNames.push(classes.LabelTouched)
+  } else {
+    labelClassNames.push(classes.Label)
+  }
 
   if (color === 'primary') {
     inputClassNames.push(classes.Primary)
