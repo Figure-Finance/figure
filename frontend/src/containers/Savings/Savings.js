@@ -1,6 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import PropTypes from 'prop-types'
+import {
+  format,
+  startOfToday,
+  eachDayOfInterval,
+  eachWeekOfInterval,
+  eachMonthOfInterval,
+  eachYearOfInterval,
+  subDays,
+  subMonths,
+  subYears,
+  addDays,
+  differenceInCalendarDays,
+  differenceInCalendarWeeks,
+  differenceInCalendarMonths,
+  differenceInCalendarYears,
+} from 'date-fns'
 import api from '../../api'
 import classes from './Savings.module.css'
 import Graph from '../../components/Graph/Graph'
@@ -44,18 +60,24 @@ const Savings = ({ history }) => {
     return res.data
   }, [getTimeFrame, graphTimePeriod])
 
-  const onDeposit = useCallback(async (progressAmount) => {
-    const res = await api.patch('savings/progress', {
-      progressAmount,
-    })
-    return res.data
-  }, [])
+  const onDeposit = useCallback(
+    async (progressAmount, totalSavingsProgress) => {
+      const res = await api.patch('savings/progress', {
+        progressAmount,
+      })
+      return {
+        message: res.data.message,
+        totalSavingsProgress: progressAmount + totalSavingsProgress,
+      }
+    },
+    []
+  )
 
   const onUpdateTotalGoal = useCallback(async (totalSavingsGoal) => {
     const res = await api.patch('savings/total', {
       totalSavingsGoal,
     })
-    return res.data
+    return { message: res.data.message, totalSavingsGoal: totalSavingsGoal }
   }, [])
 
   const onGetGoal = useCallback(async (id) => {
@@ -113,32 +135,79 @@ const Savings = ({ history }) => {
   const mutateTimePeriod = useMutation((event) => timePeriodChange(event), {
     onSuccess: () => queryClient.clear(),
   })
-  const mutateDeposit = useMutation((value) => onDeposit(value), {
-    onSuccess: () => queryClient.clear(),
-  })
+  const mutateDeposit = useMutation(
+    ({ value, totalSavingsProgress }) => {
+      return onDeposit(value, totalSavingsProgress)
+    },
+    {
+      onSuccess: (res) => {
+        data.totalSavingsProgress = res.totalSavingsProgress
+      },
+    }
+  )
   const mutateTotalGoal = useMutation((value) => onUpdateTotalGoal(value), {
-    onSuccess: () => queryClient.clear(),
+    onSuccess: (res) => {
+      data.totalSavingsGoal = res.totalSavingsGoal
+    },
   })
 
   const timePeriodChangeHandler = (event) => {
     mutateTimePeriod.mutate(event)
   }
-  const depositChangeHandler = (value) => {
-    mutateDeposit.mutate(value)
+  const depositChangeHandler = (value, totalSavingsProgress) => {
+    mutateDeposit.mutate({
+      value: value,
+      totalSavingsProgress: totalSavingsProgress,
+    })
   }
   const totalGoalChangeHandler = (value) => {
     mutateTotalGoal.mutate(value)
   }
 
-  const labels = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ]
+  let labels
+  let dates
+
+  switch (graphTimePeriod) {
+    case '1W':
+      dates = eachDayOfInterval({
+        start: subDays(startOfToday(), 6),
+        end: startOfToday(),
+      })
+      labels = dates.map((date) => format(date, 'EEEE'))
+      break
+    case '1M':
+      dates = eachDayOfInterval({
+        start: subDays(startOfToday(), 29),
+        end: startOfToday(),
+      })
+      labels = dates.map((date) => format(date, 'M/d'))
+      break
+    case '3M':
+      dates = eachWeekOfInterval({
+        start: subMonths(startOfToday(), 3),
+        end: startOfToday(),
+      })
+      labels = dates.map((date) =>
+        format(date, `M/d - M/${format(addDays(date, 7), 'd')}`)
+      )
+      break
+    case '1Y':
+      dates = eachMonthOfInterval({
+        start: subMonths(startOfToday(), 11),
+        end: startOfToday(),
+      })
+      labels = dates.map((date) => format(date, 'MMMM'))
+      break
+    case 'A':
+      dates = eachYearOfInterval({
+        start: subYears(startOfToday(), 4),
+        end: startOfToday(),
+      })
+      labels = dates.map((date) => format(date, 'yyy'))
+      break
+    default:
+      break
+  }
 
   let progress
   let graph
@@ -184,7 +253,7 @@ const Savings = ({ history }) => {
     progress = (
       <Progress
         updateGoal={(value) => totalGoalChangeHandler(value)}
-        updateProgress={(value) => depositChangeHandler(value)}
+        updateProgress={(value) => depositChangeHandler(value, goalProgress)}
         leftColor="neutral"
         leftAmount={goalProgress}
         rightAmount={totalGoal}
@@ -221,18 +290,51 @@ const Savings = ({ history }) => {
       />
     )
   } else if (graphData) {
-    const data = [0, 0, 0, 0, 0, 0, 0]
-    for (const dataElement of graphData) {
-      const date = new Date()
-      const dayOfWeek = date.getDay(dataElement.period)
-      data[dayOfWeek] = dataElement.amount
-    }
+    let savingsData
+    data.progressUpdates.map((update) => {
+      if (update.curTotal) {
+        let difference
+        const date = new Date(update.date)
+        switch (graphTimePeriod) {
+          case '1W':
+            savingsData = new Array(7).fill(0)
+            difference = differenceInCalendarDays(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+          case '1M':
+            savingsData = new Array(30).fill(0)
+            difference = differenceInCalendarDays(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+          case '3M':
+            savingsData = new Array(13).fill(0)
+            difference = differenceInCalendarWeeks(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+          case '1Y':
+            savingsData = new Array(11).fill(0)
+            difference = differenceInCalendarMonths(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+          case 'A':
+            savingsData = new Array(4).fill(0)
+            difference = differenceInCalendarYears(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+          default:
+            difference = differenceInCalendarYears(date, startOfToday())
+            savingsData[savingsData.length + difference] = update.curTotal
+            return difference
+        }
+      }
+      return 0
+    })
     graph = (
       <Graph
         onNavSavingsChange={(e) => timePeriodChangeHandler(e)}
         active={graphTimePeriod}
         labels={labels}
-        data={{ savings: data }}
+        data={{ savings: savingsData }}
         isSavings
       />
     )
