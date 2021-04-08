@@ -36,6 +36,11 @@
   resize: none;
 }
 
+.Select {
+  text-indent: 10px;
+  text-align-last: center;
+}
+
 .PrimaryLabel {
   color: var(--primary);
 }

@@ -42,6 +42,8 @@ const Input = ({
 
   if (type === 'textarea') {
     inputClassNames.push(classes.TextArea)
+  } else if (type === 'select') {
+    inputClassNames.push(classes.Select)
   }
 
   const moveSelfOut = (event) => {
