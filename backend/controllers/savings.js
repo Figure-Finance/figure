@@ -27,13 +27,14 @@ exports.getSavings = (req, res, next) => {
         res.status(404).send(error)
       }
       // Once we have our savingsDoc, query for our user's savings item goals
-      savings = savingsDoc
+      // Call toClient on our savingsDoc to return correct format
+      savings = savingsDoc.toClient()
       return ItemGoal.find({ userId: req.userId })
     })
     .then((itemGoalArray) => {
       // Ensure we return both savings and our itemGoalArray
       // to display graphs and goals dashboard
-      return res.status(200).json({ ...savings, itemGoalArray })
+      return res.status(200).json({ savings, itemGoalArray })
     })
     .catch((err) => {
       if (!err.statusCode) {
