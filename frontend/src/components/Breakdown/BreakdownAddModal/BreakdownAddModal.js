@@ -9,17 +9,18 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     type: {
-      type: 'input',
+      type: 'select',
       config: {
-        type: 'text',
+        type: 'select',
         label: 'Type',
+        options: [{ value: 'value', displayValue: 'display' }],
       },
       value: '',
       validation: {
         required: true,
       },
       valid: false,
-      touched: false,
+      touched: true,
     },
     amount: {
       type: 'input',
