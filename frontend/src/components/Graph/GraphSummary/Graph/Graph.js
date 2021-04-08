@@ -35,6 +35,7 @@ const Graph = ({ isSavings, labels, data }) => {
               {
                 ticks: {
                   beginAtZero: true,
+                  callback: (value) => '$' + value,
                 },
               },
             ],
@@ -83,6 +84,7 @@ const Graph = ({ isSavings, labels, data }) => {
               {
                 ticks: {
                   beginAtZero: true,
+                  callback: (value) => '$' + value,
                 },
               },
             ],
