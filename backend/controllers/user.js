@@ -13,32 +13,26 @@ exports.signup = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // Send status 422 for 'validation failed' and send our error
+    res.status(422).send(error)
   }
+  // Initialize user for .then() scope access
   let user
-  const email = req.body.email
-  const firstName = req.body.firstName
-  const lastName = req.body.lastName
-  const password = req.body.password
-  const categories = [{ category: 'Groceries', isIncome: false }]
   bcrypt
-    .hash(password, 12)
+    .hash(req.body.password, 12)
     .then((hashedPassword) => {
-      user = new User({
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        password: hashedPassword,
-        categories: categories
-      })
+      // Create our new user
+      user = new User(req.body)
+      // All users currently receive category "Groceries"
+      user.categories = [{ category: 'Groceries', isIncome: false }]
       return user.save()
     })
     .then((result) => {
+      // Initialize empty 'total savings' for new user
       return postSavings(0, 0, user._id)
     })
     .then((result) => {
+      // Send our token
       const token = jwt.sign(
         {
           email: user.email,
@@ -49,6 +43,7 @@ exports.signup = (req, res, next) => {
           expiresIn: '1h'
         }
       )
+      // Send 201: 'resource successfully created'
       res.status(201).json({ token: token })
     })
     .catch((err) => {
@@ -63,31 +58,33 @@ exports.signin = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // Send status 422 for 'validation failed' and send our error
+    res.status(422).send(error)
   }
-  const email = req.body.email
-  const password = req.body.password
+  // Initialize loadedUser for .then() scope access
   let loadedUser
-  User.findOne({ email: email })
+  User.findOne({ email: req.body.email })
     .then((user) => {
+      // If a user does not exist for this email address:
       if (!user) {
         const error = new Error(
           'We could not find a user with that email address.'
         )
-        error.statusCode = 401
-        throw error
+        // Set status 401 for 'unauthorized' if user does not exist.
+        res.status(401).send(error)
       }
       loadedUser = user
-      return bcrypt.compare(password, user.password)
+      // Check our hashed password against the input password
+      return bcrypt.compare(req.body.password, user.password)
     })
     .then((isEqual) => {
+      // If our passwords do not match:
       if (!isEqual) {
         const error = new Error('Incorrect password')
-        error.statusCode = 401
-        throw error
+        // Send status 401 'unauthorized'
+        res.status(401).send(error)
       }
+      // Send our JWT
       const token = jwt.sign(
         {
           email: loadedUser.email,
@@ -112,7 +109,9 @@ exports.getUserProfile = (req, res, next) => {
   User.findById(req.userId)
     .then((user) => {
       if (!user) {
-        throw new Error('User not found.')
+        const error = new Error('User not found.')
+        // If this user is not found, set 404 'resource not found'
+        res.status(404).send(error)
       }
       const returnUser = {
         firstName: user.firstName,
@@ -140,19 +139,15 @@ exports.updateUserProfile = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.')
-    error.statusCode = 422
-    error.data = errors.array()
-    throw error
+    // Send status 422 for 'validation failed' and send our error
+    res.status(422).send(error)
   }
-  const newFirstName = req.body.firstName
-  const newLastName = req.body.lastName
-  const newEmail = req.body.email
 
   User.findById(req.userId)
     .then((user) => {
-      user.firstName = newFirstName
-      user.lastName = newLastName
-      user.email = newEmail
+      user.firstName = req.body.firstName
+      user.lastName = req.body.lastName
+      user.email = req.body.email
       return user.save()
     })
     .then((result) => {
