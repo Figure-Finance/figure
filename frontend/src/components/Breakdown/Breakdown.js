@@ -10,6 +10,7 @@ import BreakdownDetailSavingsModal from './BreakdownDetailSavingsModal/Breakdown
 const Breakdown = ({
   color,
   isIncome,
+  categories,
   height,
   width,
   title,
@@ -86,6 +87,7 @@ const Breakdown = ({
     modal = (
       <BreakdownAddModal
         title={title}
+        categories={categories}
         color={color}
         onClose={closeAddModalHandler}
         onAdd={addItem}
@@ -136,6 +138,7 @@ Breakdown.propTypes = {
   isSavings: PropTypes.bool,
   allocateSavings: PropTypes.func,
   showButtons: PropTypes.bool,
+  categories: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default Breakdown

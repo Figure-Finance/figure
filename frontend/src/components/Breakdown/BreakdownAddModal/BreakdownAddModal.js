@@ -5,7 +5,11 @@ import classes from './BreakdownAddModal.module.css'
 import Input from '../../UI/Input/Input'
 import Button from '../../UI/Button/Button'
 
-const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
+const BreakdownAddModal = ({ title, onClose, onAdd, color, categories }) => {
+  const categoryOptions = categories.map((category) => {
+    return { value: category, displayValue: category }
+  })
+
   const [formIsValid, setFormIsValid] = useState(false)
   const [formElements, setFormElements] = useState({
     type: {
@@ -13,7 +17,7 @@ const BreakdownAddModal = ({ title, onClose, onAdd, color }) => {
       config: {
         type: 'select',
         label: 'Type',
-        options: [{ value: 'value', displayValue: 'display' }],
+        options: categoryOptions,
       },
       value: '',
       validation: {
@@ -162,6 +166,7 @@ BreakdownAddModal.propTypes = {
   onClose: PropTypes.func,
   onAdd: PropTypes.func,
   color: PropTypes.string,
+  categories: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default BreakdownAddModal
