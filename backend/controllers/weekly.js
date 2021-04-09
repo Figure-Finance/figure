@@ -8,13 +8,17 @@ const Finance = require('../models/finances')
 exports.getUserFinances = (req, res, next) => {
   const startDate = req.params.startDate
   const endDate = req.params.endDate
-  User.findById(req.userId)
-    .then((user) => {
-      return Finance.find({ userId: user._id })
+  let user
+  User.findById(req.userId).populate('categories')
+    .then((loadedUser) => {
+      user = loadedUser
+      return Finance.find({ userId: loadedUser._id })
     })
     .then((finances) => {
       if (!finances) {
-        throw new Error('This user has no finances yet!')
+        const error = new Error('This user has no finances yet!')
+        // If we're unable to find finances for our user, send 404 'resource not found'
+        res.status(404).send(error)
       }
       const weeklyFinances = finances.filter((i) => {
         return isWithinInterval(new Date(i.date), {
@@ -30,7 +34,11 @@ exports.getUserFinances = (req, res, next) => {
           isIncome: entry.isIncome
         }
       })
-      return res.status(200).json(financeData)
+      const categories = user.categories.map((cat) => {
+        return { category: cat.category, isIncome: cat.isIncome }
+      })
+      // console.log(`user.categories, financeData: ${user.categories}, ${financeData}`)
+      return res.status(200).json({ categories, financeData })
     })
     .catch((err) => {
       if (!err.statusCode) {
