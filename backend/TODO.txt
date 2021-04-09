@@ -1,1 +1,4 @@
-Send categories to frontend for dropdown
+1. Send categories to frontend for dropdown
+2. Fix allocating funds to itemGoals
+
+http://localhost:80/api/weekly/Wed Jan 01 2021 00:00:00 GMT-0800 (Pacific Standard Time)/Thu Dec 31 2021 23:59:59 GMT-0800 (Pacific Standard Time)
