@@ -1,1 +1,2 @@
-Send categories to frontend for dropdown
+1. Send categories to frontend for dropdown
+2. Fix allocating funds to itemGoals
