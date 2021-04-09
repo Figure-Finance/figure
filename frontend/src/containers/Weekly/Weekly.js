@@ -60,6 +60,19 @@ const Weekly = ({ history }) => {
     return { income, expenses }
   }
 
+  const sortCategories = (categories) => {
+    const incomeCategories = []
+    const expenseCategories = []
+    for (const category of categories) {
+      if (category.isIncome) {
+        incomeCategories.push(category.category)
+      } else {
+        expenseCategories.push(category.category)
+      }
+    }
+    return { incomeCategories, expenseCategories }
+  }
+
   const onFetchWeekly = useCallback(async () => {
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
@@ -226,7 +239,9 @@ const Weekly = ({ history }) => {
       />
     )
   } else {
-    const { income, expenses } = updateIncomeExpenses(data)
+    const { categories, financeData } = data
+    const { incomeCategories, expenseCategories } = sortCategories(categories)
+    const { income, expenses } = updateIncomeExpenses(financeData)
     progress = (
       <Progress
         leftColor="primary"
@@ -238,6 +253,7 @@ const Weekly = ({ history }) => {
     incomeBreakdown = (
       <Breakdown
         title="Income"
+        categories={incomeCategories}
         content={income}
         getItem={onFetchWeeklyItem}
         addItem={onAddIncome}
@@ -261,6 +277,7 @@ const Weekly = ({ history }) => {
     expensesBreakdown = (
       <Breakdown
         title="Expenses"
+        categories={expenseCategories}
         content={expenses}
         getItem={onFetchWeeklyItem}
         addItem={onAddExpense}
