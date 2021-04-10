@@ -116,7 +116,6 @@ exports.editItemGoal = (req, res, next) => {
 }
 
 exports.allocateGoalFunds = (req, res, next) => {
-  console.log('CALLING ALLOCATE GOAL FUNDS')
   const allocateAmount = req.body.allocateAmount
   // Find our user's savings to update allocated & remaining savings amounts
   Savings.findOne({ userId: req.userId })
@@ -138,6 +137,10 @@ exports.allocateGoalFunds = (req, res, next) => {
     })
     .then((itemGoal) => {
       // Check if we've already saved enough for this goal
+      if (!itemGoal) {
+        const error = new Error('Goal not found. Please be sure to pass the ID.')
+        res.status(404).send(error)
+      }
       if (itemGoal.progress >= itemGoal.amount) {
         const error = new Error('This goal has been reached.')
         // Set status 304 'not modified' if the goal has been reached
@@ -157,7 +160,6 @@ exports.allocateGoalFunds = (req, res, next) => {
       return res.status(200).json({ message: 'Funds successfully allocated!' })
     })
     .catch((err) => {
-      console.log('IN CATCH BLOCK LINE 160 ITEMGOAL CONTROLLER')
       if (!err.statusCode) {
         err.statusCode = 500
       }
