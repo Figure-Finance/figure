@@ -48,10 +48,8 @@ const Breakdown = ({
   const openDetailModalHandler = useCallback(
     (id) => {
       const selectedItem = content.filter((item) => item.id === id)
-      console.log('selectedItem', selectedItem)
       setCurrentItem(selectedItem[0])
       getItemHandler(id)
-      console.log('currentItem', currentItem)
       setShowDetailModal(true)
     },
     [getItemHandler, content, currentItem]

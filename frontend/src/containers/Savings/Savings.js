@@ -247,16 +247,15 @@ const Savings = ({ history }) => {
       />
     )
   } else {
-    const goals = data.itemGoals
-    const goalProgress = data.totalSavingsProgress
-    const totalGoal = data.totalSavingsGoal
+    const { itemGoals, savings } = data
+    const { totalSavingsGoal, totalSavingsProgress } = savings
     progress = (
       <Progress
         updateGoal={(value) => totalGoalChangeHandler(value)}
-        updateProgress={(value) => depositChangeHandler(value, goalProgress)}
+        updateProgress={(value) => depositChangeHandler(value, totalSavingsProgress)}
         leftColor="neutral"
-        leftAmount={goalProgress}
-        rightAmount={totalGoal}
+        leftAmount={totalSavingsProgress}
+        rightAmount={totalSavingsGoal}
         single
         showButtons
       />
@@ -270,7 +269,7 @@ const Savings = ({ history }) => {
         deleteItem={onDeleteGoal}
         color="neutral"
         title="Goals"
-        content={goals}
+        content={itemGoals}
         canAdd
         isSavings
         showButtons
@@ -291,7 +290,8 @@ const Savings = ({ history }) => {
     )
   } else if (graphData) {
     let savingsData
-    data.progressUpdates.map((update) => {
+    const { progressUpdates } = data.savings
+    progressUpdates.map((update) => {
       if (update.curTotal) {
         let difference
         const date = new Date(update.date)

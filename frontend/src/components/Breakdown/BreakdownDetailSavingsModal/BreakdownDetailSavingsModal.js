@@ -60,7 +60,7 @@ const BreakdownDetailSavingsModal = ({
   })
 
   const queryClient = useQueryClient()
-  const mutateAllocate = useMutation(() => onAllocate(allocateAmount), {
+  const mutateAllocate = useMutation((id) => onAllocate(id, allocateAmount), {
     onSuccess: (data) => queryClient.invalidateQueries(),
   })
   const mutateUpdate = useMutation((newItem) => onUpdate(newItem), {
@@ -70,9 +70,9 @@ const BreakdownDetailSavingsModal = ({
     onSuccess: (data) => queryClient.invalidateQueries(),
   })
 
-  const allocateHandler = () => {
+  const allocateHandler = (id) => {
     onClose()
-    mutateAllocate.mutate()
+    mutateAllocate.mutate(id)
   }
 
   const updateHandler = () => {
@@ -144,7 +144,7 @@ const BreakdownDetailSavingsModal = ({
         size="medium"
         color={color}
         width="100%"
-        onClick={allocateHandler}>
+        onClick={() => allocateHandler(item.id)}>
         Allocate
       </Button>
       <div className={classes.Divider} />

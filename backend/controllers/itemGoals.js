@@ -133,6 +133,7 @@ exports.allocateGoalFunds = (req, res, next) => {
       return totalSavings.save()
     })
     .then((result) => {
+      console.log(req.body.id)
       return ItemGoal.findOne({ _id: req.body.id })
     })
     .then((itemGoal) => {
