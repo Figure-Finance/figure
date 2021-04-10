@@ -6,7 +6,8 @@
     "start-dev": "nodemon app.js",
     "format": "prettier --write \"{utils,routes,models,middleware,controllers}/*.js\" && prettier --write ./app.js",
     "lint-files": "eslint --fix \"{utils,routes,models,middleware,controllers}/*.js\" && eslint --fix ./app.js",
-    "lint": "yarn format && yarn lint-files"
+    "lint": "yarn format && yarn lint-files",
+    "test": "snyk test"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -17,7 +18,7 @@
     "express-validator": "^6.9.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.3",
-    "mongoose": "^5.11.8"
+    "mongoose": "5.12.3"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
@@ -26,6 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "nodemon": "^2.0.4",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "snyk": "^1.530.0"
   }
 }
