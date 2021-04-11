@@ -191,7 +191,12 @@ const Weekly = ({ history }) => {
     chart = <Loader />
     expensesBreakdown = <Loader />
   } else if (isError) {
-    if (error.response.status && error.response.status === 401) {
+    if (
+      error &&
+      error.response &&
+      error.response.status &&
+      error.response.status === 401
+    ) {
       history.push('/auth')
     }
     progress = (

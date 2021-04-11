@@ -52,7 +52,7 @@ const Breakdown = ({
       getItemHandler(id)
       setShowDetailModal(true)
     },
-    [getItemHandler, content, currentItem]
+    [getItemHandler, content]
   )
 
   const closeDetailModalHandler = useCallback(() => {
