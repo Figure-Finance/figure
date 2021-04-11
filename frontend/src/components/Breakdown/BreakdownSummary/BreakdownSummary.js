@@ -27,7 +27,7 @@ const BreakdownSummary = ({
 
   let buttons
 
-  if (showButtons) {
+  if (showButtons && content) {
     buttons = content.map((item) => {
       return (
         <Button
