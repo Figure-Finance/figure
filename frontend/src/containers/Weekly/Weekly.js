@@ -80,6 +80,8 @@ const Weekly = ({ history }) => {
     console.log('startDate', startDate)
     console.log('endDate', endDate)
     console.log('api', api)
+    console.log('axios', axios)
+    console.log(process.env.REACT_APP_API_URL)
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/weekly/${startDate}/${endDate}`
     )
