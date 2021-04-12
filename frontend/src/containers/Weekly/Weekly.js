@@ -78,6 +78,7 @@ const Weekly = ({ history }) => {
     const endDate = endOfWeek(startDate)
     console.log('startDate', startDate)
     console.log('endDate', endDate)
+    console.log('api', api)
     const res = await api.get(`weekly/${startDate}/${endDate}`)
     console.log(res)
     console.log(res.data)
