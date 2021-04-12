@@ -217,7 +217,12 @@ const Savings = ({ history }) => {
     progress = <Loader />
     breakdown = <Loader />
   } else if (isError) {
-    if (error.response.status && error.response.status === 401) {
+    if (
+      error &&
+      error.response &&
+      error.response.status &&
+      error.response.status === 401
+    ) {
       history.push('/auth')
     }
     progress = (
@@ -252,7 +257,9 @@ const Savings = ({ history }) => {
     progress = (
       <Progress
         updateGoal={(value) => totalGoalChangeHandler(value)}
-        updateProgress={(value) => depositChangeHandler(value, totalSavingsProgress)}
+        updateProgress={(value) =>
+          depositChangeHandler(value, totalSavingsProgress)
+        }
         leftColor="neutral"
         leftAmount={totalSavingsProgress}
         rightAmount={totalSavingsGoal}
