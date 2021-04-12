@@ -76,6 +76,8 @@ const Weekly = ({ history }) => {
   const onFetchWeekly = useCallback(async () => {
     const startDate = weeks[currentWeekIndex]
     const endDate = endOfWeek(startDate)
+    console.log('startDate', startDate)
+    console.log('endDate', endDate)
     const res = await api.get(`weekly/${startDate}/${endDate}`)
     console.log(res.data)
     return res.data
