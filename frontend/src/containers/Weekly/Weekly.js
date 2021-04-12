@@ -79,6 +79,7 @@ const Weekly = ({ history }) => {
     console.log('startDate', startDate)
     console.log('endDate', endDate)
     const res = await api.get(`weekly/${startDate}/${endDate}`)
+    console.log(res)
     console.log(res.data)
     return res.data
   }, [currentWeekIndex, weeks])
