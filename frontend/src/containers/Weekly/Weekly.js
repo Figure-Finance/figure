@@ -244,6 +244,7 @@ const Weekly = ({ history }) => {
       />
     )
   } else {
+    console.log(data)
     const { categories, financeData } = data
     const { incomeCategories, expenseCategories } = sortCategories(categories)
     const { income, expenses } = updateIncomeExpenses(financeData)
