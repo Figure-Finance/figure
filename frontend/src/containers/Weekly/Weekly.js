@@ -8,6 +8,7 @@ import {
   eachWeekOfInterval,
   subYears,
 } from 'date-fns'
+import axios from 'axios'
 import api from '../../api'
 import classes from './Weekly.module.css'
 import Progress from '../../components/Progress/Progress'
@@ -79,7 +80,10 @@ const Weekly = ({ history }) => {
     console.log('startDate', startDate)
     console.log('endDate', endDate)
     console.log('api', api)
-    const res = await api.get(`weekly/${startDate}/${endDate}`)
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/weekly/${startDate}/${endDate}`
+    )
+    // const res = await api.get(`weekly/${startDate}/${endDate}`)
     console.log(res)
     console.log(res.data)
     return res.data
